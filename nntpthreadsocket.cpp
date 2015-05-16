@@ -1882,6 +1882,7 @@ bool NntpThread::serverConnect( QString & addr, quint16 port )
 	}
 	else
 	{
+        kes->setProtocol((QSsl::SslProtocol)nHost->getSslProtocol());
 		kes->connectToHostEncrypted(addr, port);
 		kes->ignoreSslErrors(nHost->getExpectedSslErrors());
         qDebug() << "Setting ignore SSL errs count to: " << nHost->getExpectedSslErrors().size() << " for server " << qId;

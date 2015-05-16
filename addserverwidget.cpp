@@ -39,6 +39,32 @@ AddServerWidget::AddServerWidget(QWidget * _parent) // This is a create
 
     olddt = QDateTime::currentDateTime();
 
+    protocol_comboBox->addItem("SSL v3", QSsl::SslV3); // default at 4.7.4
+    protocol_comboBox->addItem("SSL v2", QSsl::SslV2);
+
+#if (QT_VERSION < QT_VERSION_CHECK(4, 8, 5))
+
+    protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1);
+    protocol_comboBox->setCurrentIndex(0);
+
+#elif (QT_VERSION < QT_VERSION_CHECK(5, 0, 2))
+
+    protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1);
+    protocol_comboBox->addItem("TLSv1.0 and SSLv3", QSsl::TlsV1SslV3);
+    protocol_comboBox->addItem("Protocols known to be secure", QSsl::SecureProtocols);
+    protocol_comboBox->setCurrentIndex(4);
+
+#else
+
+    protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1_0);
+    protocol_comboBox->addItem("TLSv1.1", QSsl::TlsV1_1);
+    protocol_comboBox->addItem("TLSv1.2", QSsl::TlsV1_2);
+    protocol_comboBox->addItem("TLSv1.0 and SSLv3", QSsl::TlsV1SslV3);
+    protocol_comboBox->addItem("Protocols known to be secure", QSsl::SecureProtocols);
+    protocol_comboBox->setCurrentIndex(6);
+
+#endif
+
 	connect(testServerButton, SIGNAL(clicked()), this, SLOT(slotTestServer()));
 	connect(updateButton, SIGNAL(clicked()), this, SLOT(slotUpdateServer()));
 
@@ -160,6 +186,54 @@ void AddServerWidget::populate(NntpHost* host)
          newdt = dt.addDays(1);
 
     resetEndDateEdit->setDate(newdt.date());
+
+    if (host->getSslSocket())
+    {
+        qint16 currentSslProtocol = host->getSslProtocol();
+
+        // need to see if ssl is enabled and then test the host val against QSsl::SslV3 etc
+
+        protocol_comboBox->addItem("SSL v3", QSsl::SslV3); // default at 4.7.4
+        if (currentSslProtocol == QSsl::SslV3) protocol_comboBox->setCurrentIndex(0);
+
+        protocol_comboBox->addItem("SSL v2", QSsl::SslV2);
+        if (currentSslProtocol == QSsl::SslV2) protocol_comboBox->setCurrentIndex(1);
+
+#if (QT_VERSION < QT_VERSION_CHECK(4, 8, 5))
+
+        protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1);
+        if (currentSslProtocol == QSsl::TlsV1) protocol_comboBox->setCurrentIndex(2);
+
+#elif (QT_VERSION < QT_VERSION_CHECK(5, 0, 2))
+
+        protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1);
+        if (currentSslProtocol == QSsl::TlsV1) protocol_comboBox->setCurrentIndex(2);
+
+        protocol_comboBox->addItem("TLSv1.0 and SSLv3", QSsl::TlsV1SslV3);
+        if (currentSslProtocol == QSsl::TlsV1SslV3) protocol_comboBox->setCurrentIndex(3);
+
+        protocol_comboBox->addItem("Protocols known to be secure", QSsl::SecureProtocols);
+        if (currentSslProtocol == QSsl::SecureProtocols) protocol_comboBox->setCurrentIndex(4);
+
+#else
+
+        protocol_comboBox->addItem("TLSv1.0", QSsl::TlsV1_0);
+        if (currentSslProtocol == QSsl::TlsV1_0) protocol_comboBox->setCurrentIndex(2);
+
+        protocol_comboBox->addItem("TLSv1.1", QSsl::TlsV1_1);
+        if (currentSslProtocol == QSsl::TlsV1_1) protocol_comboBox->setCurrentIndex(3);
+
+        protocol_comboBox->addItem("TLSv1.2", QSsl::TlsV1_2);
+        if (currentSslProtocol == QSsl::TlsV1_2) protocol_comboBox->setCurrentIndex(4);
+
+        protocol_comboBox->addItem("TLSv1.0 and SSLv3", QSsl::TlsV1SslV3);
+        if (currentSslProtocol == QSsl::TlsV1SslV3) protocol_comboBox->setCurrentIndex(5);
+
+        protocol_comboBox->addItem("Protocols known to be secure", QSsl::SecureProtocols);
+        if (currentSslProtocol == QSsl::SecureProtocols) protocol_comboBox->setCurrentIndex(6);
+
+#endif
+    }
 
 	connect(testServerButton, SIGNAL(clicked()), this, SLOT(slotTestServer()));
 }

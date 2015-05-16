@@ -94,6 +94,19 @@ void NntpHost::loadHost( char *p)
     memcpy(&sslProtocol, i, sz16);
     i+=sz16;
 
+    if (sslProtocol > 15 || sslProtocol < 0)
+    {
+#if (QT_VERSION < QT_VERSION_CHECK(4, 8, 5))
+
+    sslProtocol = QSsl::SslV3;
+
+#else
+
+    sslProtocol = QSsl::SecureProtocols;
+
+#endif
+    }
+
     memcpy(&enableServerLimit, i, sizeof(bool));
     i+=sizeof(bool);
 
