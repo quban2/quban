@@ -23,7 +23,7 @@
 
 #include <QObject>
 #include <QRegExp>
-#include <QAtomicInt>
+//#include <QAtomicInt>
 #include "nntpthreadsocket.h"
 #include "headerQueue.h"
 
@@ -47,8 +47,8 @@ public:
     explicit HeaderReadWorker(QMutex *_headerDbLock, QObject *parent = 0);
     ~HeaderReadWorker();
 
-    QAtomicInt  idle;
-    QAtomicInt  finishedReading;
+    bool        idle;
+    bool        finishedReading;
     QMutex      busyMutex;
 
     int         error;
