@@ -1,0 +1,1573 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>quban</class>
+ <widget class="QMainWindow" name="quban">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1065</width>
+    <height>666</height>
+   </rect>
+  </property>
+  <property name="acceptDrops">
+   <bool>false</bool>
+  </property>
+  <property name="windowTitle">
+   <string>Quban</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="quban.qrc">
+    <normaloff>:/quban/images/hi32-app-klibido.png</normaloff>:/quban/images/hi32-app-klibido.png</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Vertical</enum>
+      </property>
+      <widget class="QWidget" name="widget" native="true">
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <widget class="MainTabWidget" name="tabWidget">
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <widget class="QWidget" name="tab_7">
+            <attribute name="title">
+             <string>Servers</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="ServersList" name="serversList">
+               <property name="autoScroll">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Server</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Status</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Speed</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_8">
+            <attribute name="title">
+             <string>Subscribed Groups</string>
+            </attribute>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="GroupList" name="subGroupList">
+               <property name="autoScroll">
+                <bool>false</bool>
+               </property>
+               <property name="selectionMode">
+                <enum>QAbstractItemView::ExtendedSelection</enum>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Group</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Unread</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Total</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+          <widget class="MainTabWidget" name="tabWidget_2">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+             <horstretch>1</horstretch>
+             <verstretch>1</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="currentIndex">
+            <number>0</number>
+           </property>
+           <property name="tabsClosable">
+            <bool>false</bool>
+           </property>
+           <property name="movable">
+            <bool>false</bool>
+           </property>
+           <widget class="QWidget" name="tab_3">
+            <attribute name="icon">
+             <iconset resource="quban.qrc">
+              <normaloff>:/quban/images/fatCow/Viewstack.png</normaloff>:/quban/images/fatCow/Viewstack.png</iconset>
+            </attribute>
+            <attribute name="title">
+             <string>Queue</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_6">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="DropTree" name="queueList">
+               <property name="acceptDrops">
+                <bool>true</bool>
+               </property>
+               <property name="autoScroll">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Id</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Item</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Status</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Info</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>ETA (HH:MM:SS)</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_2">
+            <attribute name="icon">
+             <iconset resource="quban.qrc">
+              <normaloff>:/quban/images/fatCow/Tick.png</normaloff>:/quban/images/fatCow/Tick.png</iconset>
+            </attribute>
+            <attribute name="title">
+             <string>Finished</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_8">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QTreeWidget" name="doneList">
+               <property name="autoScroll">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Id</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Item</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Info</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab">
+            <attribute name="icon">
+             <iconset resource="quban.qrc">
+              <normaloff>:/quban/images/fatCow/Cross.png</normaloff>:/quban/images/fatCow/Cross.png</iconset>
+            </attribute>
+            <attribute name="title">
+             <string>Failed</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QTreeWidget" name="failedList">
+               <property name="autoScroll">
+                <bool>false</bool>
+               </property>
+               <column>
+                <property name="text">
+                 <string>Id</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Item</string>
+                </property>
+               </column>
+               <column>
+                <property name="text">
+                 <string>Info</string>
+                </property>
+               </column>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="widget_2" native="true">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="MainTabWidget" name="jobsAndLogsTabs">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="tab_9">
+           <attribute name="title">
+            <string>Jobs</string>
+           </attribute>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QTreeWidget" name="jobsTreeWidget">
+              <column>
+               <property name="text">
+                <string>Status</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Type</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Details</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start Time</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>End Time</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_5">
+           <attribute name="title">
+            <string>Alerts</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QTreeWidget" name="alertTreeWidget">
+              <column>
+               <property name="text">
+                <string notr="true">Timestamp</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="tab_4">
+           <attribute name="title">
+            <string>Events</string>
+           </attribute>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>0</number>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QTreeWidget" name="eventTreeWidget">
+              <column>
+               <property name="text">
+                <string notr="true">Timestamp</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Description</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1065</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionDownload_nzb"/>
+    <addaction name="actionDownload_nzb_files_and_auto_unpack"/>
+    <addaction name="separator"/>
+    <addaction name="actionCompact_databases"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menuServer">
+    <property name="title">
+     <string>Server</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionGet_list_of_groups"/>
+    <addaction name="separator"/>
+    <addaction name="actionNew_Server"/>
+    <addaction name="actionValidate_Server"/>
+    <addaction name="actionServer_properties"/>
+    <addaction name="separator"/>
+    <addaction name="actionDelete_Server"/>
+    <addaction name="separator"/>
+    <addaction name="actionPause_Server"/>
+    <addaction name="actionResume_Server"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddThread"/>
+    <addaction name="actionRemove_thread"/>
+   </widget>
+   <widget class="QMenu" name="menuNewsgroup">
+    <property name="title">
+     <string>Newsgroup</string>
+    </property>
+    <addaction name="actionShow_available_newsgroups"/>
+    <addaction name="separator"/>
+    <addaction name="actionSubscribe_to_newsgroup"/>
+    <addaction name="separator"/>
+    <addaction name="actionUpdate_current"/>
+    <addaction name="actionUpdate_subscribed_newsgroups"/>
+    <addaction name="actionUpdate_selected_newsgroups"/>
+    <addaction name="actionNewsgroup_Management"/>
+    <addaction name="actionGroup_properties"/>
+    <addaction name="separator"/>
+    <addaction name="actionView_group_articles"/>
+    <addaction name="separator"/>
+    <addaction name="actionUnsubscribeToNewsgroup"/>
+    <addaction name="actionReset_selected"/>
+    <addaction name="actionValidate_newsgroup"/>
+   </widget>
+   <widget class="QMenu" name="menuArticles">
+    <property name="title">
+     <string>Articles</string>
+    </property>
+    <addaction name="actionView_article"/>
+    <addaction name="actionDownload_selected"/>
+    <addaction name="actionDownload_selected_first"/>
+    <addaction name="actionDownload_to_dir"/>
+    <addaction name="actionGroup_and_download_selected"/>
+    <addaction name="separator"/>
+    <addaction name="actionMark_as_read"/>
+    <addaction name="actionMark_as_unread"/>
+    <addaction name="actionDelete"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_only_complete_articles"/>
+    <addaction name="actionShow_only_unread_articles"/>
+    <addaction name="separator"/>
+    <addaction name="actionFilter_articles"/>
+   </widget>
+   <widget class="QMenu" name="menuQueue">
+    <property name="title">
+     <string>Queue</string>
+    </property>
+    <addaction name="actionPause_queue"/>
+    <addaction name="actionEmpty_finished_list"/>
+    <addaction name="actionEmpty_failed_list"/>
+    <addaction name="separator"/>
+    <addaction name="actionMove_to_top"/>
+    <addaction name="actionMove_to_bottom"/>
+    <addaction name="separator"/>
+    <addaction name="actionPause"/>
+    <addaction name="actionResume"/>
+    <addaction name="actionCancel"/>
+   </widget>
+   <widget class="QMenu" name="menuSettings">
+    <property name="title">
+     <string>Settings</string>
+    </property>
+    <addaction name="actionWizard"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="separator"/>
+    <addaction name="actionDiagnostics"/>
+    <addaction name="separator"/>
+    <addaction name="actionAbout"/>
+    <addaction name="actionAbout_Qt"/>
+   </widget>
+   <widget class="QMenu" name="menuGroups">
+    <property name="title">
+     <string>Groups</string>
+    </property>
+    <addaction name="actionGroup_Info"/>
+   </widget>
+   <widget class="QMenu" name="menuScheduler">
+    <property name="title">
+     <string>Scheduler</string>
+    </property>
+    <addaction name="actionSchedulerEdit"/>
+    <addaction name="actionTraffic_Management"/>
+   </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionQueue_Toolbar"/>
+    <addaction name="actionServer_Toolbar"/>
+    <addaction name="actionNewsgroup_Toolbar"/>
+    <addaction name="actionHeaders_Toolbar"/>
+    <addaction name="actionJob_Toolbar"/>
+   </widget>
+   <widget class="QMenu" name="menuJobs">
+    <property name="title">
+     <string>Jobs</string>
+    </property>
+    <addaction name="actionCancel_Job"/>
+    <addaction name="actionDelete_Job"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuView"/>
+   <addaction name="menuServer"/>
+   <addaction name="menuNewsgroup"/>
+   <addaction name="menuArticles"/>
+   <addaction name="menuQueue"/>
+   <addaction name="menuGroups"/>
+   <addaction name="menuJobs"/>
+   <addaction name="menuScheduler"/>
+   <addaction name="menuSettings"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <property name="movable">
+    <bool>true</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionWizard"/>
+   <addaction name="separator"/>
+   <addaction name="actionDownload_nzb"/>
+   <addaction name="actionDownload_nzb_files_and_auto_unpack"/>
+   <addaction name="separator"/>
+   <addaction name="actionGet_list_of_groups"/>
+   <addaction name="separator"/>
+   <addaction name="actionShow_available_newsgroups"/>
+   <addaction name="separator"/>
+   <addaction name="actionGroup_Info"/>
+   <addaction name="separator"/>
+   <addaction name="actionSchedulerEdit"/>
+   <addaction name="actionTraffic_Management"/>
+  </widget>
+  <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Help.png</normaloff>:/quban/images/fatCow/Help.png</iconset>
+   </property>
+   <property name="text">
+    <string>About</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDownload_nzb">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/File-Extension-Nzb.png</normaloff>:/quban/images/File-Extension-Nzb.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download .nzb file ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Download .nzb file ...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionCompact_databases">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Database-Lightning.png</normaloff>:/quban/images/fatCow/Database-Lightning.png</iconset>
+   </property>
+   <property name="text">
+    <string>Compact databases</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cancel.png</normaloff>:/quban/images/fatCow/Cancel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionNew_Server">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Add.png</normaloff>:/quban/images/fatCow/Server-Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>New Server</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionSubscribe_to_newsgroup">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Newspaper-Add.png</normaloff>
+     <normalon>:/quban/crystal/images/crystal/view_detailed-256.png</normalon>:/quban/images/fatCow/Newspaper-Add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Subscribe to newsgroup...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGet_list_of_groups">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Go.png</normaloff>:/quban/images/fatCow/Server-Go.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download list of available groups</string>
+   </property>
+   <property name="toolTip">
+    <string>Download list of available groups</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAbout_Qt">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Help.png</normaloff>:/quban/images/fatCow/Help.png</iconset>
+   </property>
+   <property name="text">
+    <string>About Qt</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDelete_Server">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Delete.png</normaloff>:/quban/images/fatCow/Server-Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Server</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionServer_properties">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Edit.png</normaloff>:/quban/images/fatCow/Server-Edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Server properties ...</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionAddThread">
+   <property name="text">
+    <string>Add thread</string>
+   </property>
+  </action>
+  <action name="actionRemove_thread">
+   <property name="text">
+    <string>Remove thread</string>
+   </property>
+  </action>
+  <action name="actionUnsubscribeToNewsgroup">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/woofunction/Newspaper-close.png</normaloff>:/quban/images/woofunction/Newspaper-close.png</iconset>
+   </property>
+   <property name="text">
+    <string>Unsubscribe from newsgroup</string>
+   </property>
+   <property name="toolTip">
+    <string>Unsubscribe from newsgroup</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionUpdate_selected_newsgroups">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/Newspaper_Update_Selected.png</normaloff>:/quban/images/Newspaper_Update_Selected.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update selected newsgroups</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionUpdate_current">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Report-Edit.png</normaloff>:/quban/images/fatCow/Report-Edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update current newsgroup</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionReset_selected">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Delete.png</normaloff>:/quban/images/fatCow/Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete headers for selected groups</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete all headers for selected newsgroups </string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGroup_properties">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/Newspaper_Edit.png</normaloff>:/quban/images/Newspaper_Edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Newsgroup properties ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit newsgroup properties</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionValidate_newsgroup">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Validate newsgroup</string>
+   </property>
+  </action>
+  <action name="actionView_article">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Picture.png</normaloff>:/quban/images/fatCow/Picture.png</iconset>
+   </property>
+   <property name="text">
+    <string>View article</string>
+   </property>
+   <property name="toolTip">
+    <string>View selected article(s)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDownload_selected">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Document-Save-32.png</normaloff>:/quban/images/gnome/32/Gnome-Document-Save-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download selected</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDownload_selected_first">
+   <property name="text">
+    <string>Download selected first</string>
+   </property>
+  </action>
+  <action name="actionDownload_to_dir">
+   <property name="text">
+    <string>Download to dir ...</string>
+   </property>
+  </action>
+  <action name="actionMark_as_read">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_article_read.png</normaloff>:/quban/images/hi16-action-icon_article_read.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mark as read</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionMark_as_unread">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_article_new.png</normaloff>:/quban/images/hi16-action-icon_article_new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Mark as unread</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Delete.png</normaloff>:/quban/images/fatCow/Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected articles</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGroup_articles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Group articles</string>
+   </property>
+  </action>
+  <action name="actionShow_only_complete_articles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_filter_only_attachments.png</normaloff>:/quban/images/hi16-action-icon_filter_only_attachments.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show only complete articles</string>
+   </property>
+   <property name="shortcut">
+    <string>C</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShow_only_unread_articles">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_filter_only_new.png</normaloff>:/quban/images/hi16-action-icon_filter_only_new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show only unread articles</string>
+   </property>
+   <property name="shortcut">
+    <string>U</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPause_queue">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</normaloff>
+     <normalon>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</normalon>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause queue</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionEmpty_finished_list">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Tick.png</normaloff>:/quban/images/fatCow/Tick.png</iconset>
+   </property>
+   <property name="text">
+    <string>Empty finished list</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionEmpty_failed_list">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cross.png</normaloff>:/quban/images/fatCow/Cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Empty failed list</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionMove_to_top">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Skip-Backward-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Skip-Backward-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move to top</string>
+   </property>
+   <property name="toolTip">
+    <string>Move selected items to start of queue</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionMove_to_bottom">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Skip-Forward-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Skip-Forward-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Move to bottom</string>
+   </property>
+   <property name="toolTip">
+    <string>Move selected items to end of queue</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+   <property name="toolTip">
+    <string>Pause selected queued items</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionResume">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resume</string>
+   </property>
+   <property name="toolTip">
+    <string>Resume selected queued items</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionCancel">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cancel.png</normaloff>:/quban/images/fatCow/Cancel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+   <property name="toolTip">
+    <string>Cancel selected items</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionUpdate_subscribed_newsgroups">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/Newspaper_Update.png</normaloff>:/quban/images/Newspaper_Update.png</iconset>
+   </property>
+   <property name="text">
+    <string>Update all subscribed newsgroups</string>
+   </property>
+   <property name="toolTip">
+    <string>Update all subscribed newsgroups</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionShow_available_newsgroups">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Newspaper.png</normaloff>:/quban/images/fatCow/Newspaper.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show available newsgroups</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="sPauseThreadAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/quban/images/crystal/player_pause-256.png</normaloff>:/quban/images/crystal/player_pause-256.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause thread</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="sResumeThreadAction">
+   <property name="icon">
+    <iconset>
+     <normaloff>:/quban/images/crystal/player_play-256.png</normaloff>:/quban/images/crystal/player_play-256.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resume thread</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="headerCloseAction">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cross.png</normaloff>:/quban/images/fatCow/Cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close window ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="headerCloseMarkAction">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_article_read.png</normaloff>:/quban/images/hi16-action-icon_article_read.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close and mark as read</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="headerCloseNoMarkAction">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/hi16-action-icon_article_new.png</normaloff>:/quban/images/hi16-action-icon_article_new.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close and don't mark as read</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="availCloseAction">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cross.png</normaloff>:/quban/images/fatCow/Cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close window</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="viewerCloseAction">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cross.png</normaloff>:/quban/images/fatCow/Cross.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close window</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="viewerCloseDeleteAction">
+   <property name="text">
+    <string>Close and delete</string>
+   </property>
+  </action>
+  <action name="viewerCloseNoDeleteAction">
+   <property name="text">
+    <string>Close and keep file</string>
+   </property>
+  </action>
+  <action name="clearFilter">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Filter-Delete.png</normaloff>:/quban/images/fatCow/Filter-Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Clear filter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="focusFilter">
+   <property name="text">
+    <string>Set focus to filter edit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
+   </property>
+  </action>
+  <action name="actionTest_server_connection">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Connect.png</normaloff>:/quban/images/fatCow/Server-Connect.png</iconset>
+   </property>
+   <property name="text">
+    <string>Test server connection</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionList_article_parts">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Viewstack.png</normaloff>:/quban/images/fatCow/Viewstack.png</iconset>
+   </property>
+   <property name="text">
+    <string>List sub parts</string>
+   </property>
+   <property name="toolTip">
+    <string>List sub parts (if any)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionView_group_articles">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Viewstack.png</normaloff>:/quban/images/fatCow/Viewstack.png</iconset>
+   </property>
+   <property name="text">
+    <string>View newsgroup headers</string>
+   </property>
+   <property name="toolTip">
+    <string>View newsgroup headers that have already been downloaded</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGroup_and_download_selected">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/File-Extension-Rar.png</normaloff>:/quban/images/fatCow/File-Extension-Rar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Group and download selected ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Group and download selected articles for auto unpack</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDownload_nzb_files_and_auto_unpack">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/File-Extension-Nzb_plus.png</normaloff>:/quban/images/File-Extension-Nzb_plus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Download .nzb files and auto unpack</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionGroup_Info">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/rar.png</normaloff>:/quban/images/rar.png</iconset>
+   </property>
+   <property name="text">
+    <string>Group Info</string>
+   </property>
+   <property name="toolTip">
+    <string>View status of auto repair and unpack groups</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionWizard">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Wand.png</normaloff>:/quban/images/fatCow/Wand.png</iconset>
+   </property>
+   <property name="text">
+    <string>Wizard</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionSchedulerEdit">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Clock-Edit.png</normaloff>
+     <normalon>:/quban/images/fatCow/Clock-Red.png</normalon>:/quban/images/fatCow/Clock-Edit.png</iconset>
+   </property>
+   <property name="text">
+    <string>Edit</string>
+   </property>
+   <property name="toolTip">
+    <string>Edit queue schedules</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionTraffic_Management">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Speedometer.png</normaloff>:/quban/images/fatCow/Speedometer.png</iconset>
+   </property>
+   <property name="text">
+    <string>Traffic Management</string>
+   </property>
+   <property name="toolTip">
+    <string>Throttle download speed</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionNewsgroup_Management">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Newspaper-Go.png</normaloff>:/quban/images/fatCow/Newspaper-Go.png</iconset>
+   </property>
+   <property name="text">
+    <string>Newsgroup Management ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Download and Expire Newsgroup Headers</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionQueue_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Queue Toolbar</string>
+   </property>
+  </action>
+  <action name="actionServer_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Server Toolbar</string>
+   </property>
+  </action>
+  <action name="actionNewsgroup_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Newsgroup Toolbar</string>
+   </property>
+  </action>
+  <action name="actionHeaders_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Headers Toolbar</string>
+   </property>
+  </action>
+  <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Help.png</normaloff>:/quban/images/fatCow/Help.png</iconset>
+   </property>
+   <property name="text">
+    <string>Help</string>
+   </property>
+   <property name="toolTip">
+    <string>Application Help</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionJob_Toolbar">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Jobs Toolbar</string>
+   </property>
+  </action>
+  <action name="actionPause_Job">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause Job</string>
+   </property>
+   <property name="toolTip">
+    <string>Pause selected job(s)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionResume_Job">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resume Job</string>
+   </property>
+   <property name="toolTip">
+    <string>Resume selected job(s)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionCancel_Job">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Cancel.png</normaloff>:/quban/images/fatCow/Cancel.png</iconset>
+   </property>
+   <property name="text">
+    <string>Cancel Job</string>
+   </property>
+   <property name="toolTip">
+    <string>Cancel selected job(s)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDelete_Job">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Delete.png</normaloff>:/quban/images/fatCow/Delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete Job</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected job(s) from list (cancel first if not completed)</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="copyToFilter">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Edit-Copy-32.png</normaloff>:/quban/images/gnome/32/Gnome-Edit-Copy-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Copy to filter</string>
+   </property>
+   <property name="toolTip">
+    <string>Copy selected subject to filter</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionValidate_Server">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Server-Lightning.png</normaloff>:/quban/images/fatCow/Server-Lightning.png</iconset>
+   </property>
+   <property name="text">
+    <string>Validate Server</string>
+   </property>
+   <property name="toolTip">
+    <string>makes an invalid server usable</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionDiagnostics">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/Health.png</normaloff>:/quban/images/fatCow/Health.png</iconset>
+   </property>
+   <property name="text">
+    <string>Diagnostics</string>
+   </property>
+   <property name="toolTip">
+    <string>Produce Diagnostics Report</string>
+   </property>
+   <property name="iconVisibleInMenu">
+    <bool>true</bool>
+   </property>
+  </action>
+  <action name="actionPause_Server">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Pause-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Pause Server</string>
+   </property>
+   <property name="toolTip">
+    <string>Pause all Server's threads</string>
+   </property>
+  </action>
+  <action name="actionResume_Server">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</normaloff>:/quban/images/gnome/32/Gnome-Media-Playback-Start-32.png</iconset>
+   </property>
+   <property name="text">
+    <string>Resume Server</string>
+   </property>
+   <property name="toolTip">
+    <string>Resume all Server's threads</string>
+   </property>
+  </action>
+  <action name="actionFilter_articles">
+   <property name="icon">
+    <iconset resource="quban.qrc">
+     <normaloff>:/quban/images/fatCow/FilterPlusPlus.png</normaloff>:/quban/images/fatCow/FilterPlusPlus.png</iconset>
+   </property>
+   <property name="text">
+    <string>Advanced filter articles ...</string>
+   </property>
+   <property name="toolTip">
+    <string>Advanced filter articles ...</string>
+   </property>
+  </action>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ServersList</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">serverslist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>GroupList</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">grouplist.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MainTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">maintabwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DropTree</class>
+   <extends>QTreeWidget</extends>
+   <header location="global">droptree.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="quban.qrc"/>
+ </resources>
+ <connections/>
+</ui>

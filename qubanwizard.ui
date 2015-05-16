@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QubanWizard</class>
+ <widget class="QDialog" name="QubanWizard">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>809</width>
+    <height>729</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Wizard</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="wizardTabs">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="currentIndex">
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>Introduction</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_8">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="leftMargin">
+           <number>3</number>
+          </property>
+          <property name="topMargin">
+           <number>3</number>
+          </property>
+          <property name="rightMargin">
+           <number>3</number>
+          </property>
+          <property name="bottomMargin">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QTextEdit" name="textEdit">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;Add Server&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;W&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;elcome to Quban&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Quban is a Qt4 application used to download articles from the usenet news service. It supports multiple servers, multiple download threads per server, automatic joining and decoding of articles. There is also the option to automatically unpack compressed files and repair them if required. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Quban can download files listed within an nzb file or using details from a newsgroup's headers that you've downloaded previously.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;To get started, click on the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Config, Servers &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;and &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Newsgroups&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; tabs to setup Quban. If you're in a rush, there are defaults provided for all of the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Config&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; items ...&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="configTab">
+      <attribute name="icon">
+       <iconset resource="quban.qrc">
+        <normaloff>:/quban/images/fatCow/Wrench-Orange.png</normaloff>:/quban/images/fatCow/Wrench-Orange.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Config</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QTabWidget" name="tabWidget">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="generalTab">
+          <attribute name="icon">
+           <iconset resource="quban.qrc">
+            <normaloff>:/quban/images/fatCow/Report-Edit.png</normaloff>:/quban/images/fatCow/Report-Edit.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>General</string>
+          </attribute>
+          <widget class="QFrame" name="generalFrame">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>751</width>
+             <height>561</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <layout class="QVBoxLayout" name="generalLayout">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+         <widget class="QWidget" name="decodeTab">
+          <attribute name="icon">
+           <iconset resource="quban.qrc">
+            <normaloff>:/quban/images/fatCow/Newspaper-Link.png</normaloff>:/quban/images/fatCow/Newspaper-Link.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>Decode</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_22">
+           <item>
+            <widget class="QFrame" name="decodeFrame">
+             <layout class="QVBoxLayout" name="verticalLayout_18">
+              <item>
+               <widget class="QGroupBox" name="groupBox_5">
+                <property name="title">
+                 <string>If decoding fails because file is not binary or encoded in a format not supported ...</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_4">
+                 <item>
+                  <widget class="QRadioButton" name="keepBtn">
+                   <property name="text">
+                    <string>Keep file</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="deleteBtn">
+                   <property name="text">
+                    <string>Delete file</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_6">
+                <property name="title">
+                 <string>If decoded file already exists...</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_17">
+                 <item>
+                  <widget class="QRadioButton" name="overwriteBtn">
+                   <property name="text">
+                    <string>Overwrite</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="renameBtn">
+                   <property name="text">
+                    <string>Rename</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer name="spacer2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Expanding</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>334</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="headerTab">
+          <attribute name="icon">
+           <iconset resource="quban.qrc">
+            <normaloff>:/quban/images/fatCow/Viewstack.png</normaloff>:/quban/images/fatCow/Viewstack.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>Header List</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_23">
+           <item>
+            <widget class="QFrame" name="headerFrame">
+             <layout class="QVBoxLayout" name="verticalLayout_24">
+              <item>
+               <widget class="QGroupBox" name="groupBox">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Display</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_15">
+                 <item>
+                  <widget class="QCheckBox" name="fromCheck">
+                   <property name="text">
+                    <string>Show &quot;From&quot; column</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="detailsCheck">
+                   <property name="text">
+                    <string>Show &quot;server details&quot; column(s)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="dateCheck">
+                   <property name="text">
+                    <string>Show date column</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_2">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>Functionality</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_12">
+                 <item>
+                  <widget class="QCheckBox" name="viewCheck">
+                   <property name="text">
+                    <string>Always double click to view articles</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="sortCheck">
+                   <property name="text">
+                    <string>Remember sort column</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="sizeCheck">
+                   <property name="text">
+                    <string>Don't automatically size columns (and remember width)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QCheckBox" name="compressedCheck">
+                   <property name="text">
+                    <string>Download compressed headers (if available)</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <widget class="QLabel" name="label_4">
+                     <property name="text">
+                      <string>Number of articles to use for article grouping testing</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="groupingSizeSpinBox">
+                     <property name="showGroupSeparator" stdset="0">
+                      <bool>true</bool>
+                     </property>
+                     <property name="maximum">
+                      <number>999999</number>
+                     </property>
+                     <property name="value">
+                      <number>1000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_3">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_3">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="title">
+                 <string>When closing a group</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_6">
+                 <item>
+                  <widget class="QRadioButton" name="markBtn">
+                   <property name="text">
+                    <string>Mark all articles as read</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="askBtn">
+                   <property name="text">
+                    <string>Ask</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="nullBtn">
+                   <property name="text">
+                    <string>Do nothing</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_4">
+                <property name="title">
+                 <string>Header Expiry</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_14">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_4">
+                   <item>
+                    <widget class="QCheckBox" name="checkHeadersCheck">
+                     <property name="text">
+                      <string>Check headers for expiry every </string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="checkDaysValue">
+                     <property name="toolTip">
+                      <string>Must be checked to take effect</string>
+                     </property>
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="value">
+                      <number>1</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="checkDaysLabel">
+                     <property name="text">
+                      <string>days</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_4">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_10">
+                <property name="title">
+                 <string>Bulk Operation Thresholds</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_16">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_7">
+                   <property name="leftMargin">
+                    <number>6</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>6</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="bulkLoadLabel">
+                     <property name="toolTip">
+                      <string>Loads greater than this value will be run as a background job</string>
+                     </property>
+                     <property name="text">
+                      <string>Bulk Load Threshold</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="bulkLoadValue">
+                     <property name="toolTip">
+                      <string/>
+                     </property>
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>2000000</number>
+                     </property>
+                     <property name="singleStep">
+                      <number>25000</number>
+                     </property>
+                     <property name="value">
+                      <number>250000</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="checkDaysLabel_2">
+                     <property name="text">
+                      <string>articles</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <spacer name="horizontalSpacer_5">
+                     <property name="orientation">
+                      <enum>Qt::Horizontal</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>40</width>
+                       <height>20</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_2">
+                     <property name="toolTip">
+                      <string>Deletions greater than this value will be run as a background job</string>
+                     </property>
+                     <property name="text">
+                      <string>Bulk Delete Threshold</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QSpinBox" name="bulkDeleteValue">
+                     <property name="minimum">
+                      <number>1</number>
+                     </property>
+                     <property name="maximum">
+                      <number>200000</number>
+                     </property>
+                     <property name="singleStep">
+                      <number>25</number>
+                     </property>
+                     <property name="value">
+                      <number>25</number>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLabel" name="label_3">
+                     <property name="text">
+                      <string>articles</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="viewTab">
+          <attribute name="icon">
+           <iconset resource="quban.qrc">
+            <normaloff>:/quban/images/fatCow/Page-Refresh.png</normaloff>:/quban/images/fatCow/Page-Refresh.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>View</string>
+          </attribute>
+          <layout class="QVBoxLayout" name="verticalLayout_21">
+           <item>
+            <widget class="QFrame" name="viewFrame">
+             <layout class="QVBoxLayout" name="verticalLayout_20">
+              <item>
+               <widget class="QGroupBox" name="groupBox_7">
+                <property name="title">
+                 <string>Viewing files</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_2">
+                 <item>
+                  <widget class="QRadioButton" name="oneTabBtn">
+                   <property name="text">
+                    <string>View files in one tab</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="multiTabBtn">
+                   <property name="text">
+                    <string>View files in multiple tabs</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_9">
+                <property name="title">
+                 <string>File deletion</string>
+                </property>
+                <layout class="QVBoxLayout" name="verticalLayout_19">
+                 <item>
+                  <widget class="QLabel" name="textLabel1">
+                   <property name="text">
+                    <string>When closing a view or viewing another file</string>
+                   </property>
+                   <property name="wordWrap">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="deleteBtn_2">
+                   <property name="text">
+                    <string>Delete file</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="keepBtn_2">
+                   <property name="text">
+                    <string>Don't delete file</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QRadioButton" name="askBtn_2">
+                   <property name="text">
+                    <string>Ask</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QGroupBox" name="groupBox_8">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="title">
+                 <string>File viewer:</string>
+                </property>
+                <layout class="QHBoxLayout" name="horizontalLayout_6">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_5">
+                   <property name="topMargin">
+                    <number>3</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>3</number>
+                   </property>
+                   <item>
+                    <widget class="QLabel" name="label">
+                     <property name="text">
+                      <string>Text file suffixes</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="textFileSuffixes">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>400</width>
+                       <height>24</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string/>
+                     </property>
+                     <property name="maxLength">
+                      <number>900</number>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="statusBtn">
+                <property name="text">
+                 <string>Enable status bar on initial load</string>
+                </property>
+                <property name="shortcut">
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="activateBtn">
+                <property name="text">
+                 <string>Activate view tab when a new file is loaded</string>
+                </property>
+                <property name="shortcut">
+                 <string>Alt+N</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <spacer name="verticalSpacer_2">
+                <property name="orientation">
+                 <enum>Qt::Vertical</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>20</width>
+                  <height>40</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="unpackTab">
+          <attribute name="icon">
+           <iconset resource="quban.qrc">
+            <normaloff>:/quban/images/rar.png</normaloff>:/quban/images/rar.png</iconset>
+          </attribute>
+          <attribute name="title">
+           <string>Unpack</string>
+          </attribute>
+          <widget class="QFrame" name="unpackFrame">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>761</width>
+             <height>571</height>
+            </rect>
+           </property>
+           <widget class="QWidget" name="layoutWidget_2">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>761</width>
+              <height>571</height>
+             </rect>
+            </property>
+            <layout class="QVBoxLayout" name="unpackLayout2">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+            </layout>
+           </widget>
+          </widget>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="serversTab">
+      <attribute name="icon">
+       <iconset resource="quban.qrc">
+        <normaloff>:/quban/images/fatCow/Server-Edit.png</normaloff>:/quban/images/fatCow/Server-Edit.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Servers</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_5">
+          <property name="spacing">
+           <number>0</number>
+          </property>
+          <property name="leftMargin">
+           <number>0</number>
+          </property>
+          <property name="topMargin">
+           <number>0</number>
+          </property>
+          <property name="rightMargin">
+           <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>0</number>
+          </property>
+          <item>
+           <widget class="QTextEdit" name="textEdit_2">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;Add Server&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;A&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;dding a server&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Before you can use Quban you must add at least one Usenet server (such as &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;AstraWeb&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;, &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;GigaNews&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; etc). These servers hold the articles that Quban will download.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Clicking on the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Add Server&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; button below will launch a window for you to enter the server details. The details below should assist in the initial setup (which can be amended at any time): &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;   &lt;/span&gt;&lt;/p&gt;
+&lt;table border=&quot;1&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;Parameter&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;      &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;      &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Priority &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The priority setting is only relevant if multiple servers are in use. For example, if there are two active servers and their priorities are 7 and 3 then 70% of jobs will be allocated to server 1 whilst 30% are allocated to server 2.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Maximum Threads&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The maximum number of threads that this server should use for downloading articles.  &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Retries&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The number of times that a download is retried if reported as unavailable. &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Server timeout&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The time to wait when the server stops responding before dropping all connections and attempting to re-connect.    &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Thread timeout&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The time to wait when a thread has had no work before dropping the connection.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Check server at creation&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Tick this box to perform a connection check to the server immediately after creation.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Server type&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Active&lt;/span&gt;: will always be considered for downloading articles based on priority&lt;/li&gt;
+&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Passive&lt;/span&gt;: will only be considered for downloading articles if not available on an &lt;span style=&quot; font-style:italic;&quot;&gt;Active&lt;/span&gt; server&lt;/li&gt;
+&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Dormant&lt;/span&gt;: ignored by Quban. Can be used for partially setup servers or servers that should not be used at this point in time. &lt;/li&gt;&lt;/ul&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Server requires authentication&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;If you need to provide a username and password to connect to the server then tick this box and enter the details. &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;If you only want to use Quban to download articles detailed in &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600; font-style:italic;&quot;&gt;nzb&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt; files&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; then you can ignore the following step and start downloading now (either from the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;nzb&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; toolbutton or the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;File/Download .nzb file ...&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; menu).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;If you want to use Quban to subscribe to newgroups and download articles from them&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;, you should click on the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Get Newsgroup List&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; button to display details of the available newsgroups. When the list has been compiled from all servers it will be displayed in a new tab next to the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Queue &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;tab.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="addServerButton">
+              <property name="text">
+               <string>Add Server</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="getGroupListButton">
+              <property name="text">
+               <string>Get Newsgroup List</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="newsgroupsTab">
+      <attribute name="icon">
+       <iconset resource="quban.qrc">
+        <normaloff>:/quban/images/fatCow/Newspaper.png</normaloff>:/quban/images/fatCow/Newspaper.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Newsgroups</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_11">
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+           <horstretch>0</horstretch>
+           <verstretch>1</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_13">
+          <property name="spacing">
+           <number>3</number>
+          </property>
+          <property name="leftMargin">
+           <number>3</number>
+          </property>
+          <property name="topMargin">
+           <number>3</number>
+          </property>
+          <property name="rightMargin">
+           <number>3</number>
+          </property>
+          <property name="bottomMargin">
+           <number>3</number>
+          </property>
+          <item>
+           <widget class="QTextEdit" name="textEdit_3">
+            <property name="readOnly">
+             <bool>true</bool>
+            </property>
+            <property name="html">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Sans Serif'; font-size:9pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;a name=&quot;Add Server&quot;&gt;&lt;/a&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;N&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;ewsgroup Configuration&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;If you only want to use Quban to download articles detailed in &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;nzb&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; files then you can ignore the following steps and start downloading now (either from the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;nzb&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; toolbutton or the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;File/Download .nzb file ...&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; menu).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Otherwise follow the instructions below:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Display details of available newsgroups by clicking on the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Newsgroup/Show Available newsgroups&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; menu item (this will already be visible if you clicked on the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Get Newsgroup List&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; button on the Wizard &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Servers&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; tab).&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;You can filter the list to quickly find groups that contain a word. Right click on the group that you want to subscribe to, and select &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Subscribe to newsgroup ... &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;. &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;This will launch a window for you to enter the config details. The details below should assist in the initial setup (which can be amended at any time): &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Cantarell'; font-size:11pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;table border=&quot;1&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px;&quot; cellspacing=&quot;2&quot; cellpadding=&quot;2&quot;&gt;&lt;thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;Parameter&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;      &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;Description&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;      &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/thead&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Alias &lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;The name that the newsgroup will be displayed as within Quban.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Category&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Acts like a folder to allow the grouping together of various newsgroups (Programming, Photos, etc)&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Save Directory&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;If the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Auto Set&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; box is ticked the save directory for downloaded articles defaults to &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Default directory for decoded posts &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;(from &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;General&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; config ) + the newsgroup &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Alias.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Ignore unsequenced articles&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;If an article doesn't contain a sequence ( 006/087 etc ) within the subject then ignore it. You may wish to download some images that are not sequenced, but most binary articles will be sequenced.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Name database using alias&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Quban uses databases to hold downloaded headers. By default the database will be named using the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Newsgroup Name&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;. This can be changed at any time to use the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Alias&lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt; instead (and also changed back). The change will take effect the next time that Quban is restarted.&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;Default retention period&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;
+&lt;td&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;If the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;header expiry check &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;is ticked within the &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-style:italic;&quot;&gt;Header List &lt;/span&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt;&quot;&gt;config then articles will be deleted after the number of days from posting or download is reached. Otherwise, you must manually expire articles (see below).&lt;/span&gt;&lt;/p&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;p style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Cantarell'; font-size:11pt; font-weight:600;&quot;&gt;Once one or more newsgroups have been subscribed to, the following actions are available from the menus:&lt;/span&gt;&lt;/p&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;View Group Articles&lt;/span&gt;: Display all articles currently held for the selected group. From here you can select articles to download.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Update selected newsgroups&lt;/span&gt;: Download all headers from the local High Water Mark(s) to the server High Water Mark(s) for selected groups.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Newsgroup Management&lt;/span&gt;: From here you can view the local and server High Water Marks, and also download or expire headers based on user set parameters.&lt;/li&gt;&lt;/ul&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Newsgroup properties&lt;/span&gt;: Allows you to update values set during &lt;span style=&quot; font-style:italic;&quot;&gt;Subscribe to newsgroup ... &lt;/span&gt;. &lt;/li&gt;&lt;/ul&gt;
+&lt;ul style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Unsubscribe from newsgroup&lt;/span&gt;:  Unsubscribes from the selected group and deletes all downloaded headers.&lt;/li&gt;
+&lt;li style=&quot; font-family:'Cantarell'; font-size:11pt;&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;Reset selected:&lt;/span&gt; Deletes all downloaded headers, but stays subscribed to the newsgroup.&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="okButton">
+       <property name="text">
+        <string>&amp;Save Config</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelButton">
+       <property name="text">
+        <string>&amp;Cancel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="quban.qrc"/>
+ </resources>
+ <connections/>
+</ui>

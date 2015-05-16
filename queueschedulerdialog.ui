@@ -1,0 +1,3840 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>QueueSchedulerDialog</class>
+ <widget class="QDialog" name="QueueSchedulerDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1306</width>
+    <height>723</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Queue Scheduler</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_5">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Schedule: </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="scheduleComboBox"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>Priority:</string>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="prioritySpinBox">
+       <property name="value">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="enabledRadioButton">
+       <property name="text">
+        <string>Enabled</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="disabledRadioButton">
+       <property name="text">
+        <string>Disabled</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox">
+     <property name="title">
+      <string>Periods for </string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>Mode:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="setPeriodModeComboBox"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableView" name="overviewTable">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+        <property name="showGrid">
+         <bool>false</bool>
+        </property>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>24</number>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>24</number>
+        </attribute>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Fine Tune Selected Period</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_6">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QLabel" name="fromLabel">
+          <property name="text">
+           <string>From</string>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+          <property name="indent">
+           <number>-1</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTimeEdit" name="startTimeEdit">
+          <property name="displayFormat">
+           <string>mm:ss</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="toLabel">
+          <property name="text">
+           <string>to</string>
+          </property>
+          <property name="margin">
+           <number>0</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QTimeEdit" name="endTimeEdit">
+          <property name="displayFormat">
+           <string>mm:ss</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>Speed:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDoubleSpinBox" name="speedSpinBox">
+          <property name="maximum">
+           <double>99999.990000000005239</double>
+          </property>
+          <property name="singleStep">
+           <double>10.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>128.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="kbButton">
+          <property name="text">
+           <string>Kb/Sec</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QRadioButton" name="mbButton">
+          <property name="text">
+           <string>Mb/Sec</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="modifyPeriodButton">
+          <property name="toolTip">
+           <string>Modify the selected period</string>
+          </property>
+          <property name="text">
+           <string>&amp;Modify Period</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deletePeriodButton">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Delete the selected period&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Delete Period</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="deleteAllPeriodsButton">
+          <property name="text">
+           <string>Delete All Periods</string>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>16</width>
+            <height>16</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
+     <property name="lineWidth">
+      <number>2</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Set Active Periods (by setting mode to Set, setting speed below and then clicking on start and end of period)</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Speed:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="speedSpinBox2">
+            <property name="maximum">
+             <double>99999.990000000005239</double>
+            </property>
+            <property name="singleStep">
+             <double>10.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>128.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="kbButton2">
+            <property name="text">
+             <string>Kb/Sec</string>
+            </property>
+            <property name="checked">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="mbButton2">
+            <property name="text">
+             <string>Mb/Sec</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_5">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QScrollArea" name="scrollArea">
+          <property name="widgetResizable">
+           <bool>true</bool>
+          </property>
+          <widget class="QWidget" name="scrollAreaWidgetContents">
+           <property name="geometry">
+            <rect>
+             <x>0</x>
+             <y>0</y>
+             <width>1260</width>
+             <height>208</height>
+            </rect>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout">
+            <item>
+             <layout class="QGridLayout" name="gridLayout">
+              <property name="spacing">
+               <number>1</number>
+              </property>
+              <item row="0" column="21">
+               <widget class="QPushButton" name="mon20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="13">
+               <widget class="QPushButton" name="wed12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="14">
+               <widget class="QPushButton" name="wed13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="15">
+               <widget class="QPushButton" name="wed14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="16">
+               <widget class="QPushButton" name="wed15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="17">
+               <widget class="QPushButton" name="wed16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="18">
+               <widget class="QPushButton" name="wed17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="19">
+               <widget class="QPushButton" name="wed18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="20">
+               <widget class="QPushButton" name="wed19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="17">
+               <widget class="QPushButton" name="tue16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="18">
+               <widget class="QPushButton" name="tue17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="19">
+               <widget class="QPushButton" name="tue18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="13">
+               <widget class="QPushButton" name="tue12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="8">
+               <widget class="QPushButton" name="mon07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="tue00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QPushButton" name="tue01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="11">
+               <widget class="QPushButton" name="wed10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="12">
+               <widget class="QPushButton" name="wed11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="21">
+               <widget class="QPushButton" name="wed20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="22">
+               <widget class="QPushButton" name="wed21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="23">
+               <widget class="QPushButton" name="wed22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="24">
+               <widget class="QPushButton" name="wed23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QPushButton" name="thu">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Thu</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QPushButton" name="thu00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="2">
+               <widget class="QPushButton" name="thu01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="3">
+               <widget class="QPushButton" name="thu02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="4">
+               <widget class="QPushButton" name="thu03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="23">
+               <widget class="QPushButton" name="tue22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QPushButton" name="tue02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QPushButton" name="tue03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QPushButton" name="tue04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="6">
+               <widget class="QPushButton" name="tue05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="11">
+               <widget class="QPushButton" name="tue10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="11">
+               <widget class="QPushButton" name="mon10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="12">
+               <widget class="QPushButton" name="mon11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="13">
+               <widget class="QPushButton" name="mon12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="14">
+               <widget class="QPushButton" name="mon13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="20">
+               <widget class="QPushButton" name="tue19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="21">
+               <widget class="QPushButton" name="tue20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="16">
+               <widget class="QPushButton" name="tue15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="19">
+               <widget class="QPushButton" name="mon18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="20">
+               <widget class="QPushButton" name="mon19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="6">
+               <widget class="QPushButton" name="thu05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="7">
+               <widget class="QPushButton" name="tue06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="22">
+               <widget class="QPushButton" name="mon21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="23">
+               <widget class="QPushButton" name="mon22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="tue">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Tue</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="6">
+               <widget class="QPushButton" name="mon05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="7">
+               <widget class="QPushButton" name="mon06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="9">
+               <widget class="QPushButton" name="mon08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="10">
+               <widget class="QPushButton" name="mon09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="7">
+               <widget class="QPushButton" name="thu06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="5">
+               <widget class="QPushButton" name="thu04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="24">
+               <widget class="QPushButton" name="tue23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="24">
+               <widget class="QPushButton" name="thu23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="8">
+               <widget class="QPushButton" name="tue07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="9">
+               <widget class="QPushButton" name="tue08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="10">
+               <widget class="QPushButton" name="wed09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="24">
+               <widget class="QPushButton" name="mon23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="15">
+               <widget class="QPushButton" name="fri14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="16">
+               <widget class="QPushButton" name="fri15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="17">
+               <widget class="QPushButton" name="fri16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="18">
+               <widget class="QPushButton" name="fri17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="19">
+               <widget class="QPushButton" name="fri18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="20">
+               <widget class="QPushButton" name="fri19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="21">
+               <widget class="QPushButton" name="fri20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="22">
+               <widget class="QPushButton" name="fri21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QPushButton" name="sat">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Sat</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="24">
+               <widget class="QPushButton" name="fri23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="2">
+               <widget class="QPushButton" name="sat01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="3">
+               <widget class="QPushButton" name="sat02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="4">
+               <widget class="QPushButton" name="sat03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="5">
+               <widget class="QPushButton" name="sat04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="6">
+               <widget class="QPushButton" name="sat05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="7">
+               <widget class="QPushButton" name="sat06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="8">
+               <widget class="QPushButton" name="sat07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="9">
+               <widget class="QPushButton" name="sat08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="10">
+               <widget class="QPushButton" name="sat09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="11">
+               <widget class="QPushButton" name="sat10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="12">
+               <widget class="QPushButton" name="sat11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="13">
+               <widget class="QPushButton" name="sat12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="14">
+               <widget class="QPushButton" name="sat13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="15">
+               <widget class="QPushButton" name="sat14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="16">
+               <widget class="QPushButton" name="sat15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="17">
+               <widget class="QPushButton" name="sat16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="18">
+               <widget class="QPushButton" name="sat17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="19">
+               <widget class="QPushButton" name="sat18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="20">
+               <widget class="QPushButton" name="sat19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="21">
+               <widget class="QPushButton" name="sat20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="22">
+               <widget class="QPushButton" name="sat21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="23">
+               <widget class="QPushButton" name="sat22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="24">
+               <widget class="QPushButton" name="sat23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QPushButton" name="sun">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Sun</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QPushButton" name="sun00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="2">
+               <widget class="QPushButton" name="sun01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="3">
+               <widget class="QPushButton" name="sun02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="4">
+               <widget class="QPushButton" name="sun03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="5">
+               <widget class="QPushButton" name="sun04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="6">
+               <widget class="QPushButton" name="sun05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="7">
+               <widget class="QPushButton" name="sun06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="8">
+               <widget class="QPushButton" name="sun07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="9">
+               <widget class="QPushButton" name="sun08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="10">
+               <widget class="QPushButton" name="sun09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="11">
+               <widget class="QPushButton" name="sun10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="8">
+               <widget class="QPushButton" name="thu07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="9">
+               <widget class="QPushButton" name="thu08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="10">
+               <widget class="QPushButton" name="thu09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="11">
+               <widget class="QPushButton" name="thu10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="12">
+               <widget class="QPushButton" name="thu11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="13">
+               <widget class="QPushButton" name="thu12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="14">
+               <widget class="QPushButton" name="thu13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="15">
+               <widget class="QPushButton" name="thu14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="16">
+               <widget class="QPushButton" name="thu15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="17">
+               <widget class="QPushButton" name="thu16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="20">
+               <widget class="QPushButton" name="thu19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="18">
+               <widget class="QPushButton" name="thu17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="19">
+               <widget class="QPushButton" name="thu18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="21">
+               <widget class="QPushButton" name="thu20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="22">
+               <widget class="QPushButton" name="thu21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="23">
+               <widget class="QPushButton" name="thu22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QPushButton" name="fri00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="3">
+               <widget class="QPushButton" name="fri02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QPushButton" name="fri">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Fri</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="5">
+               <widget class="QPushButton" name="fri04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="4">
+               <widget class="QPushButton" name="fri03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="6">
+               <widget class="QPushButton" name="fri05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="7">
+               <widget class="QPushButton" name="fri06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="8">
+               <widget class="QPushButton" name="fri07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="9">
+               <widget class="QPushButton" name="fri08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="10">
+               <widget class="QPushButton" name="fri09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="11">
+               <widget class="QPushButton" name="fri10">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>10:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="12">
+               <widget class="QPushButton" name="fri11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="13">
+               <widget class="QPushButton" name="fri12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="14">
+               <widget class="QPushButton" name="fri13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="12">
+               <widget class="QPushButton" name="sun11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="13">
+               <widget class="QPushButton" name="sun12">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>12:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="14">
+               <widget class="QPushButton" name="sun13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="15">
+               <widget class="QPushButton" name="sun14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="16">
+               <widget class="QPushButton" name="sun15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="17">
+               <widget class="QPushButton" name="sun16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="18">
+               <widget class="QPushButton" name="sun17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="19">
+               <widget class="QPushButton" name="sun18">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>18:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="20">
+               <widget class="QPushButton" name="sun19">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>19:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="21">
+               <widget class="QPushButton" name="sun20">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>20:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="22">
+               <widget class="QPushButton" name="sun21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="23">
+               <widget class="QPushButton" name="sun22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="24">
+               <widget class="QPushButton" name="sun23">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>23:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="10">
+               <widget class="QPushButton" name="tue09">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>09:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="12">
+               <widget class="QPushButton" name="tue11">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>11:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="2">
+               <widget class="QPushButton" name="fri01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="14">
+               <widget class="QPushButton" name="tue13">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>13:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="15">
+               <widget class="QPushButton" name="tue14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="15">
+               <widget class="QPushButton" name="mon14">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>14:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="16">
+               <widget class="QPushButton" name="mon15">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>15:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="17">
+               <widget class="QPushButton" name="mon16">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>16:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="18">
+               <widget class="QPushButton" name="mon17">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>17:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QPushButton" name="mon">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Mon</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="mon00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QPushButton" name="mon01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="3">
+               <widget class="QPushButton" name="mon02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="4">
+               <widget class="QPushButton" name="mon03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="5">
+               <widget class="QPushButton" name="mon04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="wed">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Wed</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QPushButton" name="wed00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="2">
+               <widget class="QPushButton" name="wed01">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>01:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="3">
+               <widget class="QPushButton" name="wed02">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>02:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="4">
+               <widget class="QPushButton" name="wed03">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>03:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="23">
+               <widget class="QPushButton" name="fri22">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>22:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="5">
+               <widget class="QPushButton" name="wed04">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>04:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="6">
+               <widget class="QPushButton" name="wed05">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>05:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="8">
+               <widget class="QPushButton" name="wed07">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>07:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="7">
+               <widget class="QPushButton" name="wed06">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>06:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="9">
+               <widget class="QPushButton" name="wed08">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>08:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QPushButton" name="sat00">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>00:00</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="22">
+               <widget class="QPushButton" name="tue21">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>48</width>
+                  <height>32</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>21:00</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="createPushButton">
+       <property name="toolTip">
+        <string>Create a new schedule</string>
+       </property>
+       <property name="text">
+        <string>Create</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="savePushButton">
+       <property name="toolTip">
+        <string>Save the current schedule</string>
+       </property>
+       <property name="text">
+        <string>&amp;Save</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="saveAsPushButton">
+       <property name="toolTip">
+        <string>Save the current schedule under a new name</string>
+       </property>
+       <property name="text">
+        <string>Save &amp;As</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="deleteButton">
+       <property name="toolTip">
+        <string>Delete the current schedule</string>
+       </property>
+       <property name="text">
+        <string>&amp;Delete</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancelPushButton">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Close the Scheduler window (without saving)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="text">
+        <string>&amp;Close</string>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>16</width>
+         <height>16</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="quban.qrc"/>
+ </resources>
+ <connections/>
+</ui>

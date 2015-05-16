@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PrefDialogClass</class>
+ <widget class="QDialog" name="PrefDialogClass">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>784</width>
+    <height>670</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Preferences</string>
+  </property>
+  <widget class="QWidget" name="verticalLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>761</width>
+     <height>601</height>
+    </rect>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="generalTab">
+       <attribute name="icon">
+        <iconset resource="quban.qrc">
+         <normaloff>:/quban/images/fatCow/Report-Edit.png</normaloff>:/quban/images/fatCow/Report-Edit.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>General</string>
+       </attribute>
+       <widget class="QFrame" name="generalFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>751</width>
+          <height>561</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_9">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="generalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="decodeTab">
+       <attribute name="icon">
+        <iconset resource="quban.qrc">
+         <normaloff>:/quban/images/fatCow/Newspaper-Link.png</normaloff>:/quban/images/fatCow/Newspaper-Link.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Decode</string>
+       </attribute>
+       <widget class="QFrame" name="decodeFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>751</width>
+          <height>561</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_4">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="decodeLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="headerTab">
+       <attribute name="icon">
+        <iconset resource="quban.qrc">
+         <normaloff>:/quban/images/fatCow/Viewstack.png</normaloff>:/quban/images/fatCow/Viewstack.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Header List</string>
+       </attribute>
+       <widget class="QFrame" name="headerFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>751</width>
+          <height>561</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_6">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="headerLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="viewTab">
+       <attribute name="icon">
+        <iconset resource="quban.qrc">
+         <normaloff>:/quban/images/fatCow/Page-Refresh.png</normaloff>:/quban/images/fatCow/Page-Refresh.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>View</string>
+       </attribute>
+       <widget class="QFrame" name="viewFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>751</width>
+          <height>561</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <property name="margin">
+          <number>0</number>
+         </property>
+         <item>
+          <layout class="QVBoxLayout" name="viewLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="unpackTab">
+       <attribute name="icon">
+        <iconset resource="quban.qrc">
+         <normaloff>:/quban/images/rar.png</normaloff>:/quban/images/rar.png</iconset>
+       </attribute>
+       <attribute name="title">
+        <string>Unpack</string>
+       </attribute>
+       <widget class="QFrame" name="unpackFrame">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>751</width>
+          <height>561</height>
+         </rect>
+        </property>
+        <layout class="QVBoxLayout" name="unpackLayout">
+         <item>
+          <layout class="QVBoxLayout" name="unpackLayout2">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+          </layout>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>620</y>
+     <width>751</width>
+     <height>36</height>
+    </rect>
+   </property>
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QPushButton" name="okButton">
+      <property name="text">
+       <string>&amp;Ok</string>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="QPushButton" name="cancelButton">
+      <property name="text">
+       <string>&amp;Cancel</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="quban.qrc"/>
+ </resources>
+ <connections/>
+</ui>

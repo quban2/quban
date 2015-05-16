@@ -1,0 +1,70 @@
+Installation instructions for Quban - a Qt usenet binary news grabber 
+
+Version 0.7.0 - 9th April 2015
+
+Dependencies:
+ - Qt 4.6 or greater (libqt4-devel, qt4-devel, etc)
+ - Berkeley Db 4.x  or 5.x (libdb-cxx-devel, libdb5.1++-dev, etc)  
+   (http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html) 
+   with C++ support. If you compile it from source, remember to  pass the 
+   "--enable-cxx" option to configure (see below).
+- zlib version 1
+
+* How to compile:
+
+- You can grab the source from sourceforge (go to
+http://quban.sourceforge.net/). It compiles as follows:
+
+  cp Quban_0.7.0.tar.gz <your chosen installation dir>
+  cd <your chosen installation dir>
+  tar zxvf Quban_0.7.0.tar.gz
+  cd Quban_0.7.0  
+  qmake -recursive CONFIG+=release Quban.pro
+  make
+
+If the above steps successfully create the quban executable then either dive in 
+and try it straight away or read the README file for details about getting started...
+
+The following are the most common reasons for a problem (in my experience):
+
+ problem - qmake was not found
+solution - Try replacing qmake with /usr/lib/qt4/bin/qmake or run 'find' to discover where qmake resides 
+
+ problem - Qt4 Development package is not installed
+solution - use yum, apt-get, yast etc to install the appropriate package, called something like libqt4-devel 
+
+ problem - Berkeley C++ development package is not installed
+solution - use yum, apt-get, yast etc to install the appropriate package, called something like libdb-cxx-devel  
+
+ problem - zlib Development package is not installed
+solution - use yum, apt-get, yast etc to install the appropriate package, called something like zlib-devel or zlib1g-dev 
+
+ problem - You can't find a Berkeley C++ development package for your distribution
+solution - If you find a version that doesn't mention C++ take a look at it's contents. On Mandriva 64 the 
+           package lib64db5.1-devel-5.1.25 contains the required files (db_cxx.h and libdb_cxx.so).
+
+ problem - You still can't find a Berkeley C++ development package for your distribution
+solution - Download the latest source version and install as follows:
+
+ - Go to http://www.oracle.com/technetwork/database/berkeleydb/downloads/index.html and download the
+   latest version without encryption. Currently "Berkeley DB 5.2.36.NC.tar.gz , without encryption (32M)".
+ - cp db-5.2.36.NC.tar.gz <your chosen installation dir>
+ - cd <your chosen installation dir>
+ - tar zxvf db-5.2.36.NC.tar.gz
+ - cd db-5.2.36.NC/build_unix
+ - ../dist/configure --enable-cxx
+ - make
+ - make install (as root, sudo)
+ - cd /usr/local
+ - ln -s BerkeleyDB.5.2 BerkeleyDB (as root, sudo) this is required so that the Quban build finds the files
+ - at runtime invoke the following before calling quban: 
+   export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/BerkeleyDB/lib
+   or look at ldconfig...
+   This last step is required so that Quban finds the Berkeley library at runtime.
+
+I've successfully run Quban using various versions, between 4.8 and 5.2, of BerkeleyDB. As Quban is based 
+upon Klibido it should run against even earlier versions, back to 4.2 (if you need to use them).
+
+Good luck!
+Martin Demet, <martydem_at_users.sourceforge.net>
+

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>PrefUnpackClass</class>
+ <widget class="QWidget" name="PrefUnpackClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>700</width>
+    <height>550</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PrefUnpack</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab">
+      <attribute name="title">
+       <string>General</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_2">
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+         <widget class="QGroupBox" name="numAppsGroupBox">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>120</y>
+            <width>640</width>
+            <height>81</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Number of applications required</string>
+          </property>
+          <widget class="QWidget" name="layoutWidget_2">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>30</y>
+             <width>621</width>
+             <height>33</height>
+            </rect>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
+             <widget class="QLabel" name="label">
+              <property name="text">
+               <string>Number of repair applications</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="numRepairersSpinBox">
+              <property name="whatsThis">
+               <string>Reduce the priority of these jobs by increasing the value</string>
+              </property>
+              <property name="maximum">
+               <number>2</number>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="text">
+               <string>Number of unpack applications</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="numUnpackersSpinBox">
+              <property name="whatsThis">
+               <string>Reduce the priority of these jobs by increasing the value</string>
+              </property>
+              <property name="maximum">
+               <number>5</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+         <widget class="QCheckBox" name="autoUnpackCheckBox">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>20</y>
+            <width>381</width>
+            <height>26</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>Use automatic unpack and repair of files in a group</string>
+          </property>
+         </widget>
+         <widget class="QWidget" name="layoutWidget">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>70</y>
+            <width>621</width>
+            <height>33</height>
+           </rect>
+          </property>
+          <layout class="QHBoxLayout" name="horizontalLayout_4">
+           <item>
+            <widget class="QLabel" name="excludeLabel">
+             <property name="text">
+              <string>Files to exclude unless repair required</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="excludeLineEdit"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QGroupBox" name="actionsGroupBox">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>220</y>
+            <width>640</width>
+            <height>231</height>
+           </rect>
+          </property>
+          <property name="title">
+           <string>Actions to take</string>
+          </property>
+          <widget class="QCheckBox" name="delRepairCheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>60</y>
+             <width>271</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Delete repair files if successful</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="delCompressedCheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>90</y>
+             <width>281</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Delete compressed files if successful</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="alwaysConfirmCheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>180</y>
+             <width>351</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>If checked don't show the file type confirmation dialog if all appears ok</string>
+           </property>
+           <property name="text">
+            <string>Only confirm file type identification if problems</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="delOtherCheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>120</y>
+             <width>281</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="text">
+            <string>Delete other files if successful</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="delGroupCheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>30</y>
+             <width>311</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>Delete the 'group' record on successful completion</string>
+           </property>
+           <property name="text">
+            <string>Delete record of auto unpack if successful</string>
+           </property>
+          </widget>
+          <widget class="QCheckBox" name="merge001CheckBox">
+           <property name="geometry">
+            <rect>
+             <x>10</x>
+             <y>150</y>
+             <width>361</width>
+             <height>26</height>
+            </rect>
+           </property>
+           <property name="toolTip">
+            <string>Automatically merge files like test.zip.001 and test.zip.002 to test.zip when unpacking</string>
+           </property>
+           <property name="text">
+            <string>Auto merge files with 001, 002, 003  etc suffix</string>
+           </property>
+          </widget>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

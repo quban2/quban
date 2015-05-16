@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HeaderGroupingWidget</class>
+ <widget class="QWidget" name="HeaderGroupingWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>714</width>
+    <height>209</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QGroupBox" name="headerGroupBox">
+     <property name="title">
+      <string>Article 'Subject Name' Grouping</string>
+     </property>
+     <property name="flat">
+      <bool>false</bool>
+     </property>
+     <property name="checkable">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
+        <item>
+         <widget class="QLabel" name="maxDistanceLabel">
+          <property name="text">
+           <string>Max distance for match</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSpinBox" name="maxDistanceSpinBox">
+          <property name="toolTip">
+           <string>When matching articles the max difference allowed : higher = less exact</string>
+          </property>
+          <property name="value">
+           <number>12</number>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="testGroupingPushButton">
+          <property name="toolTip">
+           <string>Test the grouping before saving</string>
+          </property>
+          <property name="text">
+           <string>Test Grouping ...</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="regroupButton">
+          <property name="toolTip">
+           <string>Perform new header grouping based on current settings (by batch job)</string>
+          </property>
+          <property name="whatsThis">
+           <string/>
+          </property>
+          <property name="text">
+           <string>Regroup Now</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="noRegexCheckBox">
+        <property name="text">
+         <string>Don't use any regular expressions to shorten subject during matching</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <item>
+         <widget class="QLabel" name="groupRE1_Label">
+          <property name="text">
+           <string>Grouping Regular Expression 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="groupRE1_Value">
+          <property name="toolTip">
+           <string>The first regular expression to be applied to the article name</string>
+          </property>
+          <property name="text">
+           <string>-.*$</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="groupRE1_Combo">
+          <property name="toolTip">
+           <string>Apply the expression to the front or back of the subject name</string>
+          </property>
+          <property name="maxVisibleItems">
+           <number>2</number>
+          </property>
+          <property name="insertPolicy">
+           <enum>QComboBox::NoInsert</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>Front</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Back</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <widget class="QLabel" name="groupRE2_Label">
+          <property name="text">
+           <string>Grouping Regular Expression 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="groupRE2_Value">
+          <property name="toolTip">
+           <string>The regular expression that will be applied to the result of Expression 1</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="groupRE2_Combo">
+          <property name="toolTip">
+           <string>Apply the expression to the front or back of the result string</string>
+          </property>
+          <property name="maxVisibleItems">
+           <number>2</number>
+          </property>
+          <property name="insertPolicy">
+           <enum>QComboBox::NoInsert</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>Front</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Back</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6">
+        <item>
+         <widget class="QLabel" name="groupRE3_Label">
+          <property name="text">
+           <string>Grouping Regular Expression 3</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="groupRE3_Value">
+          <property name="toolTip">
+           <string>The regular expression that will be applied to the result of Expression 2</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QComboBox" name="groupRE3_Combo">
+          <property name="toolTip">
+           <string>Apply the expression to the front or back of the result string</string>
+          </property>
+          <property name="maxVisibleItems">
+           <number>2</number>
+          </property>
+          <property name="insertPolicy">
+           <enum>QComboBox::NoInsert</enum>
+          </property>
+          <item>
+           <property name="text">
+            <string>Front</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Back</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

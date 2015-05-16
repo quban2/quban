@@ -1,0 +1,128 @@
+README file for Quban - a Qt usenet binary news grabber 
+
+Version 0.7.0 - 9th April 2015
+
+* What it is:
+Quban is a Qt4 program to download encoded articles from the usenet news
+service, using the nntp protocol. It supports multiple servers, multiple
+download threads per server, automatic joining and decoding of articles.
+
+* What's included:
+ - built in ssl support
+ - .nzb support
+ - Automatic repair and unpacking for par2, rar, zip and 7z files.
+ - Compressed header file downloading.
+ - File viewer for image and text files
+ - Drag and drop for downloading from nzb files
+ - Wizard for simple configuration
+ - Server priorities and balancing
+ - Getting a list of available newsgroups and subscribing/unsubscribing to them
+ - Getting headers, sorting, filtering by subject, state and "completeness" 
+ - Downloading and decoding of binary posts (including yEnc).
+ - Versitile Queue management
+ - Requeueing: if an article fails on a server, it is automatically tried on
+   the other servers.
+ - Jobs console: for monitoring and cancelling background jobs
+ - Newsgroup categories and aliases
+ - Server download limits
+ 
+* How does it do it:
+ - Quban uses Qt4 libraries for the interface, Berkeley DB for
+   storing the newsgroups' headers, and a set of internal decoders for decoding the 
+   posts.
+ 
+Dependencies:
+ - Qt 4.6 or greater
+ - Berkeley Db 4.x  or 5.x 
+   (http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html) 
+   with C++ support. If you compile it from source, remember to  pass the 
+   "--enable-cxx" option to configure.
+ - zlib version 1
+
+* How to compile:
+
+ - Full details are contained in the INSTALL file.
+
+* Getting started:
+
+ Type "quban" to start the program. To get it working:
+  - Configure the directories (defaults are provided)
+  - Add your servers using the Wizard 
+  - Get the newsgroup list if required (Server->Download list of available groups)
+  - When the list of groups is displayed, subscribe to some groups (right click on group and
+    select Subscribe to newsgroup...)
+  - NewsGroup->Group properties
+  - Enjoy :)
+  
+* A note about error model: 
+
+Quban divides errors in two branches, fatal (i.e.: article not found) and not
+fatal (i.e.: timeout). Fatal errors cause the download of the item to fail, 
+while non-fatal errors trigger a retry.
+
+In the server options, there are three values that control the connection 
+timeout/errors: 
+1. Server timeout: this is the value of timeout for the server (in seconds), 
+i.e.: if no response/data come from the server in "timeout" seconds, a timeout 
+error is triggered (and the item is generally retried)
+2. Retries: this value only applies to post downloads (i.e.: not to headers 
+updates) and represents the number of times a download is retried in the event 
+of a *fatal* error. Example: Quban tries to download an article. The server 
+answers "article not found". The download is retried "Retries" times 
+(default: 3). Why, you may ask? Because some servers are lame/overloaded/whatever,
+and when you try to download an article you get "article not found" the first time, 
+but if you retry in a few seconds, the download succeeds. If your servers don't 
+show this behavior, put "retries" to 0.
+3. Thread timeout: this is the timeout (in minutes) for the connection thread. 
+When a thread fails to successfully connect/login to a server for "thread_timeout" 
+minutes, the thread is paused and must be restarted manually (via the context menu). 
+This is considered a communication error, so it doesn't cause any item in the queue 
+to fail. 
+
+More in depth: when a thread gets a login error, it is paused for n seconds. 
+"n" depends on the number of *consecutive* fails: first time 1 seconds, second 
+5 seconds, third 10 seconds, then 30, then one minute. After that, the thread 
+is always paused for one minute. After "thread_timeout" minutes, the thread is 
+put in paused state, and doesn't try to connect anymore until the user restarts 
+it manually. Why? Because a login error can have to much causes:
+- network is down
+- wrong login/password
+- thread limit exceeded
+- download limit exceeded
+- etc...
+Servers often return custom error codes, so in the event of a failed login there 
+is no easy/automated way to know if the login failed because of a wrong password, 
+exceeded daily download limit, too many connected threads, or whatever. So the best 
+thing to do (IMHO) is to pause the thread and retry later.
+
+* The story behind it:
+
+ - I wanted to carry on using Klibido ... but saw issues going forward as it's a Qt3 app (beneath KDE).
+   Now that it's working and has been tested on several Linux distributions and multiple versions of Berkeley Db and Qt4 I feel that it's time for others to see if it's of any use to them as well.
+ - Future enhancements that I'm working on are:
+     + Extending the existing par2, rar, 7z support.
+     + The re-introduction of drag and drop 
+     + A few other ideas that are on the back burner at the moment... 
+ 
+The main goals for Klibido were:
+ - Keeping memory usage as low as possible. Update/load/browse large groups
+   (groups with over one million of articles) without using 1 Gb of RAM and
+   swapping for days.
+ - Multiple server support
+ - Multiple download threads support
+ - Fine-grained manipulation of the download queue.
+
+* Credits
+ - Alessandro "Bauno" Bonometti for the work he put into developing Klibido 0.2.5,
+   from which Quban was forked. 
+ - Sourceforge for hosting this project
+ - The guys at Qt for the great IDE they've made.
+ - Sleepycat (and Oracle) for the great Berkeley Db
+ - David Pye (.nzb parsing, yy/uu decoder)
+ - KNode and Pan developers for their icons
+
+Quban is released under version 3 of the GNU General Public License.
+   
+Good luck!
+Martin Demet, <martydem_at_users.sourceforge.net>
+
