@@ -78,7 +78,7 @@ public:
 	inline quint64  getEnabledServerExtensions() { return enabledServerExtensions; }
 	inline quint64  getSslAllowableErrors() { return sslAllowableErrors; }
 	inline quint64  getSslAllErrors() { return sslAllErrors; }
-	inline quint16  getXrefPosition() { return xrefPosition; }
+    inline qint16  getSslProtocol() { return sslProtocol; }
 	inline QSslCertificate* getSslCertificate() { return &sslCertificate; }
 	inline QList<QSslError>& getExpectedSslErrors() { return expectedSslErrors; }
     inline QMap<qint16, quint64>& getSslErrorMap() { return sslErrorMap; }    
@@ -123,7 +123,7 @@ public:
 	inline void     addSslAllowableErrors(quint64 f) { sslAllowableErrors &= f; }
 	inline void     removeSslAllowableErrors(quint64 f) { sslAllowableErrors |= ~f; }
 	inline void     setSslAllErrors(quint64 f) { sslAllErrors = f; }
-	inline void     setXrefPosition(quint16 a) { xrefPosition=a; }
+    inline void     setSslProtocol(qint16 a) { sslProtocol=a; }
 	inline void     setSslCertificate(QSslCertificate* a) { sslCertificate=*a; }
     inline void     setNewCertificate(QSslCertificate* a) { newCertificate=*a; }
 	inline void     setExpectedSslErrors(QList<QSslError>& a) { expectedSslErrors=a; }    
@@ -187,7 +187,7 @@ private:
 	quint64 enabledServerExtensions;
 	quint64 sslAllErrors;
 	quint64 sslAllowableErrors;
-	quint16 xrefPosition;
+    qint16 sslProtocol;
 
 	QSslCertificate sslCertificate;
     QSslCertificate newCertificate;

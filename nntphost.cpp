@@ -91,7 +91,7 @@ void NntpHost::loadHost( char *p)
     i+=sizeof(quint64);
     memcpy(&sslAllowableErrors, i, sizeof(quint64));
     i+=sizeof(quint64);
-    memcpy(&xrefPosition, i, sz16);
+    memcpy(&sslProtocol, i, sz16);
     i+=sz16;
 
     memcpy(&enableServerLimit, i, sizeof(bool));
@@ -199,7 +199,7 @@ char * NntpHost::saveHost()
 	i+=sizeof(quint64);
 	memcpy(i, &sslAllowableErrors, sizeof(quint64));
 	i+=sizeof(quint64);
-	memcpy(i, &xrefPosition, sz16);
+    memcpy(i, &sslProtocol, sz16);
 	i+=sz16;
 
     memcpy(i, &enableServerLimit, sizeof(bool));
