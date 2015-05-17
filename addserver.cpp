@@ -104,7 +104,7 @@ void AddServer::newServerReq(NntpHost *host)
 	emit newServer(host);
 }
 
-void AddServer::testServerReq(QString addr, quint16 qport, int sslSocket, int qtimeout)
+void AddServer::testServerReq(QString addr, quint16 qport, int sslSocket, qint16 sslProtocol, int qtimeout)
 {
-	emit testServer(addr, qport, sslSocket, qtimeout);
+    emit testServer(addr, qport, sslSocket, sslProtocol, qtimeout);
 }

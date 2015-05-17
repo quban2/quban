@@ -35,7 +35,7 @@ public:
   virtual ~AddServer();
 
   void newServerReq(NntpHost *);
-  void testServerReq(QString,quint16,int,int);
+  void testServerReq(QString,quint16,int,qint16,int);
 
 public slots:
   /*$PROTECTED_SLOTS$*/
@@ -44,7 +44,7 @@ public slots:
 
   signals:
 	void newServer(NntpHost*);
-	void testServer(QString,quint16,int,int);
+    void testServer(QString,quint16,int,qint16,int);
 
 private:
 	AddServerWidget* addServerWidget;

@@ -187,7 +187,7 @@ private:
 	quint64 enabledServerExtensions;
 	quint64 sslAllErrors;
 	quint64 sslAllowableErrors;
-    qint16 sslProtocol;
+    qint16  sslProtocol;
 
 	QSslCertificate sslCertificate;
     QSslCertificate newCertificate;

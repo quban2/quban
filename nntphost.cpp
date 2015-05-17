@@ -360,6 +360,7 @@ void NntpHost::slotTestServer()
 	}
 	else
 	{
+        kes->setProtocol((QSsl::SslProtocol)sslProtocol);
 		connect(kes, SIGNAL(encrypted()), this, SLOT(slotTestConnected()));
 		connect(kes, SIGNAL(sslErrors(const QList<QSslError> &)), this, SLOT(slotSslError(const QList<QSslError> &)));
 		kes->connectToHostEncrypted(hostName, port);

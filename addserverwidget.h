@@ -58,6 +58,7 @@ public:
     void                  slotEnableTest();
     void                  slotLoginRequired(bool);
     void                  slotLimitsRequired(bool);
+    void                  sslStateChange(int);
 
   signals:
     void sigSaveNeeded();

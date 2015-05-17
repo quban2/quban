@@ -567,7 +567,7 @@ void ServersList::slotServerProperties()
 
 	AddServer *as=new AddServer(nh, this->parentWidget());
 	connect(as, SIGNAL(newServer(NntpHost*)), this, SLOT(slotModifyServer(NntpHost*)));
-	connect(as, SIGNAL(testServer(QString,quint16,int,int)), nh, SLOT(slotTestServer()));
+    connect(as, SIGNAL(testServer(QString,quint16,int,qint16,int)), nh, SLOT(slotTestServer()));
 	as->exec();
 	this->setEnabled(true);
 }
@@ -752,6 +752,7 @@ void ServersList::slotModifyServer(NntpHost * nh)
 	oh->setThreadTimeout(nh->getThreadTimeout());
 	oh->setRetries(nh->getRetries());
 	oh->setSslSocket(nh->getSslSocket());
+    oh->setSslProtocol(nh->getSslProtocol());
 	oh->setServerType(nh->getServerType());
 	oh->setServerFlags(nh->getServerFlags());
 	oh->setEnabledServerExtensions(nh->getEnabledServerExtensions());
