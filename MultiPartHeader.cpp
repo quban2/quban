@@ -190,12 +190,12 @@ MultiPartHeader::MultiPartHeader(quint32 keySize, char* k, char *p)
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
-        subj = QString::fromAscii(k, (splitpoint - k));
-        from = QString::fromAscii(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        subj = QString::fromLatin1(k, (splitpoint - k));
+        from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
     }
     else
     {
-        subj = QString::fromAscii(k, keySize);
+        subj = QString::fromLatin1(k, keySize);
         from = subj;
         qDebug("Single element header encountered ...");
     }
@@ -284,12 +284,12 @@ bool MultiPartHeader::getMultiPartHeader(unsigned int keySize, char *k, char *p,
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
-        mph->subj = QString::fromAscii(k, (splitpoint - k));
-        mph->from = QString::fromAscii(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        mph->subj = QString::fromLatin1(k, (splitpoint - k));
+        mph->from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
     }
     else
     {
-        mph->subj = QString::fromAscii(k, keySize);
+        mph->subj = QString::fromLatin1(k, keySize);
         mph->from = mph->subj;
         qDebug() << "Single element header encountered ... " <<  mph->subj;
     }

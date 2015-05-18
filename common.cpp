@@ -94,7 +94,7 @@ char* retrieve(char* i, QString &s)
 	memcpy(&strlen, i, ssize);
 	i += ssize;
 
-	s = QString::fromAscii(i, strlen);
+    s = QString::fromLatin1(i, strlen);
 	i += strlen;
 	return i;
 }

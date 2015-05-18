@@ -21,7 +21,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QList>
 #include <db_cxx.h>
 #include "appConfig.h"

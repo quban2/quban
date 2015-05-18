@@ -79,6 +79,7 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
 	headerListWidget->h_layout->setContentsMargins(0, 36, 0, 0);
     toolBarTab_4 = new QToolBar(this);
     toolBarTab_4->setObjectName(QString::fromUtf8("toolBarTab_4"));
+
     toolBarTab_4->setMovable(false);
     toolBarTab_4->addAction(quban->actionDownload_selected);
     toolBarTab_4->addAction(quban->actionView_article);
@@ -105,7 +106,12 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
     headerListWidget->filterSyntaxComboBox->addItem(tr("Wildcard"), QRegExp::Wildcard);
 
     m_headerList=new HeaderTreeView(headerListWidget);
-	m_headerList->header()->setMovable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    m_headerList->header()->setMovable(false);
+#else
+    m_headerList->header()->setSectionsMovable(false);
+#endif
+
 	headerListWidget->listLayout->addWidget(m_headerList);
 
     headerTreeModel = new HeaderTreeModel(servers, ng->getDb(), ng->getPartsDb(), ng->getGroupingDb(), this);
@@ -130,9 +136,13 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
         loadGroups(ng->getGroupingDb());
 
 	if (!bulkLoading)
-	{
+	{        
 		m_headerList->header()->setSortIndicatorShown(true);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 		m_headerList->header()->setClickable(true);
+#else
+        m_headerList->header()->setSectionsClickable(true);
+#endif
 
         if (config->rememberSort && !((ng->getSortColumn() == CommonDefs::Subj_Col) && (ng->getSortOrder() == true)))
 		{
@@ -207,7 +217,7 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
 	contextMenu = new QMenu(m_headerList);
 	m_headerList->setContextMenuPolicy(Qt::ActionsContextMenu);
 
-	m_headerList->setUpdatesEnabled(TRUE);
+    m_headerList->setUpdatesEnabled(true);
 
 	headerListWidget->m_filterEdit->setEnabled(true);
 
@@ -262,7 +272,11 @@ void HeaderList::loadHeaders(Db* db)
 {
  	bulkLoading = false;
 
-	m_headerList->header()->setClickable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(false);
+#else
+        m_headerList->header()->setSectionsClickable(false);
+#endif
 	m_headerList->setRootIsDecorated(true);
     m_headerList->setUpdatesEnabled(false);
 
@@ -461,7 +475,11 @@ void HeaderList::loadGroups(Db* db)
 {
     bulkLoading = false;
 
-    m_headerList->header()->setClickable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(false);
+#else
+        m_headerList->header()->setSectionsClickable(false);
+#endif
     m_headerList->setRootIsDecorated(true);
     m_headerList->setUpdatesEnabled(false);
 
@@ -642,7 +660,12 @@ void HeaderList::bulkLoadFinished(quint64 seq)
 		quban->getLogEventList()->logEvent(tr("Bulk load of ") + ng->getAlias() + tr(" completed successfully"));
 
 		m_headerList->header()->setSortIndicatorShown(true);
-		m_headerList->header()->setClickable(true);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(true);
+#else
+        m_headerList->header()->setSectionsClickable(true);
+#endif
 
 		Configuration* config = Configuration::getConfig();
 
@@ -750,7 +773,12 @@ void HeaderList::slotListParts()
     QModelIndex sourceIndex;
 
     //m_headerList->setSortingEnabled(false);
-    m_headerList->header()->setClickable(false);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(false);
+#else
+        m_headerList->header()->setSectionsClickable(false);
+#endif
 
     for (int i = 0; i < selectedSubjects.size(); ++i)
     {
@@ -768,7 +796,12 @@ void HeaderList::slotListParts()
 	    m_headerList->setCurrentIndex(selectedSubjects.at(0));
 	m_headerList->resizeColumnToContents(0);
 	//m_headerList->setSortingEnabled(true);
-	m_headerList->header()->setClickable(true);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(true);
+#else
+        m_headerList->header()->setSectionsClickable(true);
+#endif
 }
 
 void HeaderList::slotDownloadSelected(bool first, bool view, QString dir)
@@ -1017,7 +1050,12 @@ void HeaderList::slotDelSelected()
 	const char *k;
 
 	//m_headerList->setSortingEnabled(false);
-	m_headerList->header()->setClickable(false);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(false);
+#else
+        m_headerList->header()->setSectionsClickable(false);
+#endif
 
 	//These are used to get Header details
 	uchar* keymem2=new uchar[KEYMEM_SIZE/2];
@@ -1156,7 +1194,12 @@ void HeaderList::slotDelSelected()
 	}
 
 	//m_headerList->setSortingEnabled(true);
-    m_headerList->header()->setClickable(true);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(true);
+#else
+        m_headerList->header()->setSectionsClickable(true);
+#endif
 
 	pd->setValue(numDeleted);
 	QCoreApplication::processEvents();
@@ -1195,7 +1238,12 @@ void HeaderList::delSelectedSmall()
 	const char *k;
 
 	//m_headerList->setSortingEnabled(false);
-	m_headerList->header()->setClickable(false);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(false);
+#else
+        m_headerList->header()->setSectionsClickable(false);
+#endif
 
 	Dbt mkey;
 
@@ -1446,7 +1494,12 @@ void HeaderList::delSelectedSmall()
 	delete[] datamem2;
 
 	//m_headerList->setSortingEnabled(true);
-	m_headerList->header()->setClickable(true);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+        m_headerList->header()->setClickable(true);
+#else
+        m_headerList->header()->setSectionsClickable(true);
+#endif
 
 	pd->setValue(numDeleted);
 	QCoreApplication::processEvents();

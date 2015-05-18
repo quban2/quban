@@ -32,12 +32,12 @@ HeaderGroup::HeaderGroup(quint32 keySize, char* k, char *p)
 
     if (splitpoint)
     {
-        match = QString::fromAscii(k, (splitpoint - k));
-        from = QString::fromAscii(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        match = QString::fromLatin1(k, (splitpoint - k));
+        from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
     }
     else
     {
-        match = QString::fromAscii(k, (keySize - 1));
+        match = QString::fromLatin1(k, (keySize - 1));
         from = match;
     }
 
@@ -157,8 +157,8 @@ bool HeaderGroup::getHeaderGroup(unsigned int keySize, char *k, char *p, HeaderG
     if (!splitpoint)
         return false;
 
-    hg->match = QString::fromAscii(k, (splitpoint - k));
-    hg->from = QString::fromAscii(splitpoint + 1, k + (keySize - 1) - splitpoint);
+    hg->match = QString::fromLatin1(k, (splitpoint - k));
+    hg->from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
 
     memcpy(&hg->postingDate, pi, sz32);
     pi +=sz32;

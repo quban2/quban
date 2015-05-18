@@ -8,6 +8,7 @@ LIBS += -L/usr/local/BerkeleyDB/lib \
 QT += core \
     gui \
     network \
+    widgets \
     xml
 INCLUDEPATH += /usr/include/db5 \
     /usr/include/db4 \

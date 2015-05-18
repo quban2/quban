@@ -20,7 +20,7 @@
     You should have received a copy of the GNU General Public License
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
-#include <QtGui/QDialog>
+#include <QDialog>
 #include <QList>
 #include "common.h"
 #include "newsgroup.h"

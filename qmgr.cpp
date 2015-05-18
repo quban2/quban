@@ -65,7 +65,11 @@ QMgr::QMgr(Servers *_servers, Db *_gdb, QTreeWidget*_queueList, QTreeWidget*_don
 	// TODO	queueList->setColumnAlignment(4, Qt::AlignRight);
 
 	//Initialise the List
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 	queueList->header()->setMovable(false);
+#else
+    queueList->header()->setSectionsMovable(false);
+#endif
 	queueList->setRootIsDecorated(true);
 	queueList->setSortingEnabled(false);
 	queueList->setAcceptDrops(true);
@@ -76,7 +80,11 @@ QMgr::QMgr(Servers *_servers, Db *_gdb, QTreeWidget*_queueList, QTreeWidget*_don
 	queueList->header()->resizeSection(3, 70);
 
 	doneList->setRootIsDecorated(true);
-	doneList->header()->setMovable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    doneList->header()->setMovable(false);
+#else
+    doneList->header()->setSectionsMovable(false);
+#endif
 	doneList->setSortingEnabled(false);
 	doneList->setAcceptDrops(false);
 	doneList->setDragEnabled(false);
@@ -84,7 +92,11 @@ QMgr::QMgr(Servers *_servers, Db *_gdb, QTreeWidget*_queueList, QTreeWidget*_don
 	doneList->setAllColumnsShowFocus(true);
 	doneList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
-	failedList->header()->setMovable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    failedList->header()->setMovable(false);
+#else
+    failedList->header()->setSectionsMovable(false);
+#endif
 	failedList->setRootIsDecorated(true);
 	failedList->setSortingEnabled(false);
 	failedList->setAcceptDrops(false);

@@ -21,7 +21,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include "ui_prefunpackexternal.h"
 
 class PrefUnpackExternal : public QWidget, public Ui::PrefUnpackExternalClass

@@ -24,6 +24,7 @@
 #include "droptree.h"
 
 #include <QFile>
+#include <QMimeData>
 
 DropTree::DropTree(QWidget * parent )
     :  QTreeWidget(parent)

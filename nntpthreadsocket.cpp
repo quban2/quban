@@ -1275,7 +1275,7 @@ bool NntpThread::getXover(QString group)
 
 					if (!qstrncmp( line, "=yend", 5 ))
 					{
-						sLine = QString::fromAscii(line);
+                        sLine = QString::fromLatin1(line);
 
 						if ((beginCRC=sLine.indexOf("pcrc32=")) != -1)
 						{

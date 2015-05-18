@@ -21,7 +21,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QMainWindow>
+#include <QMainWindow>
 #include <QPixmap>
 #include <QSettings>
 #include "ui_quban.h"

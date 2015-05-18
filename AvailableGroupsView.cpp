@@ -49,7 +49,11 @@ AvailableGroupsView::AvailableGroupsView(AvailableGroups* _aGroups, QWidget* tab
 
 	availableNewsgroups = availableWidget->availableNewsgroups;
 	availableNewsgroups->setObjectName(QString::fromUtf8("availableNewsgroups"));
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 	availableNewsgroups->header()->setMovable(false);
+#else
+    availableNewsgroups->header()->setSectionsMovable(false);
+#endif
 
 	verticalLayout->addWidget(availableWidget);
 
@@ -75,7 +79,13 @@ AvailableGroupsView::AvailableGroupsView(AvailableGroups* _aGroups, QWidget* tab
 
 	availableNewsgroups->setSortingEnabled(true);
 	availableNewsgroups->header()->setSortIndicatorShown(true);
-	availableNewsgroups->header()->setClickable(true);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    availableNewsgroups->header()->setClickable(true);
+#else
+    availableNewsgroups->header()->setSectionsClickable(true);
+#endif
+
 	//availableNewsgroups->sortByColumn(0, Qt::AscendingOrder);
 
 	connect(availableNewsgroups, SIGNAL(doubleClicked(const QModelIndex)), this, SLOT(slotSubscribe()));

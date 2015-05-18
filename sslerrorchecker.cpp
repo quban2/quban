@@ -94,32 +94,71 @@ void SslErrorChecker::showCerificate(QSslCertificate* certificate, QPlainTextEdi
 	//qDebug() << certificate->toPem();
 
 	displayArea->appendPlainText("== Subject Info ==\n");
-	displayArea->appendPlainText("CommonName:\t\t" + certificate->subjectInfo( QSslCertificate::CommonName ));
-	displayArea->appendPlainText("Organization:\t\t" + certificate->subjectInfo( QSslCertificate::Organization ));
-	displayArea->appendPlainText("LocalityName:\t\t" + certificate->subjectInfo( QSslCertificate::LocalityName ));
-	displayArea->appendPlainText("OrganizationalUnitName:\t" +certificate->subjectInfo( QSslCertificate::OrganizationalUnitName ));
-	displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->subjectInfo( QSslCertificate::StateOrProvinceName ));
 
-	QMultiMap<QSsl::AlternateNameEntryType, QString> altNames = certificate->alternateSubjectNames();
-	if ( !altNames.isEmpty() ) {
-		displayArea->appendPlainText("\nAlternate Subject Names (DNS):");
-		foreach (const QString &altName, altNames.values(QSsl::DnsEntry))
-		{
-			displayArea->appendPlainText(altName);
-		}
-	}
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+
+    displayArea->appendPlainText("CommonName:\t\t" + certificate->subjectInfo( QSslCertificate::CommonName ));
+    displayArea->appendPlainText("Organization:\t\t" + certificate->subjectInfo( QSslCertificate::Organization ));
+    displayArea->appendPlainText("LocalityName:\t\t" + certificate->subjectInfo( QSslCertificate::LocalityName ));
+    displayArea->appendPlainText("OrganizationalUnitName:\t" +certificate->subjectInfo( QSslCertificate::OrganizationalUnitName ));
+    displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->subjectInfo( QSslCertificate::StateOrProvinceName ));
+
+    QMultiMap<QSsl::AlternateNameEntryType, QString> altNames = certificate->alternateSubjectNames();
+    if ( !altNames.isEmpty() ) {
+        displayArea->appendPlainText("\nAlternate Subject Names (DNS):");
+        foreach (const QString &altName, altNames.values(QSsl::DnsEntry))
+        {
+            displayArea->appendPlainText(altName);
+        }
+    }
+
+#else
+
+    displayArea->appendPlainText("CommonName:\t\t" + certificate->subjectInfo( QSslCertificate::CommonName ).join(""));
+    displayArea->appendPlainText("Organization:\t\t" + certificate->subjectInfo( QSslCertificate::Organization ).join(""));
+    displayArea->appendPlainText("LocalityName:\t\t" + certificate->subjectInfo( QSslCertificate::LocalityName ).join(""));
+    displayArea->appendPlainText("OrganizationalUnitName:\t" +certificate->subjectInfo( QSslCertificate::OrganizationalUnitName ).join(""));
+    displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->subjectInfo( QSslCertificate::StateOrProvinceName ).join(""));
+
+    QMultiMap<QSsl::AlternativeNameEntryType, QString> altNames = certificate->subjectAlternativeNames();
+    if ( !altNames.isEmpty() ) {
+        displayArea->appendPlainText("\nAlternate Subject Names (DNS):");
+        foreach (const QString &altName, altNames.values(QSsl::DnsEntry))
+        {
+            displayArea->appendPlainText(altName);
+        }
+    }
+#endif
 
 	displayArea->appendPlainText("\n== Issuer Info ==\n");
-	displayArea->appendPlainText("CommonName:\t\t" + certificate->issuerInfo( QSslCertificate::CommonName ));
-	displayArea->appendPlainText("Organization:\t\t" + certificate->issuerInfo( QSslCertificate::Organization ));
-	displayArea->appendPlainText("LocalityName:\t\t" + certificate->issuerInfo( QSslCertificate::LocalityName ));
-	displayArea->appendPlainText("OrganizationalUnitName:\t" + certificate->issuerInfo( QSslCertificate::OrganizationalUnitName ));
-	displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->issuerInfo( QSslCertificate::StateOrProvinceName ));
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+
+    displayArea->appendPlainText("CommonName:\t\t" + certificate->issuerInfo( QSslCertificate::CommonName ));
+    displayArea->appendPlainText("Organization:\t\t" + certificate->issuerInfo( QSslCertificate::Organization ));
+    displayArea->appendPlainText("LocalityName:\t\t" + certificate->issuerInfo( QSslCertificate::LocalityName ));
+    displayArea->appendPlainText("OrganizationalUnitName:\t" + certificate->issuerInfo( QSslCertificate::OrganizationalUnitName ));
+    displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->issuerInfo( QSslCertificate::StateOrProvinceName ));
+
+#else
+
+    displayArea->appendPlainText("CommonName:\t\t" + certificate->issuerInfo( QSslCertificate::CommonName ).join(""));
+    displayArea->appendPlainText("Organization:\t\t" + certificate->issuerInfo( QSslCertificate::Organization ).join(""));
+    displayArea->appendPlainText("LocalityName:\t\t" + certificate->issuerInfo( QSslCertificate::LocalityName ).join(""));
+    displayArea->appendPlainText("OrganizationalUnitName:\t" + certificate->issuerInfo( QSslCertificate::OrganizationalUnitName ).join(""));
+    displayArea->appendPlainText("StateOrProvinceName:\t\t" + certificate->issuerInfo( QSslCertificate::StateOrProvinceName ).join(""));
+
+#endif
 
 	displayArea->appendPlainText("\n== Certificate ==\n");
 	//displayArea->appendPlainText("Serial Number:\t\t");
 	//displayArea->appendPlainText(certificate->serialNumber()); // This seems buggy
 	displayArea->appendPlainText("Effective Date:\t\t" + certificate->effectiveDate().toString());
 	displayArea->appendPlainText("Expiry Date:\t\t" + certificate->expiryDate().toString());
-	displayArea->appendPlainText("Valid:\t\t\t" + QString(certificate->isValid() ? "Yes" : "No"));
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    displayArea->appendPlainText("Valid:\t\t\t" + QString(certificate->isValid() ? "Yes" : "No"));
+#else
+    displayArea->appendPlainText("Blacklisted:\t\t\t" + QString(certificate->isBlacklisted() ? "Yes" : "No"));
+#endif
 }

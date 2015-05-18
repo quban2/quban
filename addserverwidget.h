@@ -21,8 +21,8 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QDialog>
-#include <QtGui/QWidget>
+#include <QDialog>
+#include <QWidget>
 #include <QSslCertificate>
 #include "nntphost.h"
 #include "ui_addserverwidget.h"

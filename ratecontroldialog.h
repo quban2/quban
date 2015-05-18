@@ -21,7 +21,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_ratecontroldialog.h"
 
 class RateControlDialog : public QDialog, protected Ui::RateControlDialog

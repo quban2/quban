@@ -49,7 +49,12 @@ GroupList::GroupList( QWidget * parent) : QTreeWidget(parent)
 
 	this->setAllColumnsShowFocus(true);
 	this->setRootIsDecorated(true);
-	this->header()->setMovable(false);
+
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    this->header()->setMovable(false);
+#else
+    this->header()->setSectionsMovable(false);
+#endif
 
 	connect(this, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(slotExecuted(QTreeWidgetItem*)));
 	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));

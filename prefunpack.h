@@ -20,7 +20,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QWidget>
+#include <QWidget>
 #include <QList>
 #include "ui_prefunpack.h"
 #include "prefunpackexternal.h"

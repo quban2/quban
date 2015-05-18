@@ -21,7 +21,7 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include <QtGui/QDialog>
+#include <QDialog>
 #include "ui_serverconnection.h"
 
 class ServerConnection : public QDialog, private Ui::ServerConnection

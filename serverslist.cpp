@@ -35,7 +35,11 @@ extern Quban* quban;
 ServersList::ServersList(QString dbName, DbEnv *_dbEnv, Servers *_servers, QWidget* parent)
 : QTreeWidget(parent), servers(_servers), dbEnv(_dbEnv),serversDbName(dbName)
 {
-	this->header()->setMovable(false);
+#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+    this->header()->setMovable(false);
+#else
+    this->header()->setSectionsMovable(false);
+#endif
 	m_loadServers(); //this populates the serverlist
 	addServers(); //this populates the listview
 	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
