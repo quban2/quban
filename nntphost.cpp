@@ -561,30 +561,41 @@ void NntpHost::serverValidated(bool validated, QString errorString, QList<QSslEr
     {
         if (sslSocket)
         {
-            SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);
+            qDebug() << "Failed to validate SSL. Error: " << errorString;
 
-            int retCode = sslErrorChecker->exec();
-            if (retCode == QDialog::Accepted)
+            if (errorString != "Unable to read any data after being advised data was present")
             {
-                sslAllowableErrors = sslAllErrors;
-                sslCertificate = newCertificate;
+                SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);
 
-                expectedSslErrors = sslErrs;
+                int retCode = sslErrorChecker->exec();
+                if (retCode == QDialog::Accepted)
+                {
+                    sslAllowableErrors = sslAllErrors;
+                    sslCertificate = newCertificate;
 
-                //qDebug() << "Successfully validated " << hostName;
-                validated = true;
-                //qDebug() << "Emitting server is validated from SSL errs ok";
-                emit sigServerValidated(id, true);
+                    expectedSslErrors = sslErrs;
+
+                    //qDebug() << "Successfully validated " << hostName;
+                    validated = true;
+                    //qDebug() << "Emitting server is validated from SSL errs ok";
+                    emit sigServerValidated(id, true);
+                }
+                else
+                {
+                    // Red Icon
+                    emit sigInvalidServer(id);
+                }
             }
             else
             {
+                QMessageBox::warning(parent, tr("SSL connection error"), tr("Failed to connect to ") + hostName + ": " + errorString);
                 // Red Icon
                 emit sigInvalidServer(id);
             }
         }
         else
         {
-            QMessageBox::warning(parent, tr("TCP connection error"), tr("Unable to connect to ") + hostName + ": " + errorString);
+            QMessageBox::warning(parent, tr("TCP connection error"), tr("Failed to connect to ") + hostName + ": " + errorString);
             // Red Icon
             emit sigInvalidServer(id);
         }

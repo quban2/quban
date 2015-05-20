@@ -568,158 +568,207 @@ uint NntpThread::createDateTime(QStringList dateTime)
 
 bool NntpThread::waitLine( )
 {
-	if (isNilPeriod)
-	{
-		//reset the socket...
-		qDebug("waitLine(): Now in Nil Period!");
+    if (isNilPeriod)
+    {
+        //reset the socket...
+        qDebug("waitLine(): Now in Nil Period!");
         reset();
-		return false;
-	}
+        return false;
+    }
 
-	while (!m_findEndLine(buffer, watermark))
-	{
-		if (!kes->bytesAvailable())
-		{
-			// qDebug() << "In ReadyRead for thread " << threadId;
-			if (kes->waitForReadyRead(1000 * timeout) == false)
-			{
-				qDebug("Timeout or error waiting for line");
-				//TODO: set the error!
+    quint64 bytesRead = 0;
+
+    while (!m_findEndLine(buffer, watermark))
+    {
+        //qint64 bytesAvailable = kes->bytesAvailable();
+        //qDebug() << "Socket says there are " << bytesAvailable << "bytes available";
+
+        if (!kes->bytesAvailable())
+        {
+            qDebug() << "In ReadyRead for thread " << threadId;
+            if (kes->waitForReadyRead(1000 * timeout) == false)
+            {
+                qDebug("Timeout or error waiting for line");
+                //TODO: set the error!
                 reset();
                 error=Comm_Err;
                 errorString="Timeout or error waiting for data";
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		if (!cancel)
-		{
-			// Guard aganist very long article lines (> 100KB!) that exceeds
-			// the allocated buffer space and expand if needed
-			// Patch provided by Randy Pearson - Thank dude! :)
+        if (!cancel)
+        {
+            // Guard aganist very long article lines (> 100KB!) that exceeds
+            // the allocated buffer space and expand if needed
+            // Patch provided by Randy Pearson - Thank dude! :)
 
-			if (bufferSize - (watermark-buffer) == 0)
-			{
-				qDebug("Warning: Buffer is full. Expanding to %d bytes", bufferSize*2);
-				char * newbuff= new char[bufferSize*2];
-				memcpy(newbuff, buffer, bufferSize);
-				watermark=newbuff+bufferSize;
-				delete [] buffer;
-				buffer = newbuff;
-				bufferSize *= 2;
-			}
+            if (bufferSize - (watermark-buffer) == 0)
+            {
+                qDebug("Warning: Buffer is full. Expanding to %d bytes", bufferSize*2);
+                char * newbuff= new char[bufferSize*2];
+                memcpy(newbuff, buffer, bufferSize);
+                watermark=newbuff+bufferSize;
+                delete [] buffer;
+                buffer = newbuff;
+                bufferSize *= 2;
+            }
 
-			isRatePeriod = kes->isRatePeriod;
+            isRatePeriod = kes->isRatePeriod;
 
-			if (!isRatePeriod)
-			{
-				bytes = kes->readData(watermark, (qint64)(bufferSize-(watermark-buffer)));
-				watermark+=bytes;
-			}
-			else
-			{
+            if (!isRatePeriod)
+            {
+                //qint64 bytesAvailable = kes->bytesAvailable();
+                //qDebug() << "2: Socket says there are " << bytesAvailable << "bytes available";
+
+                bytes = kes->readData(watermark, (qint64)(bufferSize-(watermark-buffer)));
+                // qDebug() << "Read " << bytes << "bytes";
+                watermark+=bytes;
+                bytesRead += bytes;
+                if (!bytesRead)
+                {
+                    reset();
+                    error=Comm_Err;
+                    errorString="Unable to read any data after being advised data was present";
+
+                    return false;
+                }
+            }
+            else
+            {
                 kes->lockMutex();
                 qint64 sleepDuration = kes->getSleepDuration();
                 qint64 maxBytes = kes->getMaxBytes();
-	            bytes = kes->readData(watermark, qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes));
-	            watermark+=bytes;
-	            //qDebug() << QTime::currentTime () << " socket: " << threadId << " has read " << bytes << " bytes";
+                bytes = kes->readData(watermark, qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes));
+                watermark+=bytes;
+                bytesRead += bytes;
+                if (!bytesRead)
+                {
+                    reset();
+                    error=Comm_Err;
+                    errorString="Unable to read any data after being advised data was present";
+                    kes->unlockMutex();
+
+                    return false;
+                }
+                //qDebug() << QTime::currentTime () << " socket: " << threadId << " has read " << bytes << " bytes";
                 kes->incrementBytesRead(bytes);
                 kes->unlockMutex();
-	            //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
-	            //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
-	            msleep(sleepDuration);
-			}
+                //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
+                //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
+                msleep(sleepDuration);
+            }
 
-			*curbytes += bytes;
-		}
-		else
-		{
-			//reset the socket...
-			qDebug("waitLine(): Cancel!");
-			return false;
-		}
-	}
+            *curbytes += bytes;
+        }
+        else
+        {
+            //reset the socket...
+            qDebug("waitLine(): Cancel!");
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 bool NntpThread::waitBigLine( )
 {
-	if (isNilPeriod)
-	{
-		qDebug("waitLine(): Now in Nil Period!");
+    if (isNilPeriod)
+    {
+        qDebug("waitLine(): Now in Nil Period!");
         reset();
-		return false;
-	}
+        return false;
+    }
 
-	while (!m_findDotEndLine(bigBuffer, bigWatermark))
-	{
-		if (!kes->bytesAvailable())
-		{
-			// qDebug() << "In ReadyRead for thread " << threadId;
-			if (kes->waitForReadyRead(1000 * timeout) == false)
-			{
-				qDebug("Timeout or error waiting for line");
-				//TODO: set the error!
+   quint64 bytesRead = 0;
+
+    while (!m_findDotEndLine(bigBuffer, bigWatermark))
+    {
+        if (!kes->bytesAvailable())
+        {
+            // qDebug() << "In ReadyRead for thread " << threadId;
+            if (kes->waitForReadyRead(1000 * timeout) == false)
+            {
+                qDebug("Timeout or error waiting for line");
+                //TODO: set the error!
                 reset();
-				error=Comm_Err;
-				errorString="Timeout or error waiting for data";
+                error=Comm_Err;
+                errorString="Timeout or error waiting for data";
 
-				return false;
-			}
-		}
+                return false;
+            }
+        }
 
-		if (!cancel)
-		{
-			// Guard aganist very long article lines (> 100KB!) that exceeds
-			// the allocated buffer space and expand if needed
-			// Patch provided by Randy Pearson - Thank dude! :)
+        if (!cancel)
+        {
+            // Guard aganist very long article lines (> 100KB!) that exceeds
+            // the allocated buffer space and expand if needed
+            // Patch provided by Randy Pearson - Thank dude! :)
 
-			if (bigBufferSize - (bigWatermark-bigBuffer) == 0)
-			{
-				qDebug("Warning: Buffer is full. Expanding to %d bytes", bigBufferSize*2);
-				char * newbuff= new char[bigBufferSize*2];
-				memcpy(newbuff, bigBuffer, bigBufferSize);
-				bigWatermark=newbuff+bigBufferSize;
-				delete [] bigBuffer;
-				bigBuffer = newbuff;
-				bigBufferSize *= 2;
-			}
+            if (bigBufferSize - (bigWatermark-bigBuffer) == 0)
+            {
+                qDebug("Warning: Buffer is full. Expanding to %d bytes", bigBufferSize*2);
+                char * newbuff= new char[bigBufferSize*2];
+                memcpy(newbuff, bigBuffer, bigBufferSize);
+                bigWatermark=newbuff+bigBufferSize;
+                delete [] bigBuffer;
+                bigBuffer = newbuff;
+                bigBufferSize *= 2;
+            }
 
-			isRatePeriod = kes->isRatePeriod;
+            isRatePeriod = kes->isRatePeriod;
 
-			if (!isRatePeriod)
-			{
-				bytes = kes->readData(bigWatermark, (qint64)(bigBufferSize-(bigWatermark-bigBuffer)));
-				bigWatermark+=bytes;
-			}
-			else
-			{
+            if (!isRatePeriod)
+            {
+                bytes = kes->readData(bigWatermark, (qint64)(bigBufferSize-(bigWatermark-bigBuffer)));
+                bigWatermark+=bytes;
+                bytesRead += bytes;
+                if (!bytesRead)
+                {
+                    reset();
+                    error=Comm_Err;
+                    errorString="Unable to read any data after being advised data was present";
+
+                    return false;
+                }
+            }
+            else
+            {
                 kes->lockMutex();
                 qint64 sleepDuration = kes->getSleepDuration();
                 qint64 maxBytes = kes->getMaxBytes();
-	            bytes = kes->readData(bigWatermark, qMin<qint64>((qint64)(bigBufferSize-(bigWatermark-bigBuffer)), maxBytes));
-	            bigWatermark+=bytes;
-	            //qDebug() << QTime::currentTime () << " socket: " << threadId << " has read " << bytes << " bytes";
+                bytes = kes->readData(bigWatermark, qMin<qint64>((qint64)(bigBufferSize-(bigWatermark-bigBuffer)), maxBytes));
+                bigWatermark+=bytes;
+                bytesRead += bytes;
+                if (!bytesRead)
+                {
+                    reset();
+                    error=Comm_Err;
+                    errorString="Unable to read any data after being advised data was present";
+                    kes->unlockMutex();
+
+                    return false;
+                }
+                //qDebug() << QTime::currentTime () << " socket: " << threadId << " has read " << bytes << " bytes";
                 kes->incrementBytesRead(bytes);
                 kes->unlockMutex();
-	            //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
-	            //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
-	            msleep(sleepDuration);
-			}
+                //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
+                //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
+                msleep(sleepDuration);
+            }
 
-			*curbytes += bytes;
-		}
-		else
-		{
-			qDebug("waitLine(): Cancel!");
-			return false;
-		}
-	}
+            *curbytes += bytes;
+        }
+        else
+        {
+            qDebug("waitLine(): Cancel!");
+            return false;
+        }
+    }
 
-	return true;
+    return true;
 }
 
 int NntpThread::m_handleError( int expected, QString received )
@@ -844,7 +893,7 @@ bool NntpThread::m_connect( )
 // 		qDebug("Line found");
 		m_readLine();
 		QString s = line;
-// 		qDebug("Got this line: %s", (const char *) s);
+//        qDebug() << "Got this line: " << s;
 		if ( (s.left(3).toInt() != NntpThread::ready) &&
 					(s.left(3).toInt() != NntpThread::readyNoPost) )
 		{
