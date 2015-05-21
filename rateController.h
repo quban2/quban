@@ -56,8 +56,6 @@ public:
     void lockMutex() { socketMutex.lock(); }
     void unlockMutex() { socketMutex.unlock(); }
 
-    qint64 readData(char* data, qint64 maxlen) { return QSslSocket::readData ( data, maxlen ); }
-
 private:
     qint64 msleepDuration;
     qint64 maxBytes;

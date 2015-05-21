@@ -561,8 +561,6 @@ void NntpHost::serverValidated(bool validated, QString errorString, QList<QSslEr
     {
         if (sslSocket)
         {
-            qDebug() << "Failed to validate SSL. Error: " << errorString;
-
             if (errorString != "Unable to read any data after being advised data was present")
             {
                 SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);

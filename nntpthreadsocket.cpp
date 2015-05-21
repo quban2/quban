@@ -622,7 +622,7 @@ bool NntpThread::waitLine( )
                 //qint64 bytesAvailable = kes->bytesAvailable();
                 //qDebug() << "2: Socket says there are " << bytesAvailable << "bytes available";
 
-                bytes = kes->readData(watermark, (qint64)(bufferSize-(watermark-buffer)));
+                bytes = kes->read(watermark, (qint64)(bufferSize-(watermark-buffer)));
                 // qDebug() << "Read " << bytes << "bytes";
                 watermark+=bytes;
                 bytesRead += bytes;
@@ -640,7 +640,7 @@ bool NntpThread::waitLine( )
                 kes->lockMutex();
                 qint64 sleepDuration = kes->getSleepDuration();
                 qint64 maxBytes = kes->getMaxBytes();
-                bytes = kes->readData(watermark, qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes));
+                bytes = kes->read(watermark, qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes));
                 watermark+=bytes;
                 bytesRead += bytes;
                 if (!bytesRead)
@@ -722,7 +722,7 @@ bool NntpThread::waitBigLine( )
 
             if (!isRatePeriod)
             {
-                bytes = kes->readData(bigWatermark, (qint64)(bigBufferSize-(bigWatermark-bigBuffer)));
+                bytes = kes->read(bigWatermark, (qint64)(bigBufferSize-(bigWatermark-bigBuffer)));
                 bigWatermark+=bytes;
                 bytesRead += bytes;
                 if (!bytesRead)
@@ -739,7 +739,7 @@ bool NntpThread::waitBigLine( )
                 kes->lockMutex();
                 qint64 sleepDuration = kes->getSleepDuration();
                 qint64 maxBytes = kes->getMaxBytes();
-                bytes = kes->readData(bigWatermark, qMin<qint64>((qint64)(bigBufferSize-(bigWatermark-bigBuffer)), maxBytes));
+                bytes = kes->read(bigWatermark, qMin<qint64>((qint64)(bigBufferSize-(bigWatermark-bigBuffer)), maxBytes));
                 bigWatermark+=bytes;
                 bytesRead += bytes;
                 if (!bytesRead)
@@ -805,7 +805,7 @@ bool NntpThread::m_sendCmd( QString& cmd, int response )
     error=NntpThread::No_Err;
 
 	if (kes->bytesAvailable() > 0)
-		kes->readData(line, lineBufSize);
+        kes->read(line, lineBufSize);
 
 	//Invalidate contents of the buffer...
 	watermark=buffer;
