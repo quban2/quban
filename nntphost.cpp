@@ -563,23 +563,27 @@ void NntpHost::serverValidated(bool validated, QString errorString, QList<QSslEr
         {
             if (errorString != "Unable to read any data after being advised data was present")
             {
-                SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);
-
-                int retCode = sslErrorChecker->exec();
-                if (retCode == QDialog::Accepted)
+                if ((sslAllowableErrors || sslAllErrors) || (&sslCertificate || &newCertificate))
                 {
-                    sslAllowableErrors = sslAllErrors;
-                    sslCertificate = newCertificate;
+                    SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);
 
-                    expectedSslErrors = sslErrs;
+                    int retCode = sslErrorChecker->exec();
+                    if (retCode == QDialog::Accepted)
+                    {
+                        sslAllowableErrors = sslAllErrors;
+                        sslCertificate = newCertificate;
 
-                    //qDebug() << "Successfully validated " << hostName;
-                    validated = true;
-                    //qDebug() << "Emitting server is validated from SSL errs ok";
-                    emit sigServerValidated(id, true);
+                        expectedSslErrors = sslErrs;
+
+                        //qDebug() << "Successfully validated " << hostName;
+                        validated = true;
+                        //qDebug() << "Emitting server is validated from SSL errs ok";
+                        emit sigServerValidated(id, true);
+                    }
                 }
                 else
                 {
+                    QMessageBox::warning(parent, tr("SSL connection error"), tr("Failed to connect to ") + hostName + ": " + errorString);
                     // Red Icon
                     emit sigInvalidServer(id);
                 }
