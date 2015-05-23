@@ -563,7 +563,7 @@ void NntpHost::serverValidated(bool validated, QString errorString, QList<QSslEr
         {
             if (errorString != "Unable to read any data after being advised data was present")
             {
-                if ((sslAllowableErrors || sslAllErrors) || (&sslCertificate || &newCertificate))
+                if (sslAllowableErrors || sslAllErrors || !sslCertificate.isNull() || !newCertificate.isNull())
                 {
                     SslErrorChecker* sslErrorChecker = new SslErrorChecker(hostName, sslAllowableErrors, sslAllErrors, &sslCertificate, &newCertificate);
 
