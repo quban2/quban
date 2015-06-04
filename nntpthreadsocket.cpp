@@ -585,7 +585,7 @@ bool NntpThread::waitLine( )
 
         if (!kes->bytesAvailable())
         {
-            qDebug() << "In ReadyRead for thread " << threadId;
+            //qDebug() << "In ReadyRead for thread " << threadId;
             if (kes->waitForReadyRead(1000 * timeout) == false)
             {
                 qDebug("Timeout or error waiting for line");
