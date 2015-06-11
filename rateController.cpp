@@ -54,6 +54,11 @@ RcSslSocket::RcSslSocket(bool _isRatePeriod, bool _isNilPeriod, QObject *parent)
     bytesRead = 0;
 }
 
+RcSslSocket::~RcSslSocket()
+{
+
+}
+
 RateController::RateController(bool _isRatePeriod, qint64 _downLimit, QObject *parent) : QObject(parent), downLimit(_downLimit),
 		isRatePeriod(_isRatePeriod)
 {

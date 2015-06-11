@@ -37,6 +37,7 @@ class RcSslSocket : public QSslSocket
 public:
     RcSslSocket(QObject *parent = 0);
     RcSslSocket(bool _isRatePeriod = false, bool _isNilPeriod = false, QObject *parent = 0);
+    ~RcSslSocket();
 
 public:
     volatile bool isActive;

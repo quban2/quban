@@ -24,6 +24,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QMap>
+#include <QIcon>
 #include "addserver.h"
 #include "common.h"
 #include "hlistviewitem.h"
@@ -63,7 +64,13 @@ class ServersList : public QTreeWidget
 private:
   QTreeWidgetItem* selected;
   QTreeWidget* explorer;
-  
+
+  QIcon* activeIcon;
+  QIcon* activePausedIcon;
+  QIcon* passiveIcon;
+  QIcon* passivePausedIcon;
+  QIcon* dormantIcon;
+
   void adviseNothingSelected();
 
 public:

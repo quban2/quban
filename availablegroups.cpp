@@ -85,9 +85,7 @@ AvailableGroup::AvailableGroup(char *p)
 
 AvailableGroup::~AvailableGroup()
 {
-// TODO
     articles.clear();
-// TODO Ubuntu 11.10 issue
     serverPresence.clear();
 }
 

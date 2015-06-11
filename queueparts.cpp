@@ -261,7 +261,6 @@ void Thread::updateNilPeriod(qint64 oldSpeed, qint64 newSpeed) // one of these m
     }
 }
 
-
 Thread::~Thread()
 {
     if (speedTimer)
@@ -286,8 +285,10 @@ Thread::~Thread()
 
 void Thread::closeCleanly()
 {
-    if (nntpT->isRunning())
-        nntpT->closeConnection(true);
+    nntpT->closeConnection(true);
+
+    if (!nntpT->isRunning())
+        nntpT->tStart();
 }
 
 void Thread::kill()

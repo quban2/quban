@@ -192,7 +192,7 @@ void Configuration::write( ) const
 	conf->setValue("maxShutDownWait", maxShutDownWait);
 	conf->setValue("renameNzbFiles", renameNzbFiles);
 	conf->setValue("noQueueSavePrompt", noQueueSavePrompt);
-	conf->setValue("appFont", appFont.toString());
+        conf->setValue("appFont", appFont.toString());
     conf->setValue("minAvailEnabled", minAvailEnabled);
     conf->setValue("minAvailValue", minAvailValue);
     conf->setValue("mainTab", mainTab);

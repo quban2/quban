@@ -78,6 +78,7 @@ Quban::Quban(QWidget *parent) : QMainWindow(parent)
 	tabWidget_2 = 0;
 	schedDb = 0;
 	queueScheduler = 0;
+    qubanDbEnv = 0;
 
 	startupScheduleRequired = false;
 	isNilPeriod = false;
@@ -184,6 +185,9 @@ Quban::~Quban()
 
 	if (queueScheduler)
 	    delete queueScheduler;
+
+    if (qubanDbEnv)
+        delete qubanDbEnv;
 
 	delete settings;
 }
@@ -753,6 +757,7 @@ void Quban::closeEvent(QCloseEvent *event)
         if (qMgr->empty() || queuePaused || mustShutDown == true || maxShutdownWait == 0)
 		{
 			emit sigShutdown();
+            qMgr->closeAllConnections();
 			saveConfig();
 			settings->beginGroup("MainWindow");
 			settings->setValue("geometry", saveGeometry());
@@ -1690,6 +1695,13 @@ void Quban::slotJob_Toolbar(bool checked)
 QStatusServerWidget::QStatusServerWidget( QString serverName, int serverType, bool paused, QWidget * parent )
     : QWidget(parent)
 {
+    activeIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network-16.png"));
+    activePausedIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network_Paused-16.png"));
+    passiveIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network-16.png"));
+    passivePausedIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network_Paused-16.png"));
+    dormantIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Dormant_Network-16.png"));
+    poorlyIcon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Poorly_Network-16.png"));
+
 	m_sName = serverName;
 	QHBoxLayout *layout = new QHBoxLayout(this);
 	layout->setSpacing(1);
@@ -1699,19 +1711,19 @@ QStatusServerWidget::QStatusServerWidget( QString serverName, int serverType, bo
     if (serverType == NntpHost::activeServer)
     {
         if (!paused)
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network-16.png"));
+            ssicon = activeIcon;
         else
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network_Paused-16.png"));
+            ssicon = activePausedIcon;
     }
     else if (serverType == NntpHost::passiveServer)
     {
         if (!paused)
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network-16.png"));
+            ssicon = passiveIcon;
         else
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network_Paused-16.png"));
+            ssicon = passivePausedIcon;
     }
 	else
-		ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Dormant_Network-16.png"));
+        ssicon = dormantIcon;
 
 	iLabel->setPixmap(*ssicon);
 	iLabel->setContentsMargins(1,1,1,1);
@@ -1725,29 +1737,34 @@ QStatusServerWidget::QStatusServerWidget( QString serverName, int serverType, bo
 
 QStatusServerWidget::~QStatusServerWidget()
 {
-	delete ssicon;
+    delete activeIcon;
+    delete activePausedIcon;
+    delete passiveIcon;
+    delete passivePausedIcon;
+    delete dormantIcon;
+    delete poorlyIcon;
 }
 
 void QStatusServerWidget::updateIcon(int serverType, bool paused)
 {
-	if (serverType == NntpHost::activeServer)
+    if (serverType == NntpHost::activeServer)
     {
         if (!paused)
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network-16.png"));
+            ssicon = activeIcon;
         else
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Entire_Network_Paused-16.png"));
+            ssicon = activePausedIcon;
     }
-	else if (serverType == NntpHost::passiveServer)
+    else if (serverType == NntpHost::passiveServer)
     {
         if (!paused)
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network-16.png"));
+            ssicon = passiveIcon;
         else
-            ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Passive_Network_Paused-16.png"));
+            ssicon = passivePausedIcon;
     }
-	else if (serverType == NntpHost::dormantServer)
-		ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Dormant_Network-16.png"));
-	else
-		ssicon = new QPixmap(QString::fromUtf8(":/quban/images/ginux/Poorly_Network-16.png"));
+    else if (serverType == NntpHost::dormantServer)
+        ssicon = dormantIcon;
+    else
+        ssicon = poorlyIcon;
 
 	iLabel->setPixmap(*ssicon);
 }

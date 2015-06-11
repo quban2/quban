@@ -22,9 +22,9 @@
 #include <QtDebug>
 #include <QTimer>
 #include <QMessageBox>
-#include <QIcon>
 #include <QList>
 #include <QtAlgorithms>
+#include <QMapIterator>
 #include "quban.h"
 #include "serverslist.h"
 #include "qubanDbEnv.h"
@@ -44,7 +44,7 @@ ServersList::ServersList(QString dbName, DbEnv *_dbEnv, Servers *_servers, QWidg
 	addServers(); //this populates the listview
 	connect(this, SIGNAL(itemSelectionChanged()), this, SLOT(slotSelectionChanged()));
     serverSpeedTimer = new QTimer();
-	connect(serverSpeedTimer, SIGNAL(timeout()), this, SLOT(slotServerSpeedTimeout()));
+    connect(serverSpeedTimer, SIGNAL(timeout()), this, SLOT(slotServerSpeedTimeout()));
     qDebug()  << "In ServersList::ServersList 1";
 }
 
@@ -69,12 +69,36 @@ ServersList::ServersList(QWidget * parent )
 
 ServersList::~ServersList()
 {
-	qDebug() << "In ServersList::~ServersList";
+    qDebug() << "In ServersList::~ServersList";
 
-//TODO    qDeleteAll(serverThreads);
+    delete activeIcon;
+    delete activePausedIcon;
+    delete passiveIcon;
+    delete passivePausedIcon;
+    delete dormantIcon;
+
+    QMapIterator<int, ThreadView> i(serverThreads);
+    while (i.hasNext())
+    {
+        i.next();
+
+        QMapIterator<int, SpeedThread*> j(i.value());
+        while (j.hasNext())
+        {
+            j.next();
+
+            if (j.value())
+            {
+                if (j.value()->item)
+                    delete j.value()->item;
+
+                delete j.value();
+            }
+        }
+    }
 
     if (serverSpeedTimer)
-    delete serverSpeedTimer;
+        delete serverSpeedTimer;
 
     serverThreads.clear();
 }
@@ -82,6 +106,12 @@ ServersList::~ServersList()
 void ServersList::serversListInit()
 {
 	NntpHost::initHostMaps();
+
+    activeIcon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Entire_Network-16.png"));
+    activePausedIcon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Entire_Network_Paused-16.png"));
+    passiveIcon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Passive_Network-16.png"));
+    passivePausedIcon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Passive_Network_Paused-16.png"));
+    dormantIcon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Dormant_Network-16.png"));
 
     m_loadServers(); //this populates the serverlist
  	addServers(); //this populates the listview
@@ -119,6 +149,8 @@ void ServersList::slotSpeedChanged( int serverId, int threadId, int speed )
 	    sp->speed = speed;
 	    sp->item->setText(SpeedCol, QString::number( sp->speed ) + " KB/s");
 	}
+    else
+        qDebug() << "Getting updates for non running server : " << serverId << " from thread : " << threadId;
 
 }
 
@@ -616,19 +648,19 @@ void ServersList::slotValidServer(quint16 id)
         if (nh->getServerType() == NntpHost::activeServer)
         {
             if (!nh->isPaused())
-                icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Entire_Network-16.png"));
+                icon = activeIcon;
             else
-                icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Entire_Network_Paused-16.png"));
+                icon = activePausedIcon;
         }
         else if (nh->getServerType() == NntpHost::passiveServer)
         {
             if (!nh->isPaused())
-                icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Passive_Network-16.png"));
+                icon = passiveIcon;
             else
-                icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Passive_Network_Paused-16.png"));
+                icon = passivePausedIcon;
         }
         else
-            icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Dormant_Network-16.png"));
+            icon = dormantIcon;
 
         serverItem->setIcon(0, *icon);
         quban->setStatusIcon(id, nh->getServerType(), nh->isPaused());

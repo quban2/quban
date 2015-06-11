@@ -49,14 +49,25 @@ void NntpThread::run()
     bool OS2_system = false;
     bool result = false;
 
-	config = Configuration::getConfig();
+    if (connClose)
+    {
+        connClose=false;
+        emit SigClosingConnection(qId, threadId);
 
- 	if (isNilPeriod)
- 	{
-		status=Ready;
-		emit SigReady(qId, threadId);
- 		return;
- 	}
+        if (kes && kes->state() == QAbstractSocket::ConnectedState)
+        {
+            reset();
+        }
+    }
+
+    config = Configuration::getConfig();
+
+    if (isNilPeriod)
+    {
+        status=Ready;
+        emit SigReady(qId, threadId);
+        return;
+    }
 
     memset(line, 0, sizeof(lineBufSize));
 
@@ -68,9 +79,9 @@ void NntpThread::run()
             emit registerSocket(kes);
     }
 
-	status=Working;
+    status=Working;
 
-	kes->isActive = true;
+    kes->isActive = true;
 
     if (validate)
     {
@@ -137,39 +148,39 @@ void NntpThread::run()
     //While there are jobs in the queue, process jobs :)
     emit StartedWorking(qId, threadId);
 
-	while (true)
-	{
-// 		qDebug("qID: %d, tID: %d", qId, threadId);
+    while (true)
+    {
+        // 		qDebug("qID: %d, tID: %d", qId, threadId);
 
-		if (pause)
-		{
-			status=Paused;
-			pause=false;
-		}
+        if (pause)
+        {
+            status=Paused;
+            pause=false;
+        }
 
-		if (connClose)
-		{
-			status=ClosingConnection;
-			connClose=false;
-		}
+        if (connClose)
+        {
+            status=ClosingConnection;
+            connClose=false;
+        }
 
-		queueLock->lock();
-		if ( (*pendingOperations) != 0)
-		{
-			//Override paused state!
-			(*pendingOperations)--;
-			status=Delayed_Delete;
-			queueLock->unlock();
-			break;
-		}
-		queueLock->unlock();
+        queueLock->lock();
+        if ( (*pendingOperations) != 0)
+        {
+            //Override paused state!
+            (*pendingOperations)--;
+            status=Delayed_Delete;
+            queueLock->unlock();
+            break;
+        }
+        queueLock->unlock();
 
-		//Out of the "if" cause I want job assigned, for checking on exit.
+        //Out of the "if" cause I want job assigned, for checking on exit.
 
         if ( (status != Working) || !validated || !(job=findFreeJob()) )
-		{
-			break;
-		}
+        {
+            break;
+        }
 
         if (!kes)
         {
@@ -179,84 +190,84 @@ void NntpThread::run()
                 emit registerSocket(kes);
         }
 
-		if (!addJob())
-		{
-			// Write errors are considered non-fatal for the article...they're mostly out-of space errors.
-			// the queue is paused, and the user's responsibility to restart it, possibly after making
-			// room on the filesystem :)
-			qDebug() << "Add job Failed!";
+        if (!addJob())
+        {
+            // Write errors are considered non-fatal for the article...they're mostly out-of space errors.
+            // the queue is paused, and the user's responsibility to restart it, possibly after making
+            // room on the filesystem :)
+            qDebug() << "Add job Failed!";
 
-			queueLock->lock();
-			job->status=Job::Queued_Job;
-			queueLock->unlock();
-			//thread is in paused state
-			status=PausedOnError;
-			break;
-		}
+            queueLock->lock();
+            job->status=Job::Queued_Job;
+            queueLock->unlock();
+            //thread is in paused state
+            status=PausedOnError;
+            break;
+        }
 
-		emit Start(job);
+        emit Start(job);
 
-		if (isRatePeriod)
-		{
-			int counter = 0;
+        if (isRatePeriod)
+        {
+            int counter = 0;
 
-			while (counter < 4 && !kes->isRegistered)
-			{
-				msleep(500);
-				++counter;
-			}
+            while (counter < 4 && !kes->isRegistered)
+            {
+                msleep(500);
+                ++counter;
+            }
 
-			if (!kes->isRegistered)
-			{
-				qDebug() << "Can't register with Rate Controller - exiting";
-				exit(1);
-			}
-		}
+            if (!kes->isRegistered)
+            {
+                qDebug() << "Can't register with Rate Controller - exiting";
+                exit(1);
+            }
+        }
 
         // qDebug() << "Got job " << job->jobType;
 
-		switch (job->jobType)
-		{
-			case Job::UpdHead:
-                if (job->ng->downloadingServers.contains(qId) == false)
-                    job->ng->downloadingServers.append(qId);
+        switch (job->jobType)
+        {
+        case Job::UpdHead:
+            if (job->ng->downloadingServers.contains(qId) == false)
+                job->ng->downloadingServers.append(qId);
 
-                result = getXover(newsGroup);
-                job->ng->downloadingServers.removeOne(qId);
+            result = getXover(newsGroup);
+            job->ng->downloadingServers.removeOne(qId);
 
-				break;
+            break;
 
-			case Job::GetPost:
+        case Job::GetPost:
 
-                result = getArticle();
-				saveFile->close();
-				delete saveFile;
-				saveFile=0;
-				break;
+            result = getArticle();
+            saveFile->close();
+            delete saveFile;
+            saveFile=0;
+            break;
 
-			case Job::GetList:
+        case Job::GetList:
 
-                result = getListOfGroups();
-                queueLock->lock();
-                job->ag->stopUpdating();
-                queueLock->unlock();
-				break;
+            result = getListOfGroups();
+            queueLock->lock();
+            job->ag->stopUpdating();
+            queueLock->unlock();
+            break;
 
-			case Job::GetGroupLimits:
+        case Job::GetGroupLimits:
 
-                result = getGroupLimits(newsGroup);
-				break;
+            result = getGroupLimits(newsGroup);
+            break;
 
-			case Job::GetExtensions:
+        case Job::GetExtensions:
 
-                result = getCapabilities();
-				break;
+            result = getCapabilities();
+            break;
 
-			default:
-				qDebug() << "NntpThread::run(): unknown job type!";
-                result = false;
-				break;
-		}
+        default:
+            qDebug() << "NntpThread::run(): unknown job type!";
+            result = false;
+            break;
+        }
 
         if (result == true)
         {
@@ -311,7 +322,7 @@ void NntpThread::run()
                         {
                             job->tries--;
                             qDebug() << "NntpThread::run(): retry: "
-                                <<	job->tries;
+                                     <<	job->tries;
                             job->status=Job::Queued_Job;
                             emit Err(job, No_Err);
 
@@ -339,45 +350,45 @@ void NntpThread::run()
                 }
             }
         }
-	}
+    }
 
     if (kes)
         kes->isActive = false;
 
-	//Exited. Why?
+    //Exited. Why?
 
-	switch (status)
-	{
-		case Paused:
- 			qDebug("You paused me: %d", threadId);
-			emit SigPaused(qId, threadId, false);
-			break;
-		case PausedOnError:
-			qDebug("Paused on error: %d", threadId);
-			emit SigPaused(qId, threadId, true);
-			break;
-		case Delayed_Delete:
-			emit SigDelayed_Delete(qId, threadId);
-			break;
-		case Working:
-        case Ready:
-			status=Ready;
-			emit SigReady(qId, threadId);
-			break;
-		case ClosingConnection:
-			emit SigClosingConnection(qId, threadId);
-			break;
-		default:
-			qDebug() << "Error: wrong status: " << status;
-			break;
-	}
+    switch (status)
+    {
+    case Paused:
+        // qDebug("You paused me: %d", threadId);
+        emit SigPaused(qId, threadId, false);
+        break;
+    case PausedOnError:
+        qDebug("Paused on error: %d", threadId);
+        emit SigPaused(qId, threadId, true);
+        break;
+    case Delayed_Delete:
+        emit SigDelayed_Delete(qId, threadId);
+        break;
+    case Working:
+    case Ready:
+        status=Ready;
+        emit SigReady(qId, threadId);
+        break;
+    case ClosingConnection:
+        emit SigClosingConnection(qId, threadId);
+        break;
+    default:
+        qDebug() << "Error: wrong status: " << status;
+        break;
+    }
 
     if (kes && status == ClosingConnection && kes->state() == QAbstractSocket::ConnectedState)
     {
         reset();
     }
 
-	//qDebug("Exiting thread : %d", threadId);
+    //qDebug("Exiting thread : %d", threadId);
 }
 
 Job *NntpThread::findFreeJob()
@@ -392,17 +403,17 @@ Job *NntpThread::findFreeJob()
     for (it = threadQueue->begin(); it != threadQueue->end(); ++it)
     {
         //for every part of the item...
-// 		qDebug("Thread %d: trying item %d", threadId, *it);
+        // 		qDebug("Thread %d: trying item %d", threadId, *it);
         item=(*queue)[*it];
-// 		qDebug("item's part count: %d", item->parts.count());
+        // 		qDebug("item's part count: %d", item->parts.count());
         for (pit = item->parts.begin(); pit != item->parts.end(); ++pit)
         {
             //check every job of the item...
-// 			qDebug("Trying part %d of item %d", pit.key(), *it);
+            // 			qDebug("Trying part %d of item %d", pit.key(), *it);
             j=pit.value()->job;
             if ( (j->status==Job::Queued_Job) && (j->qId == qId) )
             {
-// 					qDebug("Job: %d", j->id);
+                // 					qDebug("Job: %d", j->id);
                 j->status=Job::Processing_Job;
                 j->threadId=threadId;
                 queueLock->unlock();
@@ -412,45 +423,45 @@ Job *NntpThread::findFreeJob()
     }
 
     queueLock->unlock();
-// 	qDebug("thread %d: job not found", threadId);
+    // 	qDebug("thread %d: job not found", threadId);
     return 0;
 }
 
 bool NntpThread::addJob()
 {
-// 	qDebug("Entering NntpThread::addJob()");
+    // 	qDebug("Entering NntpThread::addJob()");
 
     if (nHost == 0)
     {
-		nHost=job->nh; //Redundant, but oh, well :)
-		error=NntpThread::No_Err;
-	}
+        nHost=job->nh; //Redundant, but oh, well :)
+        error=NntpThread::No_Err;
+    }
 
-	timeout=nHost->getTimeout();
-// 	retries=nHost->tries;
+    timeout=nHost->getTimeout();
+    // 	retries=nHost->tries;
 
     switch (job->jobType)
     {
     case Job::GetPost:
-		db=job->ng->getDb();
+        db=job->ng->getDb();
 
-// 		qDebug("NntpThread::addJob(): adding GetPost job");
-//         *status=NntpThread::NewJob;
-// 		qDebug("Savefile: %s", (const char *) job->fName);
+        // 		qDebug("NntpThread::addJob(): adding GetPost job");
+        //         *status=NntpThread::NewJob;
+        // 		qDebug("Savefile: %s", (const char *) job->fName);
         saveFile=new QFile(job->fName);
 
         if (!saveFile->open(QIODevice::WriteOnly|QIODevice::Truncate))
         {
-//             qDebug("Failed to open file: %s", (const char *) job->fName);
-			error=Write_Err;
-			errorString="Cannot open file " + job->fName ;
-			return false;
+            //             qDebug("Failed to open file: %s", (const char *) job->fName);
+            error=Write_Err;
+            errorString="Cannot open file " + job->fName ;
+            return false;
         }
-//         newsGroup=job->ng->ngName;
-		artNum=job->artNum;
-		lines=0;
-// 		articles=0;
-		articles=job->artSize;
+        //         newsGroup=job->ng->ngName;
+        artNum=job->artNum;
+        lines=0;
+        // 		articles=0;
+        articles=job->artSize;
 
         return true;
 
@@ -458,37 +469,37 @@ bool NntpThread::addJob()
 
     case Job::UpdHead:
 
-		db=job->ng->getDb();
-		newsGroup=job->ng->ngName;
-		lines=0;
-		articles=0;
+        db=job->ng->getDb();
+        newsGroup=job->ng->ngName;
+        lines=0;
+        articles=0;
 
         return true;
         break;
 
     case Job::GetGroupLimits:
 
-		db=job->ng->getDb();
-		newsGroup=job->ng->ngName;
-		lines=0;
-		articles=0;
+        db=job->ng->getDb();
+        newsGroup=job->ng->ngName;
+        lines=0;
+        articles=0;
 
         return true;
         break;
 
-	case Job::GetList:
+    case Job::GetList:
 
-         db=job->ag->getDb();
-		 job->ag->startUpdating();
-		 lines=1;
-		 articles=1;
-		 return true;
-		break;
+        db=job->ag->getDb();
+        job->ag->startUpdating();
+        lines=1;
+        articles=1;
+        return true;
+        break;
 
     case Job::GetExtensions:
 
-		lines=0;
-		articles=0;
+        lines=0;
+        articles=0;
 
         return true;
         break;
@@ -507,62 +518,62 @@ char * NntpThread::m_findEndLine( char * start, char * end )
     for (p=start; p < end; p++)
     {
         if (p[0] == '\r' &&
-            p+1 < end && p[1] == '\n')
-                return p;
+                p+1 < end && p[1] == '\n')
+            return p;
     }
     return NULL;
 }
 
 char * NntpThread::m_findDotEndLine( char * start, char * end )
 {
-	if (start <= end - 3)
-	{
-		char *p = end - 3;
-		//qDebug("%d %d %d", *p, *(p+1), *(p+2));
-		if (p[0] == '.' &&
-		    p[1] == '\r' &&
-		    p[2] == '\n')
-		{
-		    return p;
-		}
-	}
+    if (start <= end - 3)
+    {
+        char *p = end - 3;
+        //qDebug("%d %d %d", *p, *(p+1), *(p+2));
+        if (p[0] == '.' &&
+                p[1] == '\r' &&
+                p[2] == '\n')
+        {
+            return p;
+        }
+    }
 
-	return NULL;
+    return NULL;
 }
 
 uint NntpThread::createDateTime(QStringList dateTime)
 {
-	// Have seen totally invalid date formats here, so take care
+    // Have seen totally invalid date formats here, so take care
 
     if (dateTime[0].length() == 0)
         return 0;
 
-	int i = (dateTime[0].at(dateTime[0].length() - 1) == ',') ? 1 : 0;
+    int i = (dateTime[0].at(dateTime[0].length() - 1) == ',') ? 1 : 0;
 
-	if (dateTime.count() < (i + 3))
-		return 0;
+    if (dateTime.count() < (i + 3))
+        return 0;
 
-	QDate d;
+    QDate d;
 
-	if (dateTime[i].length() == 2)
-		d = QDate::fromString(
-				dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
-				"dd MMM yyyy");
-	else if (dateTime[i].length() == 1)
-		d = QDate::fromString(
-				dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
-				"d MMM yyyy");
-	else
-		d = QDate::currentDate();
+    if (dateTime[i].length() == 2)
+        d = QDate::fromString(
+                    dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
+                "dd MMM yyyy");
+    else if (dateTime[i].length() == 1)
+        d = QDate::fromString(
+                    dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
+                "d MMM yyyy");
+    else
+        d = QDate::currentDate();
 
-	QTime t(0, 0);
+    QTime t(0, 0);
 
-	if (dateTime.count() >= (i + 4))
-		t = QTime::fromString(dateTime[i + 3]);
+    if (dateTime.count() >= (i + 4))
+        t = QTime::fromString(dateTime[i + 3]);
 
-	QDateTime dt(d, t);
+    QDateTime dt(d, t);
 
-	return dt.toTime_t();
+    return dt.toTime_t();
 }
 
 
@@ -682,7 +693,7 @@ bool NntpThread::waitBigLine( )
         return false;
     }
 
-   quint64 bytesRead = 0;
+    quint64 bytesRead = 0;
 
     while (!m_findDotEndLine(bigBuffer, bigWatermark))
     {
@@ -773,29 +784,29 @@ bool NntpThread::waitBigLine( )
 
 int NntpThread::m_handleError( int expected, QString received )
 {
-	switch (expected)
-	{
-        case NntpThread::pass:
-            errorString=received;
-            return NntpThread::Auth_Err;
-        case NntpThread::group:
-            errorString=received;
-			if (received.left(3).toInt() == 411)
-            	return NntpThread::NoSuchGroup_Err;
-			else return NntpThread::Other_Err;
-        case NntpThread::article:
-		case NntpThread::body:
-            errorString=received;
-			if ((received.left(3).toInt() == NoSuchArticle_Err || received.left(3).toInt() == NoSuchMid_Err) && !received.contains("DMCA removed"))
-            	return NntpThread::NoSuchArticle_Err;
-			else return NntpThread::Other_Err;
-		case NntpThread::xover:
-			if (received.left(3).toInt() == 501)
-				qDebug("501 error to xover command!");
-			return NntpThread::Comm_Err;
-        default:
-            errorString=received;
-            return NntpThread::Other_Err;
+    switch (expected)
+    {
+    case NntpThread::pass:
+        errorString=received;
+        return NntpThread::Auth_Err;
+    case NntpThread::group:
+        errorString=received;
+        if (received.left(3).toInt() == 411)
+            return NntpThread::NoSuchGroup_Err;
+        else return NntpThread::Other_Err;
+    case NntpThread::article:
+    case NntpThread::body:
+        errorString=received;
+        if ((received.left(3).toInt() == NoSuchArticle_Err || received.left(3).toInt() == NoSuchMid_Err) && !received.contains("DMCA removed"))
+            return NntpThread::NoSuchArticle_Err;
+        else return NntpThread::Other_Err;
+    case NntpThread::xover:
+        if (received.left(3).toInt() == 501)
+            qDebug("501 error to xover command!");
+        return NntpThread::Comm_Err;
+    default:
+        errorString=received;
+        return NntpThread::Other_Err;
     }
 }
 
@@ -804,355 +815,355 @@ bool NntpThread::m_sendCmd( QString& cmd, int response )
     QString s;
     error=NntpThread::No_Err;
 
-	if (kes->bytesAvailable() > 0)
+    if (kes->bytesAvailable() > 0)
         kes->read(line, lineBufSize);
 
-	//Invalidate contents of the buffer...
-	watermark=buffer;
+    //Invalidate contents of the buffer...
+    watermark=buffer;
 
     QByteArray ba = cmd.toLocal8Bit();
     const char *c_str = ba.data();
     kes->write(c_str, cmd.length());
 
-	//Now I can check if the socket is valid...
+    //Now I can check if the socket is valid...
 
     if (!kes->isValid()) // may be logging in now
-	{
-		// TODO - if we lose the connection then we can't just send a body cmd
-		// TODO we need a group cmd first - always save group name for a working thread
-		// TODO and restore it if the connection is lost
-		qDebug() << "thread " << threadId << ", m_sendCmd: Invalid socket for command " << cmd;
+    {
+        // TODO - if we lose the connection then we can't just send a body cmd
+        // TODO we need a group cmd first - always save group name for a working thread
+        // TODO and restore it if the connection is lost
+        qDebug() << "thread " << threadId << ", m_sendCmd: Invalid socket for command " << cmd;
 
-		if (!m_connect())
-		{
-			qDebug() << "m_sendCmd(): Failed to connect ...";
+        if (!m_connect())
+        {
+            qDebug() << "m_sendCmd(): Failed to connect ...";
             error = Connection_Err;
-			return false;
-		}
-		else
-		{
-			kes->write(c_str, cmd.length());
-		}
-	}
+            return false;
+        }
+        else
+        {
+            kes->write(c_str, cmd.length());
+        }
+    }
 
-	if (!waitLine())
-		return false;
+    if (!waitLine())
+        return false;
 
     m_readLine();
-	s=line;
+    s=line;
 
-	// qDebug() << "Thread " << threadId << ", request : " << cmd << ", response : " << s;
+    // qDebug() << "Thread " << threadId << ", request : " << cmd << ", response : " << s;
 
     if (response == s.left(3).toInt())
     {
-		return true;
+        return true;
     }
-	else
+    else
     { //set the error
-		error=m_handleError(response, s);
-		qDebug() << "m_sendCmd(): Invalid response from server " << nHost->getHostName() \
-				<< ": " << s << ", cut down to " << s.left(3) << ", expected " << response << "cmd was " << cmd;
+        error=m_handleError(response, s);
+        qDebug() << "m_sendCmd(): Invalid response from server " << nHost->getHostName() \
+                 << ": " << s << ", cut down to " << s.left(3) << ", expected " << response << "cmd was " << cmd;
 
-		//empty buffer
-		watermark=buffer;
+        //empty buffer
+        watermark=buffer;
         return false;
-	}
+    }
 }
 
 bool NntpThread::m_connect( )
 {
-	error=NntpThread::No_Err;
+    error=NntpThread::No_Err;
     if (isLoggedIn == true)
-		return true;
+        return true;
 
-	newsGroup="";
-	watermark=buffer;
+    newsGroup="";
+    watermark=buffer;
 
     if (! serverConnect(nHost->getHostName(), nHost->getPort()) )
     {
-		qDebug("Cannot connect");
+        qDebug("Cannot connect");
         error = Connection_Err;
-		return false;
-	}
+        return false;
+    }
 
     if (!kes->state() == QAbstractSocket::ConnectedState)
-	{
-		//socket is not valid, probably a timeout
-		qDebug("Invalid socket");
+    {
+        //socket is not valid, probably a timeout
+        qDebug("Invalid socket");
         reset();
         return false;
-	}
+    }
 
-// 		qDebug("Connected, going on");
+    // 		qDebug("Connected, going on");
 
-		if (!waitLine()) {
-// 			qDebug("Error connecting!!");
+    if (!waitLine()) {
+        // 			qDebug("Error connecting!!");
 
-			return false;
-		}
-// 		qDebug("Line found");
-		m_readLine();
-		QString s = line;
-//        qDebug() << "Got this line: " << s;
-		if ( (s.left(3).toInt() != NntpThread::ready) &&
-					(s.left(3).toInt() != NntpThread::readyNoPost) )
-		{
-			qDebug("Bad response code. Response: %d", s.left(3).toInt());
-            reset();
-            error=NntpThread::Comm_Err;
+        return false;
+    }
+    // 		qDebug("Line found");
+    m_readLine();
+    QString s = line;
+    //        qDebug() << "Got this line: " << s;
+    if ( (s.left(3).toInt() != NntpThread::ready) &&
+         (s.left(3).toInt() != NntpThread::readyNoPost) )
+    {
+        qDebug("Bad response code. Response: %d", s.left(3).toInt());
+        reset();
+        error=NntpThread::Comm_Err;
 
-			errorString=s;
-            return false;
-        }
-	    if (nHost->getUserName() == "") {
-//             qDebug("Username NULL, connection finished");
-			isLoggedIn=true;
-            return true;
-        }
-        cmd="authinfo user " + nHost->getUserName() + "\r\n";
-// 		qDebug("Sending user");
-        if (!m_sendCmd(cmd, NntpThread::user )) {
-            qDebug("Bad response to the \"user\" cmd");
-            reset();
-            return false;
-        }
-       cmd="authinfo pass " + nHost->getPass() + "\r\n";
-// 	   qDebug("Sending password");
-       if (!(m_sendCmd(cmd, NntpThread::pass ))) {
-           qDebug("Authentication failed");
-           qDebug("Error is: %d", error);
-           qDebug() << "Response from server: " << errorString;
-		   //disconnected
-           reset();
+        errorString=s;
+        return false;
+    }
+    if (nHost->getUserName() == "") {
+        //             qDebug("Username NULL, connection finished");
+        isLoggedIn=true;
+        return true;
+    }
+    cmd="authinfo user " + nHost->getUserName() + "\r\n";
+    // 		qDebug("Sending user");
+    if (!m_sendCmd(cmd, NntpThread::user )) {
+        qDebug("Bad response to the \"user\" cmd");
+        reset();
+        return false;
+    }
+    cmd="authinfo pass " + nHost->getPass() + "\r\n";
+    // 	   qDebug("Sending password");
+    if (!(m_sendCmd(cmd, NntpThread::pass ))) {
+        qDebug("Authentication failed");
+        qDebug("Error is: %d", error);
+        qDebug() << "Response from server: " << errorString;
+        //disconnected
+        reset();
 
-           return false;
-       }
+        return false;
+    }
 
-       isLoggedIn=true;
-// 	   qDebug("Logged in");
+    isLoggedIn=true;
+    // 	   qDebug("Logged in");
 
-       return true;
+    return true;
 }
 
 bool NntpThread::getGroupLimits(QString group)
 {
-	QString s;
+    QString s;
     if (!m_connect())
     {
-		qDebug() << "getGroupLimits(): can't connect to  " << nHost->getName();
+        qDebug() << "getGroupLimits(): can't connect to  " << nHost->getName();
         return false;
-	}
+    }
 
     error=NntpThread::No_Err;
     cmd = "group " + group + "\r\n";
 
-	if (!m_sendCmd(cmd, NntpThread::group))
-		return false;
+    if (!m_sendCmd(cmd, NntpThread::group))
+        return false;
 
-	s=line;
-	parse(s.split(" ", QString::KeepEmptyParts));
+    s=line;
+    parse(s.split(" ", QString::KeepEmptyParts));
 
-	qDebug() << "Highwatermark: " << highWatermark << " Lowwatermark: " << lowWatermark << " Articles: " << articles;
+    qDebug() << "Highwatermark: " << highWatermark << " Lowwatermark: " << lowWatermark << " Articles: " << articles;
 
     emit SigUpdateLimits(job, lowWatermark, highWatermark, articles);
 
-	if (cancel)
-		return false;
-	else
-		return true;
+    if (cancel)
+        return false;
+    else
+        return true;
 }
 
 bool NntpThread::getCapabilities()
 {
-	QString s;
-	QString capabilityLine;
-	quint64 capabilities = 0;
+    QString s;
+    QString capabilityLine;
+    quint64 capabilities = 0;
 
     if (!m_connect())
     {
-		qDebug() << "getCapabilities(): can't connect to  " << nHost->getName();
+        qDebug() << "getCapabilities(): can't connect to  " << nHost->getName();
         return true; // no point trying to queue for another server - this is server specific
-	}
+    }
 
     error=NntpThread::No_Err;
 
     cmd = "help\r\n";
 
-	if (!m_sendCmd(cmd, NntpThread::help))
-		return false;
+    if (!m_sendCmd(cmd, NntpThread::help))
+        return false;
 
-	while (line[0] != '.')
-	{
-		if (!waitLine())
-			return false;
+    while (line[0] != '.')
+    {
+        if (!waitLine())
+            return false;
 
-		while (m_readLine())
-		{
-			if (line[0] == '.')
-			{
-				break;
-			}
-			else
-			{
-				capabilityLine = QString::fromLocal8Bit(line).trimmed();
+        while (m_readLine())
+        {
+            if (line[0] == '.')
+            {
+                break;
+            }
+            else
+            {
+                capabilityLine = QString::fromLocal8Bit(line).trimmed();
                 qDebug() << "Got help : " << capabilityLine;
 
                 if (capabilityLine.startsWith("xzver", Qt::CaseInsensitive))
-                	capabilities |= NntpHost::xzver;
+                    capabilities |= NntpHost::xzver;
                 else if (capabilityLine.startsWith("xfeature compress gzip", Qt::CaseInsensitive))
-                	capabilities |= NntpHost::xfeatgzip;
+                    capabilities |= NntpHost::xfeatgzip;
                 else if (capabilityLine.startsWith("xfeature-compress gzip", Qt::CaseInsensitive))
-                	capabilities |= NntpHost::xfeatgzip;
+                    capabilities |= NntpHost::xfeatgzip;
                 else if (capabilityLine.startsWith("capabilities", Qt::CaseInsensitive))
-                	capabilities |= NntpHost::capab;
-			}
-		}
-	}
+                    capabilities |= NntpHost::capab;
+            }
+        }
+    }
 
-	if (capabilities & NntpHost::capab)
-	{
-		cmd = "capabilities\r\n";
+    if (capabilities & NntpHost::capab)
+    {
+        cmd = "capabilities\r\n";
 
-		if (!m_sendCmd(cmd, NntpThread::capabilities))
-			return false;
+        if (!m_sendCmd(cmd, NntpThread::capabilities))
+            return false;
 
-		while (line[0] != '.')
-		{
-			if (!waitLine())
-				return false;
+        while (line[0] != '.')
+        {
+            if (!waitLine())
+                return false;
 
-			while (m_readLine())
-			{
-				if (line[0] == '.')
-				{
-					break;
-				}
-				else
-				{
-					capabilityLine = QString::fromLocal8Bit(line).trimmed();
-					qDebug() << "Got capability : " << capabilityLine;
+            while (m_readLine())
+            {
+                if (line[0] == '.')
+                {
+                    break;
+                }
+                else
+                {
+                    capabilityLine = QString::fromLocal8Bit(line).trimmed();
+                    qDebug() << "Got capability : " << capabilityLine;
 
-	                if (capabilityLine.startsWith("xfeature compress gzip", Qt::CaseInsensitive))
-	                	capabilities |= NntpHost::xfeatgzip;
-	                else if (capabilityLine.startsWith("xfeature-compress gzip", Qt::CaseInsensitive))
-	                	capabilities |= NntpHost::xfeatgzip;
-				}
-			}
-		}
-	}
+                    if (capabilityLine.startsWith("xfeature compress gzip", Qt::CaseInsensitive))
+                        capabilities |= NntpHost::xfeatgzip;
+                    else if (capabilityLine.startsWith("xfeature-compress gzip", Qt::CaseInsensitive))
+                        capabilities |= NntpHost::xfeatgzip;
+                }
+            }
+        }
+    }
 
-	emit SigExtensions(job, nHost->getId(), capabilities);
+    emit SigExtensions(job, nHost->getId(), capabilities);
 
-	if (cancel)
-		return false;
-	else
-		return true;
+    if (cancel)
+        return false;
+    else
+        return true;
 }
 
 void NntpThread::charCRC(const unsigned char *c)
 {
-	crc ^= 0xffffffffL;
-	crc=crc_table[((int)crc ^ (*c)) & 0xff] ^ (crc >> 8);
-	crc ^= 0xffffffffL;
+    crc ^= 0xffffffffL;
+    crc=crc_table[((int)crc ^ (*c)) & 0xff] ^ (crc >> 8);
+    crc ^= 0xffffffffL;
 }
 
 bool NntpThread::getXover(QString group)
 {
-	QString s;
+    QString s;
 
     HeaderQueue<QByteArray*> headerQueue;
 
-	uint from, to;
-	quint64 maxHeaderNum;
+    uint from, to;
+    quint64 maxHeaderNum;
 
-	quint64 targetHWM  = 0;
-	bool endReached = false;
+    quint64 targetHWM  = 0;
+    bool endReached = false;
 
-	qint16 hostId = nHost->getId();
-	Db* db = job->ng->getDb();
+    qint16 hostId = nHost->getId();
+    Db* db = job->ng->getDb();
 
-	maxHeaderNum = job->ng->servLocalHigh[hostId];
+    maxHeaderNum = job->ng->servLocalHigh[hostId];
 
     if (!m_connect())
     {
-		qDebug() << "getXover(): can't connect to  " << nHost->getName();
+        qDebug() << "getXover(): can't connect to  " << nHost->getName();
         return false;
-	}
+    }
 
     qDebug() << hostId << ": getXover()";
     error=NntpThread::No_Err;
 
 
-	if (config->downloadCompressed
-			&& (nHost->getServerFlags() & NntpHost::xfeatgzip)
-			&& (nHost->getEnabledServerExtensions() & NntpHost::xfeatgzip))
-	{
-		cmd="xfeature compress gzip\r\n";
-		//Check first line
+    if (config->downloadCompressed
+            && (nHost->getServerFlags() & NntpHost::xfeatgzip)
+            && (nHost->getEnabledServerExtensions() & NntpHost::xfeatgzip))
+    {
+        cmd="xfeature compress gzip\r\n";
+        //Check first line
         if (!m_sendCmd(cmd, NntpThread::gzip)) // xfeatgzip uses the same response code as xover
-		{
-			qDebug() << "xfeature-compress gzip failed for command: " << cmd;
-			return false;
-		}
+        {
+            qDebug() << "xfeature-compress gzip failed for command: " << cmd;
+            return false;
+        }
 
-		qDebug() << "xfeature-compress gzip accepted for command: " << cmd;
-	}
+        qDebug() << "xfeature-compress gzip accepted for command: " << cmd;
+    }
 
     cmd = "group " + group + "\r\n";
 
-	if (!m_sendCmd(cmd, NntpThread::group))
-		return false;
+    if (!m_sendCmd(cmd, NntpThread::group))
+        return false;
 
-	s=line;
-//     qDebug("Line: %s", line);
-	//parse fills articles, lowW and highW variables...
+    s=line;
+    //     qDebug("Line: %s", line);
+    //parse fills articles, lowW and highW variables...
     parse(s.split(" ", QString::KeepEmptyParts)); // gives HWM, LWM and articles
 
-	qDebug() << hostId << ": Highwatermark: " << highWatermark << " Lowwatermark: " << lowWatermark << " Articles: " << articles;
+    qDebug() << hostId << ": Highwatermark: " << highWatermark << " Lowwatermark: " << lowWatermark << " Articles: " << articles;
 
-	int oldHighW = job->ng->servLocalHigh[nHost->getId()];
+    int oldHighW = job->ng->servLocalHigh[nHost->getId()];
 
     // Now grab the articles from the old highw to the new highw...
 
-	if (job->from == 0 && job->to == 0) // update without options (topup)
-	{
-		if (oldHighW != 0)
-		{
-			from = oldHighW + 1;
-		}
-		else
-		{
-			from = lowWatermark;
-		}
+    if (job->from == 0 && job->to == 0) // update without options (topup)
+    {
+        if (oldHighW != 0)
+        {
+            from = oldHighW + 1;
+        }
+        else
+        {
+            from = lowWatermark;
+        }
 
-		to   = highWatermark;
-		articles = to - from + 1;
-		targetHWM = highWatermark;
-	}
-	else
-	{
-		from = job->from;
-		to   = job->to;
+        to   = highWatermark;
+        articles = to - from + 1;
+        targetHWM = highWatermark;
+    }
+    else
+    {
+        from = job->from;
+        to   = job->to;
 
-		targetHWM = job->to;
+        targetHWM = job->to;
 
-		articles = to - from + 1;
-	}
+        articles = to - from + 1;
+    }
 
-	if (from > to) // nothing to do
-		return true;
+    if (from > to) // nothing to do
+        return true;
 
-	qDebug() << hostId << ": Getting articles " << from << '-' << to;
+    qDebug() << hostId << ": Getting articles " << from << '-' << to;
 
-	step=articles/100;
-	qDebug() << hostId << ": Step = " << step;
+    step=articles/100;
+    qDebug() << hostId << ": Step = " << step;
 
-	lines=0;
-	if (step == 0)
-		step=1;
+    lines=0;
+    if (step == 0)
+        step=1;
 
-	groupArticles = 0;
-	unreadArticles = 0;
+    groupArticles = 0;
+    unreadArticles = 0;
 
     bool workersStarted = false;
 
@@ -1161,9 +1172,9 @@ bool NntpThread::getXover(QString group)
     HeaderReadNoCompression* headerReadNoCompression[NUM_HEADER_WORKERS];
     HeaderReadWorker* headerReadWorker[NUM_HEADER_WORKERS];
 
-	if (config->downloadCompressed
-			&& (nHost->getServerFlags() & NntpHost::xfeatgzip)
-			&& (nHost->getEnabledServerExtensions() & NntpHost::xfeatgzip))
+    if (config->downloadCompressed
+            && (nHost->getServerFlags() & NntpHost::xfeatgzip)
+            && (nHost->getEnabledServerExtensions() & NntpHost::xfeatgzip))
     {
         // Create worker threads here .....
         for (int k=0; k<NUM_HEADER_WORKERS; ++k)
@@ -1182,37 +1193,37 @@ bool NntpThread::getXover(QString group)
         }
 
         bigBufferSize=6 * 1024 * 1024;
-		if (!bigBuffer)
-		    bigBuffer = new char[bigBufferSize];
+        if (!bigBuffer)
+            bigBuffer = new char[bigBufferSize];
 
-		if (!inflatedBuffer)
-		    inflatedBuffer = new char[40 * 1024 * 1024];
-		bigWatermark=bigBuffer;
+        if (!inflatedBuffer)
+            inflatedBuffer = new char[40 * 1024 * 1024];
+        bigWatermark=bigBuffer;
 
-		uint batchSize = 0;
+        uint batchSize = 0;
 
-		qDebug() << hostId << ": It's time for header compression type 2";
+        qDebug() << hostId << ": It's time for header compression type 2";
 
-		int chd=0;
-		while ((chd*COMPRESSED_HEADER_THRESHOLD) < (int)articles)
-		{
-			batchSize = qMin(uint(COMPRESSED_HEADER_THRESHOLD), articles - (chd*COMPRESSED_HEADER_THRESHOLD));
+        int chd=0;
+        while ((chd*COMPRESSED_HEADER_THRESHOLD) < (int)articles)
+        {
+            batchSize = qMin(uint(COMPRESSED_HEADER_THRESHOLD), articles - (chd*COMPRESSED_HEADER_THRESHOLD));
 
-			cmd="xover " + QString::number(from) + "-" + QString::number(from + batchSize - 1) + "\r\n";
+            cmd="xover " + QString::number(from) + "-" + QString::number(from + batchSize - 1) + "\r\n";
 
-			if (!m_sendCmd(cmd, NntpThread::xover))
-			{
-				qDebug() << "xover failed for command: " << cmd;
-				return false;
-			}
+            if (!m_sendCmd(cmd, NntpThread::xover))
+            {
+                qDebug() << "xover failed for command: " << cmd;
+                return false;
+            }
 
-			qDebug() << "xover accepted for command: " << cmd;
+            qDebug() << "xover accepted for command: " << cmd;
 
-			if (!waitBigLine())
-			{
-				qDebug() << "xover failed in waitBigLine()";
-				return false;
-			}
+            if (!waitBigLine())
+            {
+                qDebug() << "xover failed in waitBigLine()";
+                return false;
+            }
 
             if (!m_readBigLine())
             {
@@ -1232,12 +1243,12 @@ bool NntpThread::getXover(QString group)
                 emit startHeaderRead();
                 workersStarted = true;
             }
-		}
-	}
+        }
+    }
     else if (config->downloadCompressed
-			&& (nHost->getServerFlags() & NntpHost::xzver)
-			&& (nHost->getEnabledServerExtensions() & NntpHost::xzver))
-	{
+             && (nHost->getServerFlags() & NntpHost::xzver)
+             && (nHost->getEnabledServerExtensions() & NntpHost::xzver))
+    {
         // Create worker threads here .....
         for (int k=0; k<NUM_HEADER_WORKERS; ++k)
         {
@@ -1254,131 +1265,131 @@ bool NntpThread::getXover(QString group)
             emit setReaderBusy();
         }
 
-		QString sLine;
+        QString sLine;
 
-		if (!bufferLine)
-		    bufferLine = new uchar[6 * 1024 * 1024];
-		if (!inflatedBuffer)
-		    inflatedBuffer = new char[30 * 1024 * 1024];
+        if (!bufferLine)
+            bufferLine = new uchar[6 * 1024 * 1024];
+        if (!inflatedBuffer)
+            inflatedBuffer = new char[30 * 1024 * 1024];
 
-		unsigned int i2;
-		uint batchSize = 0;
-		uint expectedCRC;
-		uint bufferIndex=0;
-		int beginCRC;
+        unsigned int i2;
+        uint batchSize = 0;
+        uint expectedCRC;
+        uint bufferIndex=0;
+        int beginCRC;
 
-		bool badCRC=false;
+        bool badCRC=false;
 
-		unsigned char ch;
-		const char *ascii_rep;
+        unsigned char ch;
+        const char *ascii_rep;
 
-		qDebug() << hostId << ": It's time for header compression";
+        qDebug() << hostId << ": It's time for header compression";
         for (int i=0; (i*COMPRESSED_HEADER_THRESHOLD) < (int)articles; ++i)
-		{
-			batchSize = qMin(uint(COMPRESSED_HEADER_THRESHOLD), articles - (i*COMPRESSED_HEADER_THRESHOLD));
+        {
+            batchSize = qMin(uint(COMPRESSED_HEADER_THRESHOLD), articles - (i*COMPRESSED_HEADER_THRESHOLD));
 
-			bufferIndex=0;
-			badCRC=false;
-			crc= 0L;
+            bufferIndex=0;
+            badCRC=false;
+            crc= 0L;
 
-			cmd="xzver " + QString::number(from) + "-" + QString::number(from + batchSize - 1) + "\r\n";
-			from += batchSize;
+            cmd="xzver " + QString::number(from) + "-" + QString::number(from + batchSize - 1) + "\r\n";
+            from += batchSize;
 
-			//Check first line
-			if (!m_sendCmd(cmd, NntpThread::xover)) // xzver uses the same response code as xover
-			{
-				qDebug() << "xzver failed for command: " << cmd;
-				return false;
-			}
+            //Check first line
+            if (!m_sendCmd(cmd, NntpThread::xover)) // xzver uses the same response code as xover
+            {
+                qDebug() << "xzver failed for command: " << cmd;
+                return false;
+            }
 
-			qDebug() << "xzver accepted for command: " << cmd;
+            qDebug() << "xzver accepted for command: " << cmd;
 
-			if (!waitLine())
-			{
-				qDebug() << "xzver failed in waitLine()";
-				return false;
-			}
+            if (!waitLine())
+            {
+                qDebug() << "xzver failed in waitLine()";
+                return false;
+            }
 
-			// Get the first line and make sure that it's yy encoded (size is not valid)
-			if (m_readLine() == false || qstrncmp( line, "=ybegin", 7 ))
-			{
-				qDebug() << "xzver failed to find yy encoded input: *" << line << "*";
-				return false;
-			}
+            // Get the first line and make sure that it's yy encoded (size is not valid)
+            if (m_readLine() == false || qstrncmp( line, "=ybegin", 7 ))
+            {
+                qDebug() << "xzver failed to find yy encoded input: *" << line << "*";
+                return false;
+            }
 
-			// We know that it's yy encoded, so decode now
-			while (line[0] != '.')
-			{
-				if (!waitLine())
-				{
-					qDebug() << "xzver failed in waitLine()";
-					return false;
-				}
+            // We know that it's yy encoded, so decode now
+            while (line[0] != '.')
+            {
+                if (!waitLine())
+                {
+                    qDebug() << "xzver failed in waitLine()";
+                    return false;
+                }
 
-				while (m_readLine())
-				{
-					if (line[0] == '.')
-					{
-						break;
-					}
+                while (m_readLine())
+                {
+                    if (line[0] == '.')
+                    {
+                        break;
+                    }
 
-					if (!qstrncmp( line, "=yend", 5 ))
-					{
+                    if (!qstrncmp( line, "=yend", 5 ))
+                    {
                         sLine = QString::fromLatin1(line);
 
-						if ((beginCRC=sLine.indexOf("pcrc32=")) != -1)
-						{
-							//May be a post crc
-							expectedCRC=sLine.mid(beginCRC + 7, 8).toUInt(NULL, 16);
-						}
-						else if ((beginCRC=sLine.indexOf("crc32=")) != -1)
-						{
-							expectedCRC=sLine.mid(beginCRC +6, 8).toUInt(NULL, 16);
-						}
+                        if ((beginCRC=sLine.indexOf("pcrc32=")) != -1)
+                        {
+                            //May be a post crc
+                            expectedCRC=sLine.mid(beginCRC + 7, 8).toUInt(NULL, 16);
+                        }
+                        else if ((beginCRC=sLine.indexOf("crc32=")) != -1)
+                        {
+                            expectedCRC=sLine.mid(beginCRC +6, 8).toUInt(NULL, 16);
+                        }
 
-						if (beginCRC == -1)
-						{
-							qDebug() << "Cannot find crc!\n";
-							expectedCRC=0;
-							badCRC=false;
-						}
-						else
-						{
-							//CRC32 is always 8 chars...
-							//compare part crc...
-							if (crc != expectedCRC)
-							{
-								qDebug() << "Warning: part crc differs!";
-								qDebug() << "Expected CRC: " << expectedCRC << " WrittenCRC: " << crc;
-								badCRC=true;
-							}
-							else
-								badCRC=false;
-						}
+                        if (beginCRC == -1)
+                        {
+                            qDebug() << "Cannot find crc!\n";
+                            expectedCRC=0;
+                            badCRC=false;
+                        }
+                        else
+                        {
+                            //CRC32 is always 8 chars...
+                            //compare part crc...
+                            if (crc != expectedCRC)
+                            {
+                                qDebug() << "Warning: part crc differs!";
+                                qDebug() << "Expected CRC: " << expectedCRC << " WrittenCRC: " << crc;
+                                badCRC=true;
+                            }
+                            else
+                                badCRC=false;
+                        }
 
-						if (badCRC)
-							return false;
-					}
-					else //It's a data line
-					{
-						ascii_rep = line;
+                        if (badCRC)
+                            return false;
+                    }
+                    else //It's a data line
+                    {
+                        ascii_rep = line;
 
-						for (i2=0; i2<qstrlen(line); ++i2)
-						{
-							if (ascii_rep[i2]=='=')
-							{
-								ch = ascii_rep[++i2] -106;
-							}
-							else
-							{
-								ch=ascii_rep[i2]-42;
-							}
-							bufferLine[bufferIndex++]=ch;
-							charCRC((const unsigned char *) &ch);
-						}
-					}
-				}
-			}
+                        for (i2=0; i2<qstrlen(line); ++i2)
+                        {
+                            if (ascii_rep[i2]=='=')
+                            {
+                                ch = ascii_rep[++i2] -106;
+                            }
+                            else
+                            {
+                                ch=ascii_rep[i2]-42;
+                            }
+                            bufferLine[bufferIndex++]=ch;
+                            charCRC((const unsigned char *) &ch);
+                        }
+                    }
+                }
+            }
 
             lineBA = new QByteArray((const char *)bufferLine, (int)bufferIndex);
 
@@ -1390,8 +1401,8 @@ bool NntpThread::getXover(QString group)
                 workersStarted = true;
             }
 
-			bufferIndex=0;
-		}
+            bufferIndex=0;
+        }
     }
     else // no compression
     {
@@ -1413,26 +1424,26 @@ bool NntpThread::getXover(QString group)
             emit setReaderBusy();
         }
 
-		cmd="xover " + QString::number(from) + "-" + QString::number(to) + "\r\n";
+        cmd="xover " + QString::number(from) + "-" + QString::number(to) + "\r\n";
 
-		//Check first line
-		if (!m_sendCmd(cmd, NntpThread::xover))
-			return false;
+        //Check first line
+        if (!m_sendCmd(cmd, NntpThread::xover))
+            return false;
 
-		while (line[0] != '.')
-		{
-			if (!waitLine())
-				return false;
+        while (line[0] != '.')
+        {
+            if (!waitLine())
+                return false;
 
             while (m_readLineBA())
-			{
+            {
                 if (lineBA->at(0) == '.')
-				{
-	// 				qDebug("End found");
-					endReached = true;
-					break;
-				}
-				else
+                {
+                    // 				qDebug("End found");
+                    endReached = true;
+                    break;
+                }
+                else
                 {
                     headerQueue.enqueue(lineBA);
 
@@ -1441,10 +1452,10 @@ bool NntpThread::getXover(QString group)
                         emit startHeaderRead();
                         workersStarted = true;
                     }
-				}
-			}
-		}
-	}
+                }
+            }
+        }
+    }
 
     for (int k=0; k<NUM_HEADER_WORKERS; ++k)
     {
@@ -1483,49 +1494,49 @@ bool NntpThread::getXover(QString group)
 
     emit quitHeaderRead();
 
-	if (endReached == true)
+    if (endReached == true)
         job->ng->servLocalHigh[hostId] = targetHWM;
-	else
+    else
         job->ng->servLocalHigh[hostId] = qMax(job->ng->servLocalHigh[hostId], maxHeaderNum);
 
-	saveGroup();
-	db->sync(0);
+    saveGroup();
+    db->sync(0);
 
-	emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
-			job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
+    emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
+                                   job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
 
-	if (cancel)
-		return false;
-	else
-		return true;
+    if (cancel)
+        return false;
+    else
+        return true;
 }
 
 bool NntpThread::saveGroup()
 {
-	int tret;
-	Dbt groupkey, groupdata;
+    int tret;
+    Dbt groupkey, groupdata;
 
-	char *tempng = job->ng->data(); // MD TODO this allocates space each time called !!!
-	groupdata.set_data(tempng);
-	groupdata.set_size(job->ng->getRecordSize());
+    char *tempng = job->ng->data(); // MD TODO this allocates space each time called !!!
+    groupdata.set_data(tempng);
+    groupdata.set_size(job->ng->getRecordSize());
 
-	QByteArray ba = job->ng->ngName.toLocal8Bit();
-	const char *tempkey = ba.data();
-	groupkey.set_data((void*) tempkey);
-	groupkey.set_size(job->ng->ngName.length());
+    QByteArray ba = job->ng->ngName.toLocal8Bit();
+    const char *tempkey = ba.data();
+    groupkey.set_data((void*) tempkey);
+    groupkey.set_size(job->ng->ngName.length());
 
-	if ((tret = job->gdb->put(NULL, &groupkey, &groupdata, 0)) != 0)
-	{
-		qDebug() << "Error updating newsgroup: %d" << tret;
-		delete [] tempng;
-		return false;
-	}
+    if ((tret = job->gdb->put(NULL, &groupkey, &groupdata, 0)) != 0)
+    {
+        qDebug() << "Error updating newsgroup: %d" << tret;
+        delete [] tempng;
+        return false;
+    }
 
-	job->gdb->sync(0);
+    job->gdb->sync(0);
 
-	delete [] tempng;
+    delete [] tempng;
 
-	return true;
+    return true;
 }
 
 void NntpThread::parse(QStringList qs)
@@ -1537,15 +1548,15 @@ void NntpThread::parse(QStringList qs)
 
 void NntpThread::setQueue(QList<int> *tq, QMap<int, QItem*> *q, QMutex *qLock, int* po)
 {
-	threadQueue=tq;
-	queue=q;
-	queueLock=qLock;
-	pendingOperations=po;
+    threadQueue=tq;
+    queue=q;
+    queueLock=qLock;
+    pendingOperations=po;
 }
 
 void NntpThread::setDbSync(QMutex *qLock)
 {
-	headerDbLock = qLock;
+    headerDbLock = qLock;
 }
 
 bool NntpThread::m_readLine()
@@ -1559,8 +1570,8 @@ bool NntpThread::m_readLine()
 
         if (lineSize > lineBufSize)
         {
-//     		qDebug("Line Buffer overflow");
-// 			qDebug("LineSize: %d", lineSize);
+            //     		qDebug("Line Buffer overflow");
+            // 			qDebug("LineSize: %d", lineSize);
             lineBufSize=lineSize+1000;
             delete [] line;
             line=new char[lineBufSize];
@@ -1579,156 +1590,156 @@ bool NntpThread::m_readLine()
 
 bool NntpThread::m_readLineBA()
 {
-	if ((lineEnd=m_findEndLine(buffer, watermark)))
-	{
-		lineEnd[0]=0;
-		lineEnd[1]=0;
-		lineEnd+=2;
-		lineSize=lineEnd-buffer;
+    if ((lineEnd=m_findEndLine(buffer, watermark)))
+    {
+        lineEnd[0]=0;
+        lineEnd[1]=0;
+        lineEnd+=2;
+        lineSize=lineEnd-buffer;
 
         lineBA = new QByteArray(buffer, lineSize);
 
-    	memmove(buffer,lineEnd,watermark-lineEnd);
+        memmove(buffer,lineEnd,watermark-lineEnd);
 
-		watermark-=lineSize;
-		return true;
-	}
-	else
-		return false;
+        watermark-=lineSize;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool NntpThread::m_readBigLine()
 {
-	if ((bigLineEnd=m_findDotEndLine(bigBuffer, bigWatermark)))
-	{
-		bigLineEnd[0]=0; // '.'
-		bigLineEnd[1]=0; // CR
-		bigLineEnd[2]=0; // LF
-		bigLineEnd+=3;
-		bigLineSize=bigLineEnd-bigBuffer;
+    if ((bigLineEnd=m_findDotEndLine(bigBuffer, bigWatermark)))
+    {
+        bigLineEnd[0]=0; // '.'
+        bigLineEnd[1]=0; // CR
+        bigLineEnd[2]=0; // LF
+        bigLineEnd+=3;
+        bigLineSize=bigLineEnd-bigBuffer;
 
         bigLine = new QByteArray(bigBuffer, bigLineSize);
 
-    	memmove(bigBuffer,bigLineEnd,bigWatermark-bigLineEnd);
+        memmove(bigBuffer,bigLineEnd,bigWatermark-bigLineEnd);
 
-    	bigWatermark-=bigLineSize;
-		return true;
-	}
-	else
-		return false;
+        bigWatermark-=bigLineSize;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool NntpThread::getArticle()
 {
-	if (!m_connect())
-	{
-		qDebug() << "getArticle(): can't connect";
+    if (!m_connect())
+    {
+        qDebug() << "getArticle(): can't connect";
         return false;
-	}
+    }
 
-	error=NntpThread::No_Err;
+    error=NntpThread::No_Err;
 
-	if (job->mid.isNull() || job->mid.isEmpty())
-	{
-		if (newsGroup != job->ng->ngName)
-		{
-			newsGroup=job->ng->ngName;
-			cmd = "group " + newsGroup + "\r\n";
+    if (job->mid.isNull() || job->mid.isEmpty())
+    {
+        if (newsGroup != job->ng->ngName)
+        {
+            newsGroup=job->ng->ngName;
+            cmd = "group " + newsGroup + "\r\n";
 
-			if (!m_sendCmd(cmd, NntpThread::group))
-				return false;
-		}
+            if (!m_sendCmd(cmd, NntpThread::group))
+                return false;
+        }
 
 
-		cmd="body " + QString::number(artNum) + "\r\n";
+        cmd="body " + QString::number(artNum) + "\r\n";
 
-		if (!m_sendCmd(cmd, NntpThread::body))
-			return false;
-	}
-	else
-	{
-		QString cmd = "body " + job->mid + "\r\n";
+        if (!m_sendCmd(cmd, NntpThread::body))
+            return false;
+    }
+    else
+    {
+        QString cmd = "body " + job->mid + "\r\n";
 
-		if (!m_sendCmd(cmd, NntpThread::body))
-			return false;
-	}
+        if (!m_sendCmd(cmd, NntpThread::body))
+            return false;
+    }
 
-	int partialLines=0;
+    int partialLines=0;
 
-	prevTime=QTime::currentTime();
+    prevTime=QTime::currentTime();
 
-	int rlines = 0;
+    int rlines = 0;
 
-	while(!((line[0] == '.') && (line[1] == '\0')))
-	{
-		if (!waitLine())
-			return false;
-		while (m_readLine())
-		{
-			if (line[0] == '.')
-			{
-				if (line[1] == '.') {
-					if ( (saveFile->write(line+1, strlen(line+1) ) == -1) || \
-										 (saveFile->write("\r\n", 2) == -1) )
-					{
-						//Write error...urgh! :)
-						error=Write_Err;
-						errorString="I/O error";
+    while(!((line[0] == '.') && (line[1] == '\0')))
+    {
+        if (!waitLine())
+            return false;
+        while (m_readLine())
+        {
+            if (line[0] == '.')
+            {
+                if (line[1] == '.') {
+                    if ( (saveFile->write(line+1, strlen(line+1) ) == -1) || \
+                         (saveFile->write("\r\n", 2) == -1) )
+                    {
+                        //Write error...urgh! :)
+                        error=Write_Err;
+                        errorString="I/O error";
                         reset();
-						return false;
-					}
-				}
-				else
-				{
-					break;
+                        return false;
+                    }
+                }
+                else
+                {
+                    break;
 
-					//finished
-				}
-			}
-			else
-			{
-				if ( (saveFile->write(line, strlen(line) ) == -1) || \
-								  (saveFile->write("\r\n",2) == -1)  )
-				{
-					//Write error...urgh! :)
-					error=Write_Err;
-					errorString="I/O error";
+                    //finished
+                }
+            }
+            else
+            {
+                if ( (saveFile->write(line, strlen(line) ) == -1) || \
+                     (saveFile->write("\r\n",2) == -1)  )
+                {
+                    //Write error...urgh! :)
+                    error=Write_Err;
+                    errorString="I/O error";
                     reset();
-					return false;
-				}
-			}
+                    return false;
+                }
+            }
 
-			//*curbytes+=strlen(line);
-			// kes->bytesRead += strlen(line);
-			rlines+=strlen(line);  // it's really bytes not lines!!
-//			qDebug() << "rlines = " << rlines << ", increased by strlen(line)";
-			currentTime=QTime::currentTime();
-		}
+            //*curbytes+=strlen(line);
+            // kes->bytesRead += strlen(line);
+            rlines+=strlen(line);  // it's really bytes not lines!!
+            //			qDebug() << "rlines = " << rlines << ", increased by strlen(line)";
+            currentTime=QTime::currentTime();
+        }
 
-// 		if ((articles != 0) && (prevTime.secsTo(currentTime) > 1)) {
-		if ( prevTime.secsTo(currentTime) > 1)
-		{
-			partialLines=rlines-partialLines;
-//			qDebug() << "Sending rlines " << rlines << ", articles " << articles;
+        // 		if ((articles != 0) && (prevTime.secsTo(currentTime) > 1)) {
+        if ( prevTime.secsTo(currentTime) > 1)
+        {
+            partialLines=rlines-partialLines;
+            //			qDebug() << "Sending rlines " << rlines << ", articles " << articles;
             emit SigUpdatePost(job, rlines, articles, partialLines, qId);
-			prevTime=QTime::currentTime();
-			partialLines=rlines;
-		}
-	}
+            prevTime=QTime::currentTime();
+            partialLines=rlines;
+        }
+    }
 
-	//send a "final" progress message, to correctly update the post lines
-	partialLines=rlines-partialLines;
+    //send a "final" progress message, to correctly update the post lines
+    partialLines=rlines-partialLines;
     emit SigUpdatePost(job, rlines, articles, partialLines, qId);
-	prevTime=QTime::currentTime();
+    prevTime=QTime::currentTime();
 
-	queueLock->lock();
-	job->status=Job::Finished_Job;
-	queueLock->unlock();
+    queueLock->lock();
+    job->status=Job::Finished_Job;
+    queueLock->unlock();
 
     if ( cancel  )
-		return false;
-	else
-		return true;
+        return false;
+    else
+        return true;
 }
 
 bool NntpThread::getListOfGroups( )
@@ -1736,126 +1747,126 @@ bool NntpThread::getListOfGroups( )
     qDebug("getListOfGroups(): Entered");
 
     if (!m_connect()) {
-		qDebug("getListOfGroups(): can't connect");
+        qDebug("getListOfGroups(): can't connect");
         return false;
-	}
+    }
 
     error=NntpThread::No_Err;
     cmd = "list\r\n";
 
-	if (!m_sendCmd(cmd, NntpThread::list))
-		return false;
+    if (!m_sendCmd(cmd, NntpThread::list))
+        return false;
 
-	while (!(line[0] == '.') && !(line[1] == '\0')  )
-	{
-		if (!waitLine())
-			return false;
+    while (!(line[0] == '.') && !(line[1] == '\0')  )
+    {
+        if (!waitLine())
+            return false;
 
-		while (m_readLine())
-		{
-			if ( (line[0] == '.') && (line[1] == '\0') )
-				break;
-			else
-			{
-        		//*curbytes += strlen(line);
-        		// kes->bytesRead += strlen(line);
+        while (m_readLine())
+        {
+            if ( (line[0] == '.') && (line[1] == '\0') )
+                break;
+            else
+            {
+                //*curbytes += strlen(line);
+                // kes->bytesRead += strlen(line);
 
-        		// put the group in the group db...
+                // put the group in the group db...
 
-				if (dbGroupPut(db, line, nHost->getId()) != 0) {
-					qDebug("dbGroupPut() failed");
+                if (dbGroupPut(db, line, nHost->getId()) != 0) {
+                    qDebug("dbGroupPut() failed");
 
-				}
-			}
-		}
-	}
-	//Update NewsGroup
+                }
+            }
+        }
+    }
+    //Update NewsGroup
 
-	db->sync(0);
-	if (cancel)
-		return false;
-	else
-		return true;
+    db->sync(0);
+    if (cancel)
+        return false;
+    else
+        return true;
 }
 
 int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
 {
-	int ret;
-	Dbt listkey, listdata;
+    int ret;
+    Dbt listkey, listdata;
 
-	listdata.set_flags(DB_DBT_MALLOC);
-	//build the key...
-	QString s=line;
-	QStringList fields=s.split(' ', QString::KeepEmptyParts);
-	QString ngName=fields[0];
+    listdata.set_flags(DB_DBT_MALLOC);
+    //build the key...
+    QString s=line;
+    QStringList fields=s.split(' ', QString::KeepEmptyParts);
+    QString ngName=fields[0];
     int articles = 0;
     articles = fields[1].toInt() - fields[2].toInt() + 1;
-	if (articles < 0)
-		articles = 0;
-// 	qDebug() <<"Articles: " << articles;
-// 	QString desc=fields[1];
+    if (articles < 0)
+        articles = 0;
+    // 	qDebug() <<"Articles: " << articles;
+    // 	QString desc=fields[1];
     QByteArray ba = ngName.toLocal8Bit();
     const char *i = ba.data();
-	listkey.set_data((void*)i);
-	listkey.set_size(ngName.length());
-// 	qDebug() << "Articles on " << ngName << ": " << articles;
+    listkey.set_data((void*)i);
+    listkey.set_size(ngName.length());
+    // 	qDebug() << "Articles on " << ngName << ": " << articles;
 
-// 	memcpy(keymem, i, ngName.length());
+    // 	memcpy(keymem, i, ngName.length());
 
-// 	key->set_size(ngName.length());
-	ret=db->get(NULL, &listkey, &listdata, 0);
-	if (ret == ENOMEM)
-		qDebug("Memory error?? WTF??");
-	if (ret == DB_NOTFOUND) {
+    // 	key->set_size(ngName.length());
+    ret=db->get(NULL, &listkey, &listdata, 0);
+    if (ret == ENOMEM)
+        qDebug("Memory error?? WTF??");
+    if (ret == DB_NOTFOUND) {
 
-		//Not found, create new group and insert into db
+        //Not found, create new group and insert into db
         AvailableGroup *g=new AvailableGroup(ngName, hostId, articles);
-// 		g->setArticles(hostId, articles);
-		//save into db...
-		char *p=g->data();
+        // 		g->setArticles(hostId, articles);
+        //save into db...
+        char *p=g->data();
 
-		//key is already built, build data
-// 		memcpy(datamem, p, g->size());
-// 		data->set_size(g->size());
-// 		delete[] p;
+        //key is already built, build data
+        // 		memcpy(datamem, p, g->size());
+        // 		data->set_size(g->size());
+        // 		delete[] p;
 
-		listdata.set_data(p);
-		listdata.set_size(g->size());
+        listdata.set_data(p);
+        listdata.set_size(g->size());
 
-		ret=db->put(NULL, &listkey, &listdata, 0);
-		if (ret != 0)
-			qDebug("Error inserting into groups db: %d", ret);
-		delete p;
-		return ret;
+        ret=db->put(NULL, &listkey, &listdata, 0);
+        if (ret != 0)
+            qDebug("Error inserting into groups db: %d", ret);
+        delete p;
+        return ret;
 
-	} else if (ret == 0) {
-		//found, update and resave
+    } else if (ret == 0) {
+        //found, update and resave
         AvailableGroup *g = new AvailableGroup((char*)listdata.get_data());
-		free(listdata.get_data());
-		g->addHost(hostId);
-		g->setArticles(hostId, articles);
-		char *p=g->data();
-// 		memcpy(datamem, p, g->size());
-// 		data->set_size(g->size());
-		listdata.set_data(p);
-		listdata.set_size(g->size());
+        free(listdata.get_data());
+        g->addHost(hostId);
+        g->setArticles(hostId, articles);
+        char *p=g->data();
+        // 		memcpy(datamem, p, g->size());
+        // 		data->set_size(g->size());
+        listdata.set_data(p);
+        listdata.set_size(g->size());
 
-		ret=db->put(NULL, &listkey, &listdata, 0);
-		if (ret != 0)
-			qDebug("Error updating group db: %d", ret);
+        ret=db->put(NULL, &listkey, &listdata, 0);
+        if (ret != 0)
+            qDebug("Error updating group db: %d", ret);
         delete [] p;
         delete g;
-		return ret;
-	}
-	else
-		qDebug("WTF??, %d", ret);
+        return ret;
+    }
+    else
+        qDebug("WTF??, %d", ret);
 
-	return -1;
+    return -1;
 }
 
 void NntpThread::reset()
 {
-	qDebug() << "Resetting thread " << threadId;
+    qDebug() << "Resetting thread " << threadId;
 
     freeSocket();
     partReset();
@@ -1884,6 +1895,8 @@ void NntpThread::freeSocket()
         kes->close();
         delete kes;
         kes = 0;
+
+        qDebug() << "Deleted socket";
     }
 
     isLoggedIn=false;
@@ -1895,18 +1908,18 @@ bool NntpThread::serverConnect( QString & addr, quint16 port )
     if (kes->state())
         kes->abort();
 
-	bool connected = false;
-	int sslSocket = nHost->getSslSocket();
+    bool connected = false;
+    int sslSocket = nHost->getSslSocket();
 
-	if (sslSocket == 0)
-	{
-		kes->connectToHost(addr, port);
-		if (kes->waitForConnected(1000 * timeout))
-		{
-             qDebug("TCP connected! : %d", threadId);
-			 connected = true;
-		}
-		else
+    if (sslSocket == 0)
+    {
+        kes->connectToHost(addr, port);
+        if (kes->waitForConnected(1000 * timeout))
+        {
+            qDebug("TCP connected! : %d", threadId);
+            connected = true;
+        }
+        else
         {
             qDebug() << "TCP connect problem: " << threadId << ", " << kes->error();
 
@@ -1914,81 +1927,81 @@ bool NntpThread::serverConnect( QString & addr, quint16 port )
             if (kes->error() == QAbstractSocket::UnfinishedSocketOperationError)
             {
 
-//#if defined(__OS2__)
+                //#if defined(__OS2__)
                 // the error often appears to be spurious .... sleep for timeout ????
-//                connected = true;
-//#  endif
+                //                connected = true;
+                //#  endif
                 kes->abort();
                 kes->connectToHost(addr, port);
 
                 if (kes->waitForConnected(1000 * timeout))
                 {
-                     qDebug("TCP connected at second attempt! : %d", threadId);
-                     connected = true;
-                }                
+                    qDebug("TCP connected at second attempt! : %d", threadId);
+                    connected = true;
+                }
             }
         }
-	}
-	else
-	{
+    }
+    else
+    {
         kes->setProtocol((QSsl::SslProtocol)nHost->getSslProtocol());
-		kes->connectToHostEncrypted(addr, port);
-		kes->ignoreSslErrors(nHost->getExpectedSslErrors());
+        kes->connectToHostEncrypted(addr, port);
+        kes->ignoreSslErrors(nHost->getExpectedSslErrors());
         qDebug() << "Setting ignore SSL errs count to: " << nHost->getExpectedSslErrors().size() << " for server " << qId;
 
-		if (kes->waitForEncrypted(1000 * timeout))
-		{
-             qDebug("SSL connected");
-			 connected = true;
-		}
-		else
-			qDebug() << "SSL connect problem: " << kes->error() << ", " << kes->errorString();
-	}
+        if (kes->waitForEncrypted(1000 * timeout))
+        {
+            qDebug("SSL connected");
+            connected = true;
+        }
+        else
+            qDebug() << "SSL connect problem: " << kes->error() << ", " << kes->errorString();
+    }
 
-	// state changed or cancelled?
-	//Cancelled?
-	if (cancel)
-		return false;
+    // state changed or cancelled?
+    //Cancelled?
+    if (cancel)
+        return false;
 
-	// qDebug() << "Mode = " << kes->mode();
-	if (sslSocket == 1)
-	{
-		; //qDebug() << "Cipher = " << kes->sslConfiguration().sessionCipher();
-	}
+    // qDebug() << "Mode = " << kes->mode();
+    if (sslSocket == 1)
+    {
+        ; //qDebug() << "Cipher = " << kes->sslConfiguration().sessionCipher();
+    }
 
-	if (connected)
-		return true;
+    if (connected)
+        return true;
 
-	if (sslSocket == 0)
-	{
-		//Ok, not cancelled, work out the error
-		QAbstractSocket::SocketError err = kes->error();
+    if (sslSocket == 0)
+    {
+        //Ok, not cancelled, work out the error
+        QAbstractSocket::SocketError err = kes->error();
         qDebug() << "TCP failure, error: " << err;
 
-		switch (err)
-		{
-			case QAbstractSocket::SocketTimeoutError:
-					//No error, it's a timeout
-				errorString="Timeout";
-				error=NntpThread::Timeout_Err;
-				break;
-			case QAbstractSocket::SocketAccessError:
-				errorString="OS or firewall prohibited the connection";
-				error=NntpThread::Comm_Err;
-				break;
-			case QAbstractSocket::ConnectionRefusedError:
-				errorString="Connection refused";
-				error=NntpThread::Comm_Err;
-				break;
-			case QAbstractSocket::NetworkError:
-				errorString="Network failure while connecting";
-				error=NntpThread::Comm_Err;
-				break;
-			default:
-                errorString="TCP unknown error while connecting: " + QString::number(err);
-				error=NntpThread::Comm_Err;
-				break;
-		}
+        switch (err)
+        {
+        case QAbstractSocket::SocketTimeoutError:
+            //No error, it's a timeout
+            errorString="Timeout";
+            error=NntpThread::Timeout_Err;
+            break;
+        case QAbstractSocket::SocketAccessError:
+            errorString="OS or firewall prohibited the connection";
+            error=NntpThread::Comm_Err;
+            break;
+        case QAbstractSocket::ConnectionRefusedError:
+            errorString="Connection refused";
+            error=NntpThread::Comm_Err;
+            break;
+        case QAbstractSocket::NetworkError:
+            errorString="Network failure while connecting";
+            error=NntpThread::Comm_Err;
+            break;
+        default:
+            errorString="TCP unknown error while connecting: " + QString::number(err);
+            error=NntpThread::Comm_Err;
+            break;
+        }
     }
     else
     {
@@ -2049,8 +2062,8 @@ bool NntpThread::serverConnect( QString & addr, quint16 port )
         }
     }
 
-	reset();
-	return false;
+    reset();
+    return false;
 }
 
 // Below are called from the controlling thread - not the worker
@@ -2059,42 +2072,42 @@ bool NntpThread::serverConnect( QString & addr, quint16 port )
 NntpThread::NntpThread(uint serverId, uint _threadId, uint* cb, bool _isRatePeriod, bool _isNilPeriod, bool _validated, bool _validate, NntpHost *nh,
                        QMgr* _qm)
 {
-	qId = serverId;
-	threadId = _threadId;
-	isRatePeriod = _isRatePeriod;
-	isNilPeriod = _isNilPeriod;
+    qId = serverId;
+    threadId = _threadId;
+    isRatePeriod = _isRatePeriod;
+    isNilPeriod = _isNilPeriod;
 
-	cancel=false;
-	pause=false;
-	connClose=false;
-	status=Ready;
-	validated = _validated;
+    cancel=false;
+    pause=false;
+    connClose=false;
+    status=Ready;
+    validated = _validated;
     validate = _validate;
 
-	lineBufSize=1000;
+    lineBufSize=1000;
     line=new char[lineBufSize];
     memset(line, 0, sizeof(lineBufSize));
-	bufferSize=100000;
-	buffer=new char[bufferSize];
-	watermark=buffer;
+    bufferSize=100000;
+    buffer=new char[bufferSize];
+    watermark=buffer;
 
-	bigBuffer = 0;
-	inflatedBuffer = 0;
-	bufferLine = 0;
+    bigBuffer = 0;
+    inflatedBuffer = 0;
+    bufferLine = 0;
 
     error=NntpThread::No_Err;
 
-	isLoggedIn=false;
-	newsGroup="";
-	//Thread...
+    isLoggedIn=false;
+    newsGroup="";
+    //Thread...
     curbytes=cb;
-//     retries=0;
+    //     retries=0;
     nHost=nh;
     qm = _qm;
     saveFile=0;
-	datamemSize=DATAMEM_SIZE;
+    datamemSize=DATAMEM_SIZE;
 
-	kes = 0;
+    kes = 0;
 
     if (nh)
         timeout=nh->getTimeout();
@@ -2102,50 +2115,50 @@ NntpThread::NntpThread(uint serverId, uint _threadId, uint* cb, bool _isRatePeri
 
 NntpThread::~ NntpThread( )
 {
-	delete [] line;
-	delete [] buffer;
-	if (bigBuffer)
-		delete [] bigBuffer;
+    delete [] line;
+    delete [] buffer;
+    if (bigBuffer)
+        delete [] bigBuffer;
 
-	if (inflatedBuffer)
-		delete [] inflatedBuffer;
+    if (inflatedBuffer)
+        delete [] inflatedBuffer;
 
-	if (bufferLine)
-		delete [] bufferLine;
+    if (bufferLine)
+        delete [] bufferLine;
 
-	if (saveFile)
-		delete saveFile;
+    if (saveFile)
+        delete saveFile;
 
-	if (kes)
-	{
-		if (kes->isRegistered)
-		{
-			emit unregisterSocket(kes);
-			while (kes->isRegistered) // make sure the RateController has let go of our pointer
-				msleep(250);
-		}
-	}
+    if (kes)
+    {
+        if (kes->isRegistered)
+        {
+            emit unregisterSocket(kes);
+            while (kes->isRegistered) // make sure the RateController has let go of our pointer
+                msleep(250);
+        }
+    }
 }
 
 void NntpThread::closeConnection(bool finally)
 {
-	if (!isLoggedIn)
-		return;
+    if (!isLoggedIn)
+        return;
 
-	error=NntpThread::No_Err;
+    error=NntpThread::No_Err;
 
-	if (finally) // It's a shutdown ...
-	{
-		if (kes)
-		{
+    if (finally) // It's a shutdown ...
+    {
+        if (kes)
+        {
             kes->isRatePeriod = false;
             kes->isNilPeriod = false;
-		    emit unregisterSocket(kes);
-		}
-	    connClose=true;
-	}
-	else // It's an idle timeout
-	{
+            emit unregisterSocket(kes);
+        }
+        connClose=true;
+    }
+    else // It's an idle timeout
+    {
         if (kes)
         {
             kes->close();
@@ -2162,65 +2175,65 @@ void NntpThread::closeConnection(bool finally)
 
         watermark=buffer; //buffer emptied :)
         newsGroup="";
-	}
+    }
 }
 
 void NntpThread::setValidated(bool _validated )
 {
-   // qDebug() << "Setting validated to " << _validated;
-	validated=_validated;
-	if (isRunning() || isNilPeriod)
-		return;
+    // qDebug() << "Setting validated to " << _validated;
+    validated=_validated;
+    if (isRunning() || isNilPeriod)
+        return;
 
-	if (validated)
-	{
+    if (validated)
+    {
         //qDebug() << "Status is " << status;
-		if (status == Ready)
-		{
-			status=Working;
-           // qDebug() << "About to start thread after validation. Parent object: " << QThread::currentThreadId();
-			start();
-		}
-	}
+        if (status == Ready)
+        {
+            status=Working;
+            // qDebug() << "About to start thread after validation. Parent object: " << QThread::currentThreadId();
+            start();
+        }
+    }
 }
 
 void NntpThread::setRatePeriod(bool _isRatePeriod )
 {
-	isRatePeriod=_isRatePeriod;
+    isRatePeriod=_isRatePeriod;
 }
 
 void NntpThread::setNilPeriod(bool _isNilPeriod )
 {
-	isNilPeriod=_isNilPeriod;
+    isNilPeriod=_isNilPeriod;
 }
 
 void NntpThread::tCancel( )
 {
-	cancel=true;
+    cancel=true;
 }
 
 void NntpThread::tPause( )
 {
-	pause=true;
+    pause=true;
 }
 
 void NntpThread::tResume( )
 {
-	if (isRunning())
-	{
-		qDebug("Thread running");
-		return;
-	}
+    if (isRunning())
+    {
+        qDebug("Thread running");
+        return;
+    }
 
-	if (isNilPeriod)
-	{
-		qDebug("Thread is in no_activity period");
-		return;
-	}
+    if (isNilPeriod)
+    {
+        qDebug("Thread is in no_activity period");
+        return;
+    }
 
-	cancel=false;
+    cancel=false;
 
-	watermark=buffer;
+    watermark=buffer;
 
     error=NntpThread::No_Err;
 
@@ -2231,37 +2244,37 @@ void NntpThread::tResume( )
         kes = 0;
     }
 
-	isLoggedIn=false;
-	newsGroup="";
+    isLoggedIn=false;
+    newsGroup="";
     nHost=0;
-	saveFile=0;
-	datamemSize=DATAMEM_SIZE;
+    saveFile=0;
+    datamemSize=DATAMEM_SIZE;
 
-	if (status != Delayed_Delete)
-	{
-		qDebug("Resuming thread");
-		pause=false;
-		connClose = false;
-		status=Working;
-		start();
-	}
+    if (status != Delayed_Delete)
+    {
+        qDebug("Resuming thread");
+        pause=false;
+        connClose = false;
+        status=Working;
+        start();
+    }
 }
 
 void NntpThread::tStart()
 {
-	//Start the thread...
-	if (isRunning() || isNilPeriod)
-		return;
+    //Start the thread...
+    if (isRunning() || isNilPeriod)
+        return;
 
     if (validated || validate)
-	{
-		if (status == Ready)
-		{
-			status=Working;
+    {
+        if (status == Ready)
+        {
+            status=Working;
             //qDebug() << "About to start thread. Parent object: " << QThread::currentThreadId();
-			start();
-		}
-	}
+            start();
+        }
+    }
 }
 
 void NntpThread::tValidate()

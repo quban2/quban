@@ -31,7 +31,6 @@
 #include "maintabwidget.h"
 #include "QueueScheduler.h"
 
-
  class EchoInterface
  {
  public:
@@ -51,6 +50,12 @@ class QStatusServerWidget: public QWidget {
 		int speed;
 		QString m_sName;
 		QPixmap *ssicon;
+        QPixmap* activeIcon;
+        QPixmap* activePausedIcon;
+        QPixmap* passiveIcon;
+        QPixmap* passivePausedIcon;
+        QPixmap* dormantIcon;
+        QPixmap* poorlyIcon;
 	public:
         QStatusServerWidget(QString serverName, int serverType, bool paused, QWidget *parent = 0);
 		~QStatusServerWidget();
