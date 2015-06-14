@@ -94,7 +94,6 @@ void Configuration::read( )
 	showDate = conf->value("showdate", true).toBool();
 	markOpt = conf->value("headerclose", Configuration::Ask).toInt();
 	ignoreNoPartArticles = conf->value("ignorenopartarticles", false).toBool();
-	alwaysDoubleClick = conf->value("alwaysdoubleclick", false).toBool();
 	rememberSort = conf->value("remembersort", false).toBool();
 	rememberWidth = conf->value("rememberwidth", false).toBool();
 	downloadCompressed = conf->value("downloadcompressed", true).toBool();
@@ -192,7 +191,8 @@ void Configuration::write( ) const
 	conf->setValue("maxShutDownWait", maxShutDownWait);
 	conf->setValue("renameNzbFiles", renameNzbFiles);
 	conf->setValue("noQueueSavePrompt", noQueueSavePrompt);
-        conf->setValue("appFont", appFont.toString());
+    QString appFontS = appFont.toString();
+    conf->setValue("appFont", appFontS);
     conf->setValue("minAvailEnabled", minAvailEnabled);
     conf->setValue("minAvailValue", minAvailValue);
     conf->setValue("mainTab", mainTab);
@@ -225,7 +225,6 @@ void Configuration::write( ) const
 	conf->setValue("remembersort", rememberSort);
 	conf->setValue("rememberwidth", rememberWidth);
 	conf->setValue("downloadcompressed", downloadCompressed);
-	conf->setValue("alwaysdoubleclick", alwaysDoubleClick);
 	conf->setValue("headerclose", markOpt);
 	conf->setValue("checkDaysValue", checkDaysValue);
     conf->setValue("bulkLoadThreshold", bulkLoadThreshold);

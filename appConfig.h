@@ -95,7 +95,6 @@ public:
 		bool showDetails;
 		bool showDate;
 		bool ignoreNoPartArticles;
-		bool alwaysDoubleClick;
 		//remember sort column
 		bool rememberSort;
 		//don't automatically resize columns (and remember the manual sizes)

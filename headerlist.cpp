@@ -114,7 +114,8 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
 
 	headerListWidget->listLayout->addWidget(m_headerList);
 
-    headerTreeModel = new HeaderTreeModel(servers, ng->getDb(), ng->getPartsDb(), ng->getGroupingDb(), this);
+    headerTreeModel = new HeaderTreeModel(servers, ng->getDb(), ng->getPartsDb(), ng->getGroupingDb(), this,
+                                          ng->areHeadersGrouped() ? ng->getTotalGroups() : ng->getTotal());
 
 	m_headerList->setAllColumnsShowFocus(true);
 	m_headerList->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -177,12 +178,8 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
 	connect(headerListWidget->m_filterEdit, SIGNAL(returnPressed()), this, SLOT(slotEnterButtonClicked()));
 	connect(headerListWidget->m_enterButton, SIGNAL(clicked()), this, SLOT(slotEnterButtonClicked()));
     connect(headerListWidget->advancedFilterButton, SIGNAL(clicked()), this, SLOT(slotAdvancedFilterButtonClicked()));
-	connect(headerListWidget->m_clearButton, SIGNAL(clicked()), this, SLOT(slotClearButtonClicked()));
-
-	if (config->alwaysDoubleClick)
-		connect(m_headerList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(slotItemExecuted()));
-// TODO	else
-// TODO		connect(m_headerList, SIGNAL(itemActivated(QTreeWidgetItem*, int)), this, SLOT(slotItemExecuted()));
+    connect(headerListWidget->m_clearButton, SIGNAL(clicked()), this, SLOT(slotClearButtonClicked()));
+    connect(m_headerList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(slotItemExecuted()));
 
 	connect(m_headerList->header(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(slotIndexChanged(int, int, int)));
 	connect(m_headerList->header(), SIGNAL(sectionResized(int, int, int)), this, SLOT(slotColSizeChanged(int, int, int)));
@@ -1858,6 +1855,7 @@ void HeaderList::closeAndNoMark( )
 	QCloseEvent *e = new QCloseEvent();
 	ng->setView(NULL);
 	QTabWidget::closeEvent(e);
+    delete e;
 }
 
 void HeaderList::closeEvent( QCloseEvent * e )

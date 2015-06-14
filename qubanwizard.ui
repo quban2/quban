@@ -268,13 +268,6 @@ p, li { white-space: pre-wrap; }
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_12">
                  <item>
-                  <widget class="QCheckBox" name="viewCheck">
-                   <property name="text">
-                    <string>Always double click to view articles</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
                   <widget class="QCheckBox" name="sortCheck">
                    <property name="text">
                     <string>Remember sort column</string>

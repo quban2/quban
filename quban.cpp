@@ -881,7 +881,6 @@ void Quban::diagnostics_slot()
     out << tr("Show Server Details field(s) = ") << config->showDetails << "\n";
     out << tr("Show Date field = ") << config->showDate << "\n";
     out << tr("Ignore articles that don't list the article number = ") << config->ignoreNoPartArticles << "\n";
-    out << tr("Double click to view articles = ") << config->alwaysDoubleClick << "\n";
     out << tr("Remember sort order = ") << config->rememberSort << "\n";
     out << tr("Remember column widths = ") << config->rememberWidth << "\n";
     out << tr("Download compressed headers if possible = ") << config->downloadCompressed << "\n";

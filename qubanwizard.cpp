@@ -46,7 +46,6 @@ QubanWizard::QubanWizard(QWidget* parent)
 	fromCheck->setChecked(config->showFrom);
 	detailsCheck->setChecked(config->showDetails);
 	dateCheck->setChecked(config->showDate);
-	viewCheck->setChecked(config->alwaysDoubleClick);
 	sortCheck->setChecked(config->rememberSort);
 	sizeCheck->setChecked(config->rememberWidth);
 	compressedCheck->setChecked(config->downloadCompressed);
@@ -198,7 +197,6 @@ void QubanWizard::slotOkClicked()
 		config->showFrom=fromCheck->isChecked();
 		config->showDetails=detailsCheck->isChecked();
 		config->showDate = dateCheck->isChecked();
-		config->alwaysDoubleClick=viewCheck->isChecked();
 		config->rememberSort = sortCheck->isChecked();
 		config->rememberWidth = sizeCheck->isChecked();
 		config->downloadCompressed = compressedCheck->isChecked();

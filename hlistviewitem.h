@@ -72,7 +72,7 @@ class HeaderTreeItem
 {
 public:
     HeaderTreeItem(QVector<QVariant>* data, QVector<QIcon*>* icons, QString _msgId, quint16 _status, quint16 _iconKey, bool _complete,
-                   quint8 _type, HeaderTreeItem *parent = 0);
+                   quint8 _type, HeaderTreeItem *parent = 0, quint64 totalRows = 0);
     ~HeaderTreeItem();
 
     QList<HeaderTreeItem*>& getChildren() { return childItems; }
@@ -113,7 +113,7 @@ private:
      Q_OBJECT
 
  public:
-     HeaderTreeModel(Servers *_servers, Db* _db, Db* _partsDb, Db* _groupsDb, QObject *parent = 0);
+     HeaderTreeModel(Servers *_servers, Db* _db, Db* _partsDb, Db* _groupsDb, QObject *parent = 0, quint64 totalRows = 0);
      ~HeaderTreeModel();
 
      void appendRows(MultiPartHeader*, quint32, SinglePartHeader*, quint32);
@@ -153,6 +153,7 @@ private:
      Db*             groupsDb;
 	 quint32         displayedArticles;
      QMap<quint16, QVector<QIcon*>*> iconMap;
+     QList<QString>  fromList;
  };
 
 typedef struct

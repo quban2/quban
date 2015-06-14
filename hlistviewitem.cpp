@@ -59,7 +59,7 @@ QWidget* RowDelegate::createEditor( QWidget* parent, const QStyleOptionViewItem 
 }
 
 HeaderTreeItem::HeaderTreeItem(QVector<QVariant>* data, QVector<QIcon*>* icons, QString _msgId, quint16 _status, quint16 _iconKey, bool _complete,
-                               quint8 _type, HeaderTreeItem *parent)
+                               quint8 _type, HeaderTreeItem *parent, quint64 totalRows)
 {
     parentItem = parent;
     itemData   = data;
@@ -69,6 +69,9 @@ HeaderTreeItem::HeaderTreeItem(QVector<QVariant>* data, QVector<QIcon*>* icons, 
     complete   = _complete;
     id         = _msgId;
     type       = _type;
+
+    if (totalRows)
+        childItems.reserve(totalRows);
 }
 
 HeaderTreeItem::~HeaderTreeItem()
@@ -83,7 +86,7 @@ HeaderTreeItem::~HeaderTreeItem()
 
 void HeaderTreeItem::appendChild(HeaderTreeItem *item)
 {
-	childItems.append(item);
+    childItems.append(item); // Can we reserve n * Num in block bytes for the vector
 }
 
 void HeaderTreeItem::setStatus(quint16 s, HeaderTreeModel *headerTreeModel)
@@ -149,7 +152,7 @@ int HeaderTreeItem::row() const
 
 ///////////////////////////////////////////////////////////////////
 
-HeaderTreeModel::HeaderTreeModel(Servers *_servers, Db* _db,  Db* _partsDb, Db* _groupsDb, QObject *parent)
+HeaderTreeModel::HeaderTreeModel(Servers *_servers, Db* _db,  Db* _partsDb, Db* _groupsDb, QObject *parent, quint64 totalRows)
 : QAbstractItemModel(parent), servers(_servers), db(_db), partsDb(_partsDb), groupsDb(_groupsDb)
 {
 	QVector<QVariant>* rootData = new QVector<QVariant>;
@@ -188,13 +191,14 @@ HeaderTreeModel::HeaderTreeModel(Servers *_servers, Db* _db,  Db* _partsDb, Db* 
 		}
 	}
 
-    rootItem = new HeaderTreeItem(rootData, iconData, QString::null, 0, 0, false, 0);
+    rootItem = new HeaderTreeItem(rootData, iconData, QString::null, 0, 0, false, 0, 0, totalRows);
 }
 
 HeaderTreeModel::~HeaderTreeModel()
 {
 	delete rootItem;
     qDeleteAll(iconMap);
+    fromList.clear();
 }
 
 quint16 HeaderTreeModel::updateFirstIcon(QVector<QIcon*>** iconData, quint32 newStatus, quint16 iconKey)
@@ -240,7 +244,6 @@ quint16 HeaderTreeModel::updateFirstIcon(QVector<QIcon*>** iconData, quint32 new
         newIconKey -= 3;
     else if ((**iconData)[0] == skullIcon)
         newIconKey -= 6;
-
 
     //qDebug() << "New icon key = " << newIconKey;
 
@@ -433,7 +436,6 @@ void HeaderTreeModel::appendRows(MultiPartHeader* mphList, quint32 mphListCount,
 
 void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
 {
-	static QString stringBuilder;
 	QVector<QVariant>* columnData = new QVector<QVariant>;
 	QVector<QIcon*>* iconData = new QVector<QIcon*>;
 	QColor lineColor; // THIS needs fixing!!!
@@ -442,6 +444,17 @@ void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
 	quint16 totalParts = 0;
 	QString msgId;
     quint16 iconKey = 0;
+
+    if (servers != NULL)
+    {
+        columnData->reserve(6 + servers->count());
+        iconData->reserve(6 + servers->count());
+    }
+    else
+    {
+        columnData->reserve(6);
+        iconData->reserve(6);
+    }
 
     totalParts = hb->getParts();
     missingParts = hb->getMissingParts();
@@ -470,8 +483,7 @@ void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
 		lineColor=Qt::black;
 		complete = true;
 
-		stringBuilder = "*/" + QString::number(totalParts);
-		*columnData << stringBuilder;
+        *columnData << "*/" + QString::number(totalParts);
 		*iconData <<  completeIcon;
         iconKey += 4;
 	}
@@ -480,8 +492,7 @@ void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
 		lineColor=Qt::red;  // TODO where does this get applied ???
 		complete = false;
 
-		stringBuilder = QString::number(totalParts - missingParts) % "/" % QString::number(totalParts);
-		*columnData << stringBuilder;
+        *columnData << QString(QString::number(totalParts - missingParts) % "/" % QString::number(totalParts));
 		*iconData <<   incompleteIcon;
         iconKey += 5;
 	}
@@ -491,7 +502,13 @@ void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
     *columnData <<  hb->getSize()/1024;
     *iconData << 0;
 
-	*columnData <<  hb->getFrom();
+    if (fromList.contains(hb->getFrom()))
+        *columnData << fromList.at(fromList.indexOf(hb->getFrom()));
+    else
+    {
+        *columnData <<  hb->getFrom();
+        fromList.append(hb->getFrom());
+    }
 	*iconData << 0;
 
     QDateTime qdt;
@@ -563,6 +580,17 @@ void HeaderTreeModel::setupTopLevelGroupItem(HeaderGroup* hg)
     QString matchId;
     quint16 iconKey = 0;
 
+    if (servers != NULL)
+    {
+        columnData->reserve(6 + servers->count());
+        iconData->reserve(6 + servers->count());
+    }
+    else
+    {
+        columnData->reserve(6);
+        iconData->reserve(6);
+    }
+
     matchId = hg->getMatch();
 
     if (hg->getStatus()==HeaderBase::bh_new)
@@ -591,7 +619,13 @@ void HeaderTreeModel::setupTopLevelGroupItem(HeaderGroup* hg)
     *columnData <<  QVariant();
     *iconData << 0;
 
-    *columnData <<  hg->getFrom();
+    if (fromList.contains(hg->getFrom()))
+        *columnData << fromList.at(fromList.indexOf(hg->getFrom()));
+    else
+    {
+        *columnData <<  hg->getFrom();
+        fromList.append(hg->getFrom());
+    }
     *iconData << 0;
 
     QDateTime qdt;
@@ -646,7 +680,6 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
         int ret;
         QString articleIndex = item->data(CommonDefs::Subj_Col).toString() % '\n' % item->data(CommonDefs::From_Col).toString();
 
-        static QString stringBuilder;
         QVector<QVariant>* columnData;
         QVector<QIcon*>* iconData;
         QColor lineColor; // THIS needs fixing!!!
@@ -665,6 +698,17 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
         const char *k= ba.constData();
         groupkey.set_data((void*)k);
         groupkey.set_size(articleIndex.length());
+
+        if (servers != NULL)
+        {
+            columnData->reserve(6 + servers->count());
+            iconData->reserve(6 + servers->count());
+        }
+        else
+        {
+            columnData->reserve(6);
+            iconData->reserve(6);
+        }
 
         ret=groupsDb->get(NULL, &groupkey, &groupdata, 0);
         if (ret != 0) //key not found
@@ -763,8 +807,7 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             {
                 lineColor=Qt::black;
 
-                stringBuilder = "*/" + QString::number(totalParts);
-                *columnData << stringBuilder;
+                *columnData << "*/" + QString::number(totalParts);
                 *iconData <<  completeIcon;
                 iconKey += 4;
             }
@@ -772,8 +815,7 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             {
                 lineColor=Qt::red;  // TODO where does this get applied ???
 
-                stringBuilder = QString::number(totalParts - missingParts) % "/" % QString::number(totalParts);
-                *columnData << stringBuilder;
+                *columnData << QString(QString::number(totalParts - missingParts) % "/" % QString::number(totalParts));
                 *iconData <<   incompleteIcon;
                 iconKey += 5;
             }
@@ -783,7 +825,13 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             *columnData <<  hb->getSize()/1024;
             *iconData << 0;
 
-            *columnData <<  hb->getFrom();
+            if (fromList.contains(hb->getFrom()))
+                *columnData << fromList.at(fromList.indexOf(hb->getFrom()));
+            else
+            {
+                *columnData <<  hb->getFrom();
+                fromList.append(hb->getFrom());
+            }
             *iconData << 0;
 
             QDateTime qdt;
@@ -930,6 +978,17 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
                 QVector<QVariant>* columnData = new QVector<QVariant>;
                 QVector<QIcon*>* iconData = new QVector<QIcon*>;
 
+                if (servers != NULL)
+                {
+                    columnData->reserve(6 + servers->count());
+                    iconData->reserve(6 + servers->count());
+                }
+                else
+                {
+                    columnData->reserve(6);
+                    iconData->reserve(6);
+                }
+
                 s=QString::number(h->getPartNo()).rightJustified(pad,'0');
 
                 *columnData << mph->getSubj() << s + "/" + QString::number(mph->getParts())
@@ -940,25 +999,28 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
                 *columnData << QVariant(); // don't bother with download date ...
                 *iconData << 0 << 0 << 0 << 0 << 0 << 0;
 
-                QMap<quint16,NntpHost*>::iterator sit;
-
-                int i = 0;
-
-                for (sit=servers->begin(); sit != servers->end(); ++sit)
+                if (servers != NULL)
                 {
-                    ++i;
+                    QMap<quint16,NntpHost*>::iterator sit;
 
-                    if (sit.value()->getServerType() != NntpHost::dormantServer)
+                    int i = 0;
+
+                    for (sit=servers->begin(); sit != servers->end(); ++sit)
                     {
-                        if (h->isHeldByServer(sit.key()))
+                        ++i;
+
+                        if (sit.value()->getServerType() != NntpHost::dormantServer)
                         {
-                            *iconData << tickIcon;
-                            iconKey += (50 + i);
-                        }
-                        else
-                        {
-                            *iconData << crossIcon;
-                            iconKey += (25 + i);
+                            if (h->isHeldByServer(sit.key()))
+                            {
+                                *iconData << tickIcon;
+                                iconKey += (50 + i);
+                            }
+                            else
+                            {
+                                *iconData << crossIcon;
+                                iconKey += (25 + i);
+                            }
                         }
                     }
                 }
