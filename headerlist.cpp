@@ -179,7 +179,6 @@ HeaderList::HeaderList(NewsGroup *_ng, Servers *_servers, QString, QWidget *pare
 	connect(headerListWidget->m_enterButton, SIGNAL(clicked()), this, SLOT(slotEnterButtonClicked()));
     connect(headerListWidget->advancedFilterButton, SIGNAL(clicked()), this, SLOT(slotAdvancedFilterButtonClicked()));
     connect(headerListWidget->m_clearButton, SIGNAL(clicked()), this, SLOT(slotClearButtonClicked()));
-    connect(m_headerList, SIGNAL(itemDoubleClicked(QTreeWidgetItem*, int)), this, SLOT(slotItemExecuted()));
 
 	connect(m_headerList->header(), SIGNAL(sectionMoved(int, int, int)), this, SLOT(slotIndexChanged(int, int, int)));
 	connect(m_headerList->header(), SIGNAL(sectionResized(int, int, int)), this, SLOT(slotColSizeChanged(int, int, int)));

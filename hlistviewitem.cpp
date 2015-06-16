@@ -699,17 +699,6 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
         groupkey.set_data((void*)k);
         groupkey.set_size(articleIndex.length());
 
-        if (servers != NULL)
-        {
-            columnData->reserve(6 + servers->count());
-            iconData->reserve(6 + servers->count());
-        }
-        else
-        {
-            columnData->reserve(6);
-            iconData->reserve(6);
-        }
-
         ret=groupsDb->get(NULL, &groupkey, &groupdata, 0);
         if (ret != 0) //key not found
         {
@@ -744,6 +733,17 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
 
             columnData = new QVector<QVariant>;
             iconData = new QVector<QIcon*>;
+
+            if (servers != NULL)
+            {
+                columnData->reserve(6 + servers->count());
+                iconData->reserve(6 + servers->count());
+            }
+            else
+            {
+                columnData->reserve(6);
+                iconData->reserve(6);
+            }
 
             ba = hbKeys.at(h).toLocal8Bit();
             k= ba.constData();
