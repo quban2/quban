@@ -36,13 +36,13 @@ public:
     char *data();
     uint getRecordSize();
 
-    QString        getMatch() { return match; }
-    QString        getFrom() { return from; }
-    QList<QString> getMphKeys() { return mphKeys; }
-    QList<QString> getSphKeys() { return sphKeys; }
+    QString&       getMatch() { return match; }
+    QString&       getFrom() { return from; }
+    QList<QString>& getMphKeys() { return mphKeys; }
+    QList<QString>& getSphKeys() { return sphKeys; }
     quint32        getMphKeyCount() { return mphKeys.count(); }
     quint32        getSphKeyCount() { return sphKeys.count(); }
-    QString        getDisplayName() { return displayName; }
+    QString&       getDisplayName() { return displayName; }
     quint32        getPostingDate() { return postingDate; }
     quint32        getDownloadDate() { return downloadDate; }
     quint16        getStatus() { return status; }

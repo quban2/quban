@@ -53,8 +53,8 @@ class HeaderBase
 		enum Add_Code { Duplicate_Part, New_Part, Unread_Status, Updated_Part, Error_Part };
 
 		void setHeaderType(char c) { headerType=c; }
-		void setSubj(QString s) {subj=s;}
-		void setFrom(QString s) {from=s;}
+        void setSubj(QString s) {subj=s;}
+        void setFrom(QString s) {from=s;}
 		void setPostingDate(quint32 u) { postingDate = u; }
 		void setDownloadDate(quint32 u) { downloadDate = u; }
         inline void setStatus(quint16 s) {status=s;}
@@ -63,8 +63,8 @@ class HeaderBase
 		inline void increaseSize(quint64 s) { size += s; }
 
         char getHeaderType() {return headerType;}
-        QString getSubj() {return subj;}
-        QString getFrom() {return from;}
+        QString& getSubj() {return subj;}
+        QString& getFrom() {return from;}
         quint32 getPostingDate() {return postingDate; }
         quint32 getDownloadDate() {return downloadDate;}
         inline quint32 getSize() {return size;}
@@ -84,7 +84,7 @@ class HeaderBase
         virtual quint16 getServerParts(quint16 serverId) = 0;
 		virtual void removeServer(Db* pDB, quint16) = 0;
 		virtual quint16 getMissingParts() = 0;
-		virtual QString getMessageId()  { return QString::null; }
+        virtual QString getMessageId()  { return QString::null; }
 		virtual void getAllArticleNums(Db* pDB, PartNumMap* serverArticleNos, QMap<quint16, quint64>* partSize,QMap<quint16, QString>* partMsgId) = 0;
 
 		virtual void deleteAllParts(Db* pDB);

@@ -48,7 +48,7 @@ public:
 	~uuDecoder();
 
 	//Returns the filename the posts specify.
-	QString encodedFilename();
+    QString encodedFilename();
 
 	//Returns true is the post appears to be uuencoded.
 	bool isDecodable();

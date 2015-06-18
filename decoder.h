@@ -49,7 +49,7 @@ public:
 	virtual ~Decoder();
 
 	//Returns the filename the posts specify.
-	virtual QString encodedFilename();
+    virtual QString encodedFilename();
 
 	//Returns true if this decoder class can decode the parts or not
 	//ie whether they are yyencoded

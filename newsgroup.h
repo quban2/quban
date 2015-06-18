@@ -167,13 +167,13 @@ public:
     char *data(char* buffer=0);
 	uint getRecordSize();
     bool isOpened() {return (view!=0);}
-    QString getName() {return ngName;}
+    QString& getName() {return ngName;}
     quint64 getTotal() {return totalArticles;}
     void setListItem(NGListViewItem *i) { listItem=i;}
     void setView(HeaderList *v) {view=v;}
-    QString getSaveDir() {return saveDir;}
+    QString& getSaveDir() {return saveDir;}
     HeaderList *getView() {return view;}
-    QString name() {return ngName;}
+    QString& name() {return ngName;}
     quint64 unread() {return unreadArticles;}
     void setUnread(quint64 u) {unreadArticles=u; }
     void incUnread() {unreadArticles++;}
@@ -197,7 +197,7 @@ public:
 	quint32 getDeleteOlderPosting() { return deleteOlderPosting; }
 	void setDeleteOlderDownload(quint32 i) { deleteOlderDownload = i; }
 	quint32 getDeleteOlderDownload() { return deleteOlderDownload; }
-	QString getLastExpiry() { return lastExpiry; }
+    QString& getLastExpiry() { return lastExpiry; }
 	void setLastExpiry(QString e) { lastExpiry = e; }
 
 	void setColIndex(quint16 col, quint16 index);
@@ -229,9 +229,9 @@ public:
     void    setGroupRE3Back(bool b) { RE3AtBack = b; }
 
     qint16  getMatchDistance() { return matchDistance; }
-    QString getGroupRE1()   { return RE1; }
-    QString getGroupRE2()   { return RE2; }
-    QString getGroupRE3()   { return RE3; }
+    QString& getGroupRE1()   { return RE1; }
+    QString& getGroupRE2()   { return RE2; }
+    QString& getGroupRE3()   { return RE3; }
     bool    getGroupRE1Back()   { return RE1AtBack; }
     bool    getGroupRE2Back()   { return RE2AtBack; }
     bool    getGroupRE3Back()   { return RE3AtBack; }

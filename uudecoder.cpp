@@ -90,7 +90,8 @@ bool uuDecoder::isDecodable() {
 	return false;
 }
 
-QString uuDecoder::encodedFilename() {
+QString uuDecoder::encodedFilename()
+{
 	QFileInfo fi(m_outputFile);
 	return fi.fileName();
 }
