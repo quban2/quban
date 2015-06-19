@@ -72,7 +72,7 @@ signals:
 	void bulkLoadCancelled(quint64);
 	void bulkLoadError(quint64);
 	void updateArticleCounts(NewsGroup*);
-	void progress(quint64, quint64);
+    void progress(quint64, quint64, QString);
 	void loadStarted(quint64);
 	void updateJob(quint16 jobType, quint16 status, quint64 identifier);
 	void logMessage(int type, QString description);

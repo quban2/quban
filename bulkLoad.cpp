@@ -144,7 +144,9 @@ bool BulkLoad::bulkLoadBody()
     quint64 count=0;
 
 	QTime start = QTime::currentTime();
-	qDebug() << "Loading started: " << start.toString();
+	qDebug() << "Loading started: " << start.toString();    
+
+    emit loadStarted(job->seq);
 
     /* Acquire a cursor for the database. */
     if ((ret = ng->getDb()->get_DB()->cursor(ng->getDb()->get_DB(), NULL, &dbcp, DB_CURSOR_BULK)) != 0)
@@ -229,11 +231,14 @@ bool BulkLoad::bulkLoadBody()
 
 			++count;
 
-			if (count % 50 == 0)
-			{
-				emit progress(job->seq, count);
-				QCoreApplication::processEvents();
-			}
+            if (count % 50 == 0)
+            {
+                QString labelText = tr("Loaded ") + QString("%L1").arg(count) +
+                        " of " + QString("%L1").arg(ng->getTotal()) +
+                        " articles.";
+                emit progress(job->seq, count, labelText);
+                QCoreApplication::processEvents();
+            }
 		}
 
 		if (m_cancel)
@@ -247,7 +252,11 @@ bool BulkLoad::bulkLoadBody()
 			ret = t_ret;
 	}
 
-	emit loadStarted(job->seq);
+    QString labelText = tr("Loaded ") + QString("%L1").arg(count) +
+            " of " + QString("%L1").arg(ng->getTotal()) +
+            " articles.";
+    emit progress(job->seq, count, labelText);
+    QCoreApplication::processEvents();
 
 	if (!m_cancel)
 	{

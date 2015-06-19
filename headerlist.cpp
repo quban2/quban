@@ -282,7 +282,8 @@ void HeaderList::loadHeaders(Db* db)
     QString progMessage(tr("Loading %1 ...").arg(ng->getAlias()));
  	quban->statusBar()->showMessage(progMessage);
 
-	pd = new QProgressDialog(tr("Loading ") + QString("%L1").arg(ng->getTotal()) +
+    pd = new QProgressDialog(tr("Loaded ") +
+            "0 of " + QString("%L1").arg(ng->getTotal()) +
 			" articles.", tr("Cancel"), 0, ng->getTotal());
 	pd->setWindowTitle(tr("Load articles"));
 
@@ -412,6 +413,9 @@ void HeaderList::loadHeaders(Db* db)
             if (count % 40 == 0)
 			{
 				pd->setValue(count);
+                pd->setLabelText(tr("Loaded ") + QString("%L1").arg(count) +
+                                    " of " + QString("%L1").arg(ng->getTotal()) +
+                                    " articles.");
 				QCoreApplication::processEvents();
 			}
 
@@ -438,6 +442,9 @@ void HeaderList::loadHeaders(Db* db)
 	quban->statusBar()->showMessage(progMessage + " : 100%", 3000);
 
 	pd->setValue(count);
+    pd->setLabelText(tr("Loaded ") + QString("%L1").arg(count) +
+                        " of " + QString("%L1").arg(ng->getTotal()) +
+                        " articles.");
 	QCoreApplication::processEvents();
 
 	if (!loadCancelled)
@@ -482,7 +489,8 @@ void HeaderList::loadGroups(Db* db)
     QString progMessage(tr("Loading %1 groups ...").arg(ng->getAlias()));
     quban->statusBar()->showMessage(progMessage);
 
-    pd = new QProgressDialog(tr("Loading ") + QString("%L1").arg(ng->getTotalGroups()) +
+    pd = new QProgressDialog(tr("Loaded ") +
+            "0 of " + QString("%L1").arg(ng->getTotalGroups()) +
             " groups.", tr("Cancel"), 0, ng->getTotalGroups());
     pd->setWindowTitle(tr("Load article groups"));
 
@@ -570,6 +578,9 @@ void HeaderList::loadGroups(Db* db)
             if (count % 40 == 0)
             {
                 pd->setValue(count);
+                pd->setLabelText(tr("Loaded ") + QString("%L1").arg(count) +
+                                    " of " + QString("%L1").arg(ng->getTotalGroups()) +
+                                    " groups.");
                 QCoreApplication::processEvents();
             }
 
@@ -595,6 +606,9 @@ void HeaderList::loadGroups(Db* db)
     quban->statusBar()->showMessage(progMessage + " : 100%", 3000);
 
     pd->setValue(count);
+    pd->setLabelText(tr("Loaded ") + QString("%L1").arg(count) +
+                        " of " + QString("%L1").arg(ng->getTotalGroups()) +
+                        " groups.");
     QCoreApplication::processEvents();
 
     /*
@@ -623,10 +637,13 @@ void HeaderList::loadGroups(Db* db)
     pd = 0;
 }
 
-void HeaderList::slotProgress(quint64 seq, quint64 count)
+void HeaderList::slotProgress(quint64 seq, quint64 count, QString newLabelText)
 {
 	if (bulkLoadSeq == seq && pd)
+    {
 		pd->setValue(count);
+        pd->setLabelText(newLabelText);
+    }
 }
 
 void HeaderList::slotCancelCurrentBulkLoad()

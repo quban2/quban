@@ -543,7 +543,7 @@ quint64 QMgr::startBulkLoad(NewsGroup* _ng, HeaderList* headerList)
 		connect(bulkLoad, SIGNAL(bulkLoadError(quint64)), this, SLOT(bulkLoadFailed(quint64)));
 		connect(bulkLoad, SIGNAL(bulkLoadError(quint64)), headerList, SLOT(bulkLoadFailed(quint64)));
 		connect(bulkLoad, SIGNAL(updateArticleCounts(NewsGroup*)), quban->subGroupList, SLOT(saveGroup(NewsGroup*)));
-		connect(bulkLoad, SIGNAL(progress(quint64, quint64)), headerList, SLOT(slotProgress(quint64, quint64)));
+        connect(bulkLoad, SIGNAL(progress(quint64, quint64, QString)), headerList, SLOT(slotProgress(quint64, quint64, QString)));
 		connect(bulkLoad, SIGNAL(loadStarted(quint64)), headerList, SLOT(slotBulkLoadStarted(quint64)));
 		connect(bulkLoad, SIGNAL(updateJob(quint16, quint16, quint64)), quban->getJobList(), SLOT(updateJob(quint16, quint16, quint64)));
 		connect(bulkLoad, SIGNAL(logMessage(int, QString)), quban->getLogAlertList(), SLOT(logMessage(int, QString)));
@@ -561,7 +561,7 @@ quint64 QMgr::startBulkLoad(NewsGroup* _ng, HeaderList* headerList)
         connect(bulkLoad, SIGNAL(bulkLoadFinished(quint64)), headerList, SLOT(bulkLoadFinished(quint64)));
         connect(bulkLoad, SIGNAL(bulkLoadCancelled(quint64)), headerList, SLOT(bulkLoadCancelled(quint64)));
         connect(bulkLoad, SIGNAL(bulkLoadError(quint64)), headerList, SLOT(bulkLoadFailed(quint64)));
-        connect(bulkLoad, SIGNAL(progress(quint64, quint64)), headerList, SLOT(slotProgress(quint64, quint64)));
+        connect(bulkLoad, SIGNAL(progress(quint64, quint64, QString)), headerList, SLOT(slotProgress(quint64, quint64, QString)));
         connect(bulkLoad, SIGNAL(loadStarted(quint64)), headerList, SLOT(slotBulkLoadStarted(quint64)));
     }
 

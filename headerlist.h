@@ -153,7 +153,7 @@ public slots:
 
 	void slotSortClicked(int);
 
-	void slotProgress(quint64, quint64);
+    void slotProgress(quint64, quint64, QString);
     void slotCancelCurrentBulkLoad();
 
 	void bulkLoadFinished(quint64);
