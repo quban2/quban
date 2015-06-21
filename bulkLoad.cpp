@@ -144,9 +144,7 @@ bool BulkLoad::bulkLoadBody()
     quint64 count=0;
 
 	QTime start = QTime::currentTime();
-	qDebug() << "Loading started: " << start.toString();    
-
-    emit loadStarted(job->seq);
+    qDebug() << "Loading started: " << start.toString();
 
     /* Acquire a cursor for the database. */
     if ((ret = ng->getDb()->get_DB()->cursor(ng->getDb()->get_DB(), NULL, &dbcp, DB_CURSOR_BULK)) != 0)
@@ -252,6 +250,8 @@ bool BulkLoad::bulkLoadBody()
 			ret = t_ret;
 	}
 
+    emit loadReady(job->seq);
+
     QString labelText = tr("Loaded ") + QString("%L1").arg(count) +
             " of " + QString("%L1").arg(ng->getTotal()) +
             " articles.";
@@ -285,7 +285,7 @@ bool BulkLoad::bulkLoadBody()
 
 	if (m_cancel)
 	{
-		emit updateJob(JobList::BulkLoad, JobList::Cancelled, job->seq);
+        emit updateJob(JobList::BulkLoad, JobList::Cancelled, job->seq);
 		return false;
 	}
 
@@ -306,8 +306,7 @@ void BulkLoad::cancel(quint64 seq)
 		{
 			if ((*it)->seq == seq)
 			{
-				emit updateJob(JobList::BulkLoad, JobList::Cancelled, seq);
-				//emit bulkLoadCancelled(*it);
+                emit updateJob(JobList::BulkLoad, JobList::Cancelled, seq);
 				jobList.erase(it);
 				break;
 			}

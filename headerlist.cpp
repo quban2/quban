@@ -284,7 +284,7 @@ void HeaderList::loadHeaders(Db* db)
 
     pd = new QProgressDialog(tr("Loaded ") +
             "0 of " + QString("%L1").arg(ng->getTotal()) +
-			" articles.", tr("Cancel"), 0, ng->getTotal());
+            " articles.", tr("Cancel"), 0, ng->getTotal());
 	pd->setWindowTitle(tr("Load articles"));
 
     pd->show();
@@ -650,11 +650,11 @@ void HeaderList::slotCancelCurrentBulkLoad()
 {
     quban->getQMgr()->slotCancelBulkLoad(bulkLoadSeq);
 
-	if (pd)
-	{
-	 	delete pd;
-	 	pd = 0;
-	}
+    if (pd)
+    {
+        delete pd;
+        pd = 0;
+    }
 }
 
 void HeaderList::bulkLoadFinished(quint64 seq)
@@ -744,7 +744,7 @@ void HeaderList::bulkLoadCancelled(quint64 seq)
     }
 }
 
-void HeaderList::slotBulkLoadStarted(quint64 seq)
+void HeaderList::slotBulkLoadReady(quint64 seq)
 {
 	if (bulkLoadSeq != seq)
 		return;
