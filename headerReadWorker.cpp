@@ -21,6 +21,7 @@
 #include <QDebug>
 #include <QtDebug>
 #include "headerReadWorker.h"
+#include "zlib.h"
 
 HeaderReadWorker::HeaderReadWorker(QMutex*_headerDbLock, QObject *parent) :
     QObject(parent)
@@ -31,7 +32,6 @@ HeaderReadWorker::HeaderReadWorker(QMutex*_headerDbLock, QObject *parent) :
     unreadArticles = 0;
     rejects=0;
     lineProcessed = 0;
-    idle = true;
     finishedReading = false;
     cacheFlushed = false;
     cache.clear();
@@ -50,9 +50,8 @@ HeaderReadWorker::HeaderReadWorker(QMutex*_headerDbLock, QObject *parent) :
 
 HeaderReadWorker::~HeaderReadWorker()
 {
-    if (tempng)
-        delete [] tempng;
-    delete []line;
+    Q_DELETE_ARRAY(tempng);
+    Q_DELETE_ARRAY(line);
 }
 
 void HeaderReadWorker::lock()
@@ -81,7 +80,7 @@ HeaderBase* HeaderReadWorker::dbBinHeaderGet(QString index)
     HeaderBase* hb = 0;
     MultiPartHeader *mph = 0;
     SinglePartHeader *sph = 0;
-    char* dataBlock;
+    char* dataBlock = 0;
     QByteArray ba = index.toLocal8Bit();
     const char *indexCharArr = ba.constData();
     key.set_data((void*) indexCharArr);
@@ -102,7 +101,7 @@ HeaderBase* HeaderReadWorker::dbBinHeaderGet(QString index)
             hb = (HeaderBase*)sph;
         }
 
-        free(dataBlock);
+        Q_FREE(dataBlock);
     }
 
     return hb;
@@ -146,7 +145,7 @@ bool HeaderReadWorker::cacheFlush(uint size)
 {
     Dbt key, data;
     int ret;
-    RawHeader* h;
+    RawHeader* h = 0;
     QString cIndex;
     NewsGroup* ng = job->ng;
     Db* pdb = ng->getPartsDb(); // get the parts Db
@@ -405,7 +404,8 @@ bool HeaderReadWorker::cacheFlush(uint size)
             return false;
         }
 
-        free(data.get_data());
+        void *ptr = data.get_data();
+        Q_FREE(ptr);
         if (hb->getHeaderType() == 'm')
             delete mph;
         else
@@ -482,4 +482,29 @@ bool HeaderReadWorker::saveGroup()
     job->gdb->sync(0);
 
     return true;
+}
+
+/* report a zlib or i/o error */
+void HeaderReadWorker::zerr(int ret)
+{
+    qDebug() << "inflate: ";
+    switch (ret) {
+    case Z_ERRNO:
+        if (ferror(stdin))
+            qDebug() << "error reading stdin";
+        if (ferror(stdout))
+            qDebug() << "error writing stdout";
+        break;
+    case Z_STREAM_ERROR:
+        qDebug() << "invalid compression level";
+        break;
+    case Z_DATA_ERROR:
+        qDebug() << "invalid or incomplete deflate data";
+        break;
+    case Z_MEM_ERROR:
+        qDebug() << "out of memory";
+        break;
+    case Z_VERSION_ERROR:
+        qDebug() << "zlib version mismatch!";
+    }
 }

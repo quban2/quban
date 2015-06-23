@@ -544,27 +544,41 @@ char * NntpThread::m_findDotEndLine( char * start, char * end )
 uint NntpThread::createDateTime(QStringList dateTime)
 {
     // Have seen totally invalid date formats here, so take care
+    QDate d;
+    int i = 0;
 
     if (dateTime[0].length() == 0)
-        return 0;
-
-    int i = (dateTime[0].at(dateTime[0].length() - 1) == ',') ? 1 : 0;
-
-    if (dateTime.count() < (i + 3))
-        return 0;
-
-    QDate d;
-
-    if (dateTime[i].length() == 2)
-        d = QDate::fromString(
-                    dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
-                "dd MMM yyyy");
-    else if (dateTime[i].length() == 1)
-        d = QDate::fromString(
-                    dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
-                "d MMM yyyy");
-    else
+    {
         d = QDate::currentDate();
+        qDebug() << "Invalid date time (1)";
+        for (int i = 0; i < dateTime.size(); ++i)
+             qDebug() << "Element " << i << " : " << dateTime.at(i).toLocal8Bit().constData();
+    }
+    else
+    {
+        i = (dateTime[0].at(dateTime[0].length() - 1) == ',') ? 1 : 0;
+
+        if (dateTime.count() < (i + 3))
+        {
+            d = QDate::currentDate();
+            qDebug() << "Invalid date time (2)";
+            for (int i = 0; i < dateTime.size(); ++i)
+                 qDebug() << "Element " << i << " : " << dateTime.at(i).toLocal8Bit().constData();
+        }
+        else
+        {
+            if (dateTime[i].length() == 2)
+                d = QDate::fromString(
+                            dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
+                        "dd MMM yyyy");
+            else if (dateTime[i].length() == 1)
+                d = QDate::fromString(
+                            dateTime[i] + " " + dateTime[i + 1] + " " + dateTime[i + 2],
+                        "d MMM yyyy");
+            else
+                d = QDate::currentDate();
+        }
+    }
 
     QTime t(0, 0);
 
@@ -1189,8 +1203,9 @@ bool NntpThread::getXover(QString group)
             connect(this, SIGNAL(quitHeaderRead()), &HeaderReadThread[k], SLOT(quit()));
 
             HeaderReadThread[k].start();
-            emit setReaderBusy();
         }
+
+        emit setReaderBusy();
 
         bigBufferSize=6 * 1024 * 1024;
         if (!bigBuffer)
@@ -1262,8 +1277,9 @@ bool NntpThread::getXover(QString group)
             connect(this, SIGNAL(quitHeaderRead()), &HeaderReadThread[k], SLOT(quit()));
 
             HeaderReadThread[k].start();
-            emit setReaderBusy();
         }
+
+        emit setReaderBusy();
 
         QString sLine;
 
@@ -1335,7 +1351,7 @@ bool NntpThread::getXover(QString group)
 
                     if (!qstrncmp( line, "=yend", 5 ))
                     {
-                        sLine = QString::fromLatin1(line);
+                        sLine = QString::fromLocal8Bit(line);
 
                         if ((beginCRC=sLine.indexOf("pcrc32=")) != -1)
                         {
@@ -1421,8 +1437,9 @@ bool NntpThread::getXover(QString group)
             connect(this, SIGNAL(quitHeaderRead()), &HeaderReadThread[k], SLOT(quit()));
 
             HeaderReadThread[k].start();
-            emit setReaderBusy();
         }
+
+        emit setReaderBusy();
 
         cmd="xover " + QString::number(from) + "-" + QString::number(to) + "\r\n";
 
@@ -1459,24 +1476,18 @@ bool NntpThread::getXover(QString group)
 
     for (int k=0; k<NUM_HEADER_WORKERS; ++k)
     {
-        headerReadWorker[0]->finishedReading = true;
+        headerReadWorker[k]->finishedReading = true;
     }
 
-    bool stillBusy = false;
+    qDebug() << "Server " << hostId << " has finished reading and will wait for header readers ...";
 
-    do
+    for (int k=0; k<NUM_HEADER_WORKERS; ++k)
     {
-        stillBusy = false;
+        headerReadWorker[k]->busyMutex.lock();
+        headerReadWorker[k]->busyMutex.unlock();
+    }
 
-        for (int k=0; k<NUM_HEADER_WORKERS; ++k)
-        {
-            if (headerReadWorker[k]->busyMutex.tryLock() == false)
-            {
-                stillBusy = true;
-                msleep(1000);
-            }
-        }
-    } while (stillBusy == true);
+    qDebug() << "Server " << hostId << " is about to kill header readers ...";
 
     for (int k=0; k<NUM_HEADER_WORKERS; ++k)
     {
@@ -1489,7 +1500,6 @@ bool NntpThread::getXover(QString group)
         }
 
         maxHeaderNum = headerReadWorker[k]->maxHeaderNum;
-        delete headerReadWorker[k];
     }
 
     emit quitHeaderRead();
@@ -1504,6 +1514,11 @@ bool NntpThread::getXover(QString group)
 
     emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
                                    job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
+
+    for (int k=0; k<NUM_HEADER_WORKERS; ++k)
+    {
+        delete headerReadWorker[k];
+    }
 
     if (cancel)
         return false;
@@ -1842,7 +1857,8 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
     } else if (ret == 0) {
         //found, update and resave
         AvailableGroup *g = new AvailableGroup((char*)listdata.get_data());
-        free(listdata.get_data());
+        void* ptr = listdata.get_data();
+        Q_FREE(ptr);
         g->addHost(hostId);
         g->setArticles(hostId, articles);
         char *p=g->data();

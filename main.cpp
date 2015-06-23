@@ -23,6 +23,7 @@
 #include <QApplication>
 #include <QDebug>
 #include <QtDebug>
+// #include <QTextCodec>
 #include "appConfig.h"
 #include "prefstartup.h"
 #include "quban.h"
@@ -35,6 +36,9 @@ Quban* quban;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+    // change if required
+    // QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     g_dbenv=0;
 

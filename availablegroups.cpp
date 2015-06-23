@@ -164,9 +164,9 @@ AvailableGroups::~ AvailableGroups( )
 
 	if (subscribedIcon)
 	{
-		delete subscribedIcon;
-		delete notSubscribedIcon;
-		delete crossIcon;
+        Q_DELETE(subscribedIcon);
+        Q_DELETE(notSubscribedIcon);
+        Q_DELETE(crossIcon);
 	}
 }
 
@@ -215,8 +215,8 @@ AvailGroupModel* AvailableGroups::loadData()
 
 		qDebug() << "Available Groups: " << count;
 		cursor->close();
-		delete key;
-		delete data;
+        Q_DELETE(key);
+        Q_DELETE(data);
 	}
 
 	return model;
@@ -226,7 +226,7 @@ AvailGroupModel* AvailableGroups::reloadData()
 {
 	qDeleteAll(groupsList);
 	groupsList.clear();
-	delete model;
+    Q_DELETE(model);
 
 	return loadData();
 }
@@ -295,7 +295,7 @@ void AvailableGroups::slotDeleteServer(quint16 serverId)
 		else if ((ret=cursor->put(&key, &data, DB_CURRENT)) != 0)
 			quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Cannot update group record. Error: ") + dbEnv->strerror(ret));
 
-		delete p;
+        Q_DELETE(p);
 	}
 	cursor->close();
 
@@ -369,8 +369,13 @@ bool AvailGroupItem::removeChildren(int position, int count)
     if (position < 0 || position + count > childItems.size())
         return false;
 
+    AvailGroupItem* item = 0;
+
     for (int row = 0; row < count; ++row)
-        delete childItems.takeAt(position);
+    {
+        item = childItems.takeAt(position);
+        Q_DELETE(item);
+    }
 
     return true;
 }
@@ -438,7 +443,7 @@ AvailGroupModel::AvailGroupModel(Servers *_servers, Db* _db, QObject *parent)
 
 AvailGroupModel::~AvailGroupModel()
 {
-	delete rootItem;
+    Q_DELETE(rootItem);
 }
 
 int AvailGroupModel::columnCount(const QModelIndex &) const

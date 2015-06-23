@@ -709,7 +709,8 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
         qDebug() << "Found group with key " << articleIndex;
 
         HeaderGroup *hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
-        free(groupdata.get_data());
+        void* ptr = groupdata.get_data();
+        Q_FREE(ptr);
 
         Dbt key;
         Dbt data;
@@ -761,7 +762,8 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             {
                 mph = new MultiPartHeader(key.get_size(), (char*)key.get_data(), (char*)data.get_data());
                 hb = (HeaderBase*)mph;
-                free(data.get_data());
+                void* ptr = data.get_data();
+                Q_FREE(ptr);
                 missingParts = mph->getMissingParts();
                 totalParts = mph->getParts();
                 msgId = QString::null;
@@ -770,7 +772,8 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             {
                 sph = new SinglePartHeader(key.get_size(), (char*)key.get_data(), (char*)data.get_data());
                 hb = (HeaderBase*)sph;
-                free(data.get_data());
+                void* ptr = data.get_data();
+                Q_FREE(ptr);
                 missingParts = 0;
                 totalParts = 1;
                 msgId = sph->getMessageId();
@@ -934,7 +937,8 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
         }
 
         MultiPartHeader *mph=new MultiPartHeader(articleIndex.length(), (char*)k, (char*)mphdata.get_data());
-        free(mphdata.get_data());
+        void* ptr = mphdata.get_data();
+        Q_FREE(ptr);
 
         Dbt key;
         Dbt data;
@@ -959,7 +963,8 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
             while (ret != DB_NOTFOUND)
             {
                 Header* h = new Header((char*)data.get_data(), (char*)key.get_data());
-                free(data.get_data());
+                void* ptr = data.get_data();
+                Q_FREE(ptr);
 
                 uint pad=1;
 

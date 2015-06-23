@@ -45,9 +45,8 @@ class HeaderReadWorker : public QObject
 
 public:
     explicit HeaderReadWorker(QMutex *_headerDbLock, QObject *parent = 0);
-    ~HeaderReadWorker();
+    virtual ~HeaderReadWorker();
 
-    bool        idle;
     bool        finishedReading;
     QMutex      busyMutex;
 
@@ -66,6 +65,7 @@ protected:
     bool cacheFlush(uint size);
     uint createDateTime(QStringList dateTime);
     bool saveGroup();
+    void zerr(int ret);
 
     Db* db;
     HeaderQueue <QByteArray*>* headerQueue;

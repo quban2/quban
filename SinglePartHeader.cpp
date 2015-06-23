@@ -47,12 +47,12 @@ SinglePartHeader::SinglePartHeader(quint32 keySize, char* k, char *p, quint16)
 
 	if ((splitpoint = (char *)memchr(k, '\n', keySize)))
 	{
-        subj = QString::fromLatin1(k, (splitpoint - k));
-        messageId = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        subj = QString::fromLocal8Bit(k, (splitpoint - k));
+        messageId = QString::fromLocal8Bit(splitpoint + 1, k + (keySize - 1) - splitpoint);
 	}
 	else
 	{
-        subj = QString::fromLatin1(k, keySize);
+        subj = QString::fromLocal8Bit(k, keySize);
 		messageId = subj;
 		qDebug("Single element header encountered ...");
 	}
@@ -167,12 +167,12 @@ bool SinglePartHeader::getSinglePartHeader(unsigned int keySize, char *k, char *
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
-        sph->subj = QString::fromLatin1(k, (splitpoint - k));
-        sph->setMessageId(QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint));
+        sph->subj = QString::fromLocal8Bit(k, (splitpoint - k));
+        sph->setMessageId(QString::fromLocal8Bit(splitpoint + 1, k + (keySize - 1) - splitpoint));
     }
     else
     {
-        sph->subj = QString::fromLatin1(k, keySize);
+        sph->subj = QString::fromLocal8Bit(k, keySize);
         sph->setMessageId(sph->getSubj());
         qDebug("Single element header encountered ...");
     }

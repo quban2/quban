@@ -28,6 +28,7 @@
 #include <qfileinfo.h>
 #include <QDebug>
 #include <QtDebug>
+#include "common.h"
 #include "yydecoder.h"
 
 #define ABSOLUTEMAXLINESIZE 4095
@@ -136,7 +137,7 @@ bool yyDecoder::isDecodable()
 		char cline[1025];
 		while (partFile.readLine(cline,1024)!=-1)
 		{
-            line = QString::fromLatin1(cline);
+            line = QString::fromLocal8Bit(cline);
 			//Remove leading and trailing whitespace - we're looking for the begin line
 			line = line.trimmed();
 			if (line.left(7)=="=ybegin") {
@@ -204,7 +205,7 @@ int yyDecoder::decodeNextPart()
 		{
 			if (!started && !qstrncmp( cline, "=ybegin", 7 ))
 			{
-                line = QString::fromLatin1(cline);
+                line = QString::fromLocal8Bit(cline);
 				len = line.length();
 
 				//Remove the \r\n
@@ -231,7 +232,7 @@ int yyDecoder::decodeNextPart()
 				partBytes=0;
 
 				partFile.readLine(cline, maxLineSize);
-                line = QString::fromLatin1(cline);
+                line = QString::fromLocal8Bit(cline);
 
 // 				qDebug() << "Read: " << line << endl;
 				if (line.left(6) == "=ypart") {
@@ -251,7 +252,7 @@ int yyDecoder::decodeNextPart()
 			}
 			else if (started && !qstrncmp( cline, "=yend", 5 ))
 			{
-                line = QString::fromLatin1(cline);
+                line = QString::fromLocal8Bit(cline);
 				len = line.length();
 
 				//Remove the \r\n
@@ -358,8 +359,7 @@ int yyDecoder::decodeNextPart()
 		partFile.close();
 	}
 
-	if (cline)
-	    free(cline);
+    Q_FREE(cline);
 
 	fileIterator++;
 	if (fileIterator==m_fileParts.end())

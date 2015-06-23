@@ -123,10 +123,10 @@ void HeaderGroupTestDialog::buildTrees()
 
         if ((splitpoint = (char *)memchr(keyData, '\n', keySize)))
         {
-            articleName = QString::fromLatin1(keyData, (splitpoint - keyData));
+            articleName = QString::fromLocal8Bit(keyData, (splitpoint - keyData));
             if (*((char *)dataData) == 'm') // multiPart
             {
-                from = QString::fromLatin1(splitpoint + 1, keyData + (keySize - 1) - splitpoint);
+                from = QString::fromLocal8Bit(splitpoint + 1, keyData + (keySize - 1) - splitpoint);
             }
             else if (*((char *)dataData) == 's') // SinglePart
             {
@@ -138,7 +138,7 @@ void HeaderGroupTestDialog::buildTrees()
         }
         else
         {
-            articleName = QString::fromLatin1(keyData, keySize);
+            articleName = QString::fromLocal8Bit(keyData, keySize);
             from = articleName;
         }     
 

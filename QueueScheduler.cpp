@@ -67,7 +67,7 @@ QueueSchedule::QueueSchedule(Db* _schedDb, uchar* dbData, QueueScheduler* _queue
     memcpy(temp, i, strSize);
     temp[strSize] = '\0';
     scheduleName = temp;
-    delete[] temp;
+    Q_DELETE_ARRAY(temp);
     i += strSize;
 
     memcpy(&isActive, i, sizeof(bool));
@@ -227,7 +227,7 @@ void QueueSchedule::removeElement(quint16 id)
 		if (queuePeriods.contains(element->getStartSecs()))
 			queuePeriods.remove(element->getStartSecs());
 
-		delete element;
+        Q_DELETE(element);
 	}
 }
 
@@ -342,12 +342,12 @@ bool QueueSchedule::dbSave()
 	if ((schedDb->put(0, &key, &data, 0)) != 0)
 	{
 		qDebug() << "Db update failed";
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		schedDb->sync(0);
 		qDebug() << "Db update worked";
 		return true;
@@ -389,7 +389,7 @@ void QueueScheduler::updateCurrentSchedule(QueueSchedule& newSchedule)
     	    enabledSchedules.remove(currentSchedule->getPriority(), currentSchedule);
     	    wasActive = true;
     	}
-    	delete currentSchedule;
+        Q_DELETE(currentSchedule);
     }
 
     currentSchedule = new QueueSchedule(newSchedule);
@@ -452,8 +452,7 @@ void QueueScheduler::removeCurrentSchedule()
     	    enabledSchedules.remove(currentSchedule->getPriority(), currentSchedule);
     	    managePeriods();
     	}
-		delete currentSchedule;
-		currentSchedule = 0;
+        Q_DELETE(currentSchedule);
 	}
 }
 
@@ -502,7 +501,7 @@ void QueueScheduler::loadData(Db* _schedDb, bool createStartup)
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -528,8 +527,8 @@ void QueueScheduler::loadData(Db* _schedDb, bool createStartup)
 
 	managePeriods();
 
-    delete[] keymem;
-    delete[] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 }
 
 void QueueScheduler::managePeriods()

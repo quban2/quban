@@ -40,9 +40,9 @@ HeaderReadXFeatGzip::HeaderReadXFeatGzip(HeaderQueue<QByteArray *> *_headerQueue
     maxHeaderNum = job->ng->servLocalHigh[hostId];
 }
 
-HeaderReadXFeatGzip::~ HeaderReadXFeatGzip()
+HeaderReadXFeatGzip::~HeaderReadXFeatGzip()
 {
-    delete []inflatedBuffer;
+    Q_DELETE_ARRAY(inflatedBuffer);
 }
 
 void HeaderReadXFeatGzip::startHeaderRead()
@@ -75,12 +75,15 @@ void HeaderReadXFeatGzip::startHeaderRead()
             zerr(ret);
             qDebug() << "Failed to inflate zipped data";
 
-            if (failures > 4) // tolerate a low number of failures using this method ...
+            if (failures > 20) // tolerate a low number of failures using this method ...
             {
                 qDebug() << "Abandoning header download";
                 error=100; // Unzip_Err
                 errorString=tr("failed to inflate zipped data");
                 delete ba;
+
+                busyMutex.unlock();
+
                 return;
             }
             else
@@ -136,6 +139,8 @@ void HeaderReadXFeatGzip::startHeaderRead()
                         error = 90; //DbWrite_Err
                         errorString=tr("error inserting header");
                         delete ba;
+                        busyMutex.unlock();
+
                         return;
                     }
                     else
@@ -155,6 +160,8 @@ void HeaderReadXFeatGzip::startHeaderRead()
 
                             emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
                                     job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
+
+                            failures=0; // reset for next block
                         }
                     }
                 }
@@ -174,7 +181,18 @@ void HeaderReadXFeatGzip::startHeaderRead()
 
     cacheFlush(0);
 
-    idle = true;
+    if (cacheFlushed == true)
+    {
+        cacheFlushed = false;
+        job->ng->servLocalHigh[hostId] = maxHeaderNum;
+
+        saveGroup(); // includes sync of group
+        db->sync(0); // sync the group headers
+
+        emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
+                job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
+    }
+
     busyMutex.unlock();
 
     return;
@@ -241,27 +259,3 @@ int HeaderReadXFeatGzip::inf(uchar *source, uint bufferIndex, char *dest, char *
     return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
 }
 
-/* report a zlib or i/o error */
-void HeaderReadXFeatGzip::zerr(int ret)
-{
-    qDebug() << "inflate: ";
-    switch (ret) {
-    case Z_ERRNO:
-        if (ferror(stdin))
-            qDebug() << "error reading stdin";
-        if (ferror(stdout))
-            qDebug() << "error writing stdout";
-        break;
-    case Z_STREAM_ERROR:
-        qDebug() << "invalid compression level";
-        break;
-    case Z_DATA_ERROR:
-        qDebug() << "invalid or incomplete deflate data";
-        break;
-    case Z_MEM_ERROR:
-        qDebug() << "out of memory";
-        break;
-    case Z_VERSION_ERROR:
-        qDebug() << "zlib version mismatch!";
-    }
-}

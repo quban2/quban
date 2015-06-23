@@ -893,7 +893,8 @@ void HeaderList::slotDownloadSelected(bool first, bool view, QString dir)
             qDebug() << "Found group with key " << articleIndex;
 
             HeaderGroup *hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
-            free(groupdata.get_data());
+            void* ptr = groupdata.get_data();
+            Q_FREE(ptr);
 
             hbKeys = hg->getSphKeys();
 
@@ -1260,7 +1261,7 @@ void HeaderList::delSelectedSmall()
 
 	Dbt mkey;
 
-	char* keymem;
+    char* keymem = 0;
 
     if ((keymem = (char*)malloc(HEADER_BULK_BUFFER_LENGTH)) == NULL)
     {
@@ -1431,7 +1432,7 @@ void HeaderList::delSelectedSmall()
 						m_headerList->setUpdatesEnabled(true);
 					    delete pd;
 						delete keybuilder;
-						free(keymem);
+                        Q_FREE(keymem);
 						delete[] keymem2;
 						delete[] datamem2;
 						emit updateFinished(ng);
@@ -1488,7 +1489,7 @@ void HeaderList::delSelectedSmall()
 		m_headerList->setUpdatesEnabled(true);
 	    delete pd;
 		delete keybuilder;
-		free(keymem);
+        Q_FREE(keymem);
 		delete[] keymem2;
 		delete[] datamem2;
 		emit updateFinished(ng);
@@ -1502,7 +1503,7 @@ void HeaderList::delSelectedSmall()
 	    headerTreeModel->removeRows(delRow, rowCount); // last set encountered
 
 	delete keybuilder;
-	free(keymem);
+    Q_FREE(keymem);
 	delete[] keymem2;
 	delete[] datamem2;
 
@@ -2150,7 +2151,8 @@ void HeaderList::slotGroupAndDownload()
             qDebug() << "Found group with key " << articleIndex;
 
             HeaderGroup *hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
-            free(groupdata.get_data());
+            void* ptr = groupdata.get_data();
+            Q_FREE(ptr);
 
             hbKeys = hg->getSphKeys();
             multiPartHeader = false;

@@ -3668,7 +3668,7 @@ void QMgr::delNzbItem(QString index)
 	memset(&data, 0, sizeof(data));
 	data.set_flags(DB_DBT_MALLOC);
 	MultiPartHeader *mph = 0;
-	char* dataBlock;
+    char* dataBlock = 0;
 
 	QByteArray ba = index.toLocal8Bit();
 	const char *c_str = ba.constData();
@@ -3682,7 +3682,7 @@ void QMgr::delNzbItem(QString index)
 		mph->deleteAllParts(nzbGroup->getPartsDb());
 		nzbGroup->getPartsDb()->sync(0);
 
-		free(dataBlock);
+        Q_FREE(dataBlock);
 	}
 	else
 		qDebug() << "Failed to get mph for deletion of parts";

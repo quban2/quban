@@ -106,8 +106,8 @@ void BulkDelete::bulkDelete()
 	// 	qDebug("Update done");
 
 	running = false;
-	delete [] keymem;
-	delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);;
 }
 
 bool BulkDelete::bulkDeleteBody()
@@ -151,7 +151,7 @@ bool BulkDelete::bulkDeleteBody()
     	commonDelete(index, false);
     }
 
-    delete sphList;
+    Q_DELETE(sphList);
 
     // Now do the multi parts ...
     for (int i=0; i<mphList->size(); ++i)
@@ -171,7 +171,7 @@ bool BulkDelete::bulkDeleteBody()
     	commonDelete(index, true);
     }
 
-    delete mphList;
+    Q_DELETE(mphList);
 
     ng->articlesNeedDeleting(false);
 
@@ -196,15 +196,15 @@ bool BulkDelete::bulkDeleteBody()
 void BulkDelete::commonDelete(QString index, bool multiPart)
 {
     QByteArray ba;
-	const char *k;
+    const char *k = 0;
 	Dbt dkey;
 
 	int ret;
 	quint16 serverId;
 
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
 	PartNumMap serverArticleNos;
 	QMap<quint16, quint64> partSize;
@@ -235,7 +235,7 @@ void BulkDelete::commonDelete(QString index, bool multiPart)
 		datamem=new uchar[data.get_size()+1000];
 		data.set_ulen(data.get_size()+1000);
 		data.set_data(datamem);
-		delete [] p;
+        Q_DELETE_ARRAY(p);
 		qDebug("Exiting growing array cycle");
 		ret=ng->getDb()->get(0,&key, &data, 0);
 	}
@@ -277,7 +277,7 @@ void BulkDelete::commonDelete(QString index, bool multiPart)
 
 		serverArticleNos.clear();
 
-		delete hb;
+        Q_DELETE(hb);
 
 		memset(&dkey, 0, sizeof(dkey));
 		dkey.set_data((void *)k);

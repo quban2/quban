@@ -29,10 +29,10 @@ class HeaderReadXzVer : public HeaderReadWorker
 
 public:
     HeaderReadXzVer(HeaderQueue<QByteArray*>* _headerQueue, Job* _job, uint _articles, qint16 _hostId, QMutex *_headerDbLock);
+    ~HeaderReadXzVer();
 
 private:
     int inf2(uchar *source, uint bufferIndex, char *dest, char **destEnd);
-    void zerr(int ret);
 
     char* inflatedBuffer;
     char* tempInflatedBuffer;

@@ -113,7 +113,7 @@ AddServerWidget::AddServerWidget( NntpHost *host, QWidget * _parent)  // This is
 
 AddServerWidget::~AddServerWidget()
 {
-	delete validator;
+    Q_DELETE(validator);
 }
 
 void AddServerWidget::populate(NntpHost* host)

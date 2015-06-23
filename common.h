@@ -58,4 +58,8 @@ typedef struct
 }
 CommonDefs;
 
+#define Q_FREE(ptr) {if (ptr) {free(ptr); ptr = 0;}}
+#define Q_DELETE(ptr) {if (ptr) {delete ptr; ptr = 0;}}
+#define Q_DELETE_ARRAY(ptr) {if (ptr) {delete [] ptr; ptr = 0;}}
+
 #endif /* COMMON_H_ */

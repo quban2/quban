@@ -36,7 +36,7 @@ HeaderReadNoCompression::HeaderReadNoCompression(HeaderQueue<QByteArray *> *_hea
 
 void HeaderReadNoCompression::startHeaderRead()
 {
-    RawHeader* h;
+    RawHeader* h = 0;
     QString headerLine;
     QByteArray* ba = 0;
 
@@ -71,6 +71,9 @@ void HeaderReadNoCompression::startHeaderRead()
                 error = 90; // DbWrite_Err
                 errorString=tr("error inserting header");
                 delete ba;
+
+                busyMutex.unlock();
+
                 return;
             }
             else
@@ -103,6 +106,17 @@ void HeaderReadNoCompression::startHeaderRead()
 
     cacheFlush(0);
 
-    idle = true;
+    if (cacheFlushed == true)
+    {
+        cacheFlushed = false;
+        job->ng->servLocalHigh[hostId] = maxHeaderNum;
+
+        saveGroup(); // includes sync of group
+        db->sync(0); // sync the group headers
+
+        emit sigHeaderDownloadProgress(job, job->ng->servLocalLow[hostId],
+                job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
+    }
+
     busyMutex.unlock();
 }

@@ -56,7 +56,7 @@ void SaveQItems::processAllItems()
 		if (item && (ok = processItem(item)))
 		{
 			saveQItems.removeAll(saveQItems.first());
-			delete item;
+            Q_DELETE(item);
 			item = 0;
 		}
 		else if (!ok)
@@ -101,12 +101,12 @@ bool SaveQItems::writeSaveItem(QSaveItem *si)
 
 	if ((saveQDb->put(0, &key, &data, 0)) != 0)
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		saveQDb->sync(0);
 		return true;
 	}
@@ -130,7 +130,8 @@ QSaveItem *SaveQItems::readSaveItem(int id)
 	{
 		QSaveItem *si = loadSaveItem((char*) data.get_data());
 		// 		qDebug("SaveItem Loaded");
-		free(data.get_data());
+        void* ptr = data.get_data();
+        Q_FREE(ptr);
 		// 		free(key.get_data());
 		return si;
 	}
@@ -151,7 +152,7 @@ bool SaveQItems::updateItem(QSaveItem *qsi)
 		si->curPostLines = qsi->curPostLines;
 		si->id = qsi->id;
 		writeSaveItem(si);
-		delete si;
+        Q_DELETE(si);
 		return true;
 	}
 }
@@ -166,7 +167,7 @@ bool SaveQItems::delSaveItem(int id)
         {
             emit deleteNzb(si->index);
         }
-        delete si;
+        Q_DELETE(si);
     }
 
 	memset(&key, 0, sizeof(key));

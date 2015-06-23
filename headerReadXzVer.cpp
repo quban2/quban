@@ -39,6 +39,11 @@ HeaderReadXzVer::HeaderReadXzVer(HeaderQueue<QByteArray*>* _headerQueue, Job* _j
     maxHeaderNum = job->ng->servLocalHigh[hostId];
 }
 
+HeaderReadXzVer::~HeaderReadXzVer()
+{
+    Q_DELETE_ARRAY(inflatedBuffer);
+}
+
 void HeaderReadXzVer::startHeaderRead()
 {
     RawHeader* h;
@@ -68,6 +73,8 @@ void HeaderReadXzVer::startHeaderRead()
             error=100; // Unzip_Err
             errorString=tr("failed to inflate zipped data");
             delete ba;
+            busyMutex.unlock();
+
             return;
         }
 
@@ -109,6 +116,8 @@ void HeaderReadXzVer::startHeaderRead()
                         error = 90; //DbWrite_Err
                         errorString=tr("error inserting header");
                         delete ba;
+                        busyMutex.unlock();
+
                         return;
                     }
                     else
@@ -158,7 +167,6 @@ void HeaderReadXzVer::startHeaderRead()
                 job->ng->servLocalHigh[hostId], job->ng->servLocalParts[hostId]);
     }
 
-    idle = true;
     busyMutex.unlock();
 }
 
@@ -221,29 +229,4 @@ int HeaderReadXzVer::inf2(uchar  *source, uint bufferIndex, char *dest, char **d
     /* clean up and return */
     (void)inflateEnd(&strm);
     return ret == Z_STREAM_END ? Z_OK : Z_DATA_ERROR;
-}
-
-/* report a zlib or i/o error */
-void HeaderReadXzVer::zerr(int ret)
-{
-    qDebug() << "inflate: ";
-    switch (ret) {
-    case Z_ERRNO:
-        if (ferror(stdin))
-            qDebug() << "error reading stdin";
-        if (ferror(stdout))
-            qDebug() << "error writing stdout";
-        break;
-    case Z_STREAM_ERROR:
-        qDebug() << "invalid compression level";
-        break;
-    case Z_DATA_ERROR:
-        qDebug() << "invalid or incomplete deflate data";
-        break;
-    case Z_MEM_ERROR:
-        qDebug() << "out of memory";
-        break;
-    case Z_VERSION_ERROR:
-        qDebug() << "zlib version mismatch!";
-    }
 }

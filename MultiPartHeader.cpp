@@ -34,7 +34,7 @@ NzbHeader::NzbHeader(Db* _pDB) : MultiPartHeader()
 int NzbHeader::saveNzbParts()
 {
 	int ret;
-	char *phead;
+    char *phead = 0;
 	Dbt pkey;
 	Dbt pdata;
 	Header* h;
@@ -55,13 +55,13 @@ int NzbHeader::saveNzbParts()
 		if (ret)
 		{
 			qDebug() << "Unable to create part " << thit.key() << " for key " << multiPartKey << ", result = " << ret;
-			delete [] phead;
+            Q_DELETE_ARRAY(phead);
 			break;
 		}
 		else
 			missingParts = missingParts - 1;
 
-		delete [] phead;
+        Q_DELETE_ARRAY(phead);
 	}
 
 	return ret;
@@ -190,12 +190,12 @@ MultiPartHeader::MultiPartHeader(quint32 keySize, char* k, char *p)
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
-        subj = QString::fromLatin1(k, (splitpoint - k));
-        from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        subj = QString::fromLocal8Bit(k, (splitpoint - k));
+        from = QString::fromLocal8Bit(splitpoint + 1, k + (keySize - 1) - splitpoint);
     }
     else
     {
-        subj = QString::fromLatin1(k, keySize);
+        subj = QString::fromLocal8Bit(k, keySize);
         from = subj;
         qDebug("Single element header encountered ...");
     }
@@ -284,12 +284,12 @@ bool MultiPartHeader::getMultiPartHeader(unsigned int keySize, char *k, char *p,
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
-        mph->subj = QString::fromLatin1(k, (splitpoint - k));
-        mph->from = QString::fromLatin1(splitpoint + 1, k + (keySize - 1) - splitpoint);
+        mph->subj = QString::fromLocal8Bit(k, (splitpoint - k));
+        mph->from = QString::fromLocal8Bit(splitpoint + 1, k + (keySize - 1) - splitpoint);
     }
     else
     {
-        mph->subj = QString::fromLatin1(k, keySize);
+        mph->subj = QString::fromLocal8Bit(k, keySize);
         mph->from = mph->subj;
         qDebug() << "Single element header encountered ... " <<  mph->subj;
     }
@@ -420,8 +420,8 @@ MultiPartHeader::Add_Code MultiPartHeader::modifyPart(Db* pdb, quint16 partNo, R
 	int ret = 0;
 	bool createPart = false;
 	Header* h = 0;
-	char *phead;
-	Dbc *cursorp;
+    char *phead = 0;
+    Dbc *cursorp = 0;
 
 	Dbt key;
 	Dbt data;
@@ -470,7 +470,7 @@ MultiPartHeader::Add_Code MultiPartHeader::modifyPart(Db* pdb, quint16 partNo, R
 		//qDebug("5");
 		cursorp->put(&key, &data, DB_CURRENT);
 		//qDebug("6");
-		delete [] phead;
+        Q_DELETE_ARRAY(phead);
 	}
 	else if (ret == DB_NOTFOUND) // create the part
 	{
@@ -515,11 +515,10 @@ MultiPartHeader::Add_Code MultiPartHeader::modifyPart(Db* pdb, quint16 partNo, R
 		else
 			retCode = New_Part;
 		//qDebug("11");
-		delete [] phead;
+        Q_DELETE_ARRAY(phead);
 	}
 
-	if (h)
-		delete h;
+    Q_DELETE(h);
 
 	//qDebug("12\n");
 
@@ -536,7 +535,7 @@ QString MultiPartHeader::getIndex()
 void MultiPartHeader::getAllArticleNums(Db* pDB, PartNumMap* serverArticleNos, QMap<quint16, quint64>* partSize,QMap<quint16, QString>* partMsgId)
 {
 	quint64 multiPartKey = getMultiPartKey();
-	Header* h;
+    Header* h = 0;
 
 	// Walk the headers to get the PartNumMap
 	Dbc *cursorp;
@@ -557,7 +556,7 @@ void MultiPartHeader::getAllArticleNums(Db* pDB, PartNumMap* serverArticleNos, Q
 		partSize->insert(h->getPartNo(), h->getSize());
 		partMsgId->insert(h->getPartNo(), h->getMessageId());
 
-		delete h;
+        Q_DELETE(h);
 		ret = cursorp->get(&key, &data, DB_NEXT_DUP);
 	}
 
@@ -596,7 +595,7 @@ void MultiPartHeader::removeServer(Db* pDB, quint16 serverId)
 	serverLowest.remove(serverId);
 
 	quint64 multiPartKey = getMultiPartKey();
-	Header* h;
+    Header* h = 0;
 
 	// Walk the headers to get the PartNumMap
 	Dbc *cursorp;
@@ -627,7 +626,7 @@ void MultiPartHeader::removeServer(Db* pDB, quint16 serverId)
 			}
 		}
 
-		delete h;
+        Q_DELETE(h);
 		ret = cursorp->get(&key, &data, DB_NEXT_DUP);
 	}
 

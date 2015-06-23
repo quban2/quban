@@ -29,11 +29,10 @@ class HeaderReadXFeatGzip : public HeaderReadWorker
 
 public:
     HeaderReadXFeatGzip(HeaderQueue<QByteArray*>* _headerQueue, Job* _job, uint _articles, qint16 _hostId, QMutex *_headerDbLock);
-    ~ HeaderReadXFeatGzip();
+    ~HeaderReadXFeatGzip();
 
 private:
     int inf(uchar *source, uint bufferIndex, char *dest, char **destEnd);
-    void zerr(int ret);
 
     char* inflatedBuffer;
     char* tempInflatedBuffer;

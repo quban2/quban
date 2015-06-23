@@ -244,7 +244,7 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
             if (retdlen){;} // MD TODO compiler .... unused variable
 
-            recKey = QString::fromLatin1((char*)retkey, retklen);
+            recKey = QString::fromLocal8Bit((char*)retkey, retklen);
 
             if (*((char *)retdata) == 'm')
             {

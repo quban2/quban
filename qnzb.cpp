@@ -217,7 +217,8 @@ void QNzb::slotGroupFullNzb()
 					qDebug() << "Error inserting binheader into nzbGroup: "
 							<< qmgr->dbEnv->strerror(ret);
 
-				free(data.get_data());
+                void* ptr = data.get_data();
+                Q_FREE(ptr);
 			}
 		}
 		n = n.nextSibling();
@@ -447,7 +448,8 @@ void QNzb::slotAddNzbItem(NzbHeader* nh, bool groupItems, bool first, QString dD
 		qDebug() << "Error inserting nzb header into nzbGroup: "
 				<< qmgr->dbEnv->strerror(ret);
 
-	free(data.get_data());
+    void* ptr = data.get_data();
+    Q_FREE(ptr);
 
 	if ((ret = nh->saveNzbParts()) != 0)
 			qDebug() << "Error inserting nzb parts into nzbGroup: "

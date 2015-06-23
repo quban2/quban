@@ -77,7 +77,7 @@ bool uuDecoder::isDecodable() {
 			char cline[1025];
 			while (partFile.readLine(cline,1024)!=-1)
 			{
-                line = QString::fromLatin1(cline);
+                line = QString::fromLocal8Bit(cline);
 				//Remove leading and trailing whitespace - we're looking for the begin line
 				line = line.trimmed();
 				if (line.left(5)=="begin") {
