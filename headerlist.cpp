@@ -228,13 +228,13 @@ HeaderList::~ HeaderList( )
 	ng->setView(NULL);
 	ng->getDb()->sync(0);
 
-	delete contextMenu;
+    Q_DELETE(contextMenu);
 	headerTreeModel->removeAllRows();
 	headerTreeModel->deleteLater();
-	delete m_headerList;
+    Q_DELETE(m_headerList);
 
-	delete [] keymem;
-	delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 }
 
 void HeaderList::slotSortClicked(int col)
@@ -334,8 +334,8 @@ void HeaderList::loadHeaders(Db* db)
     if ((ret = db->get_DB()->cursor(db->get_DB(), NULL, &dbcp, DB_CURSOR_BULK)) != 0)
     {
         db->err(ret, "DB->cursor");
-        delete [] (char*)(ckey.data);
-        delete [] (char*)(cdata.data);
+        Q_DELETE_ARRAY_NO_LVALUE((char*)(ckey.data));
+        Q_DELETE_ARRAY_NO_LVALUE((char*)(cdata.data));
         return;
     }
 
@@ -434,8 +434,8 @@ void HeaderList::loadHeaders(Db* db)
 			ret = t_ret;
 	}
 
-	delete [] (char*)(ckey.data);
-	delete [] (char*)(cdata.data);
+    Q_DELETE_ARRAY_NO_LVALUE((char*)(ckey.data));
+    Q_DELETE_ARRAY_NO_LVALUE((char*)(cdata.data));
 
 	qDebug() << "Loading finished. Seconds: " << start.secsTo(QTime::currentTime());
 	qDebug() << "Ignored " << numIgnored << " articles";
@@ -470,7 +470,7 @@ void HeaderList::loadHeaders(Db* db)
 
  	QApplication::restoreOverrideCursor();
 
- 	delete pd;
+    Q_DELETE(pd);
  	pd = 0;
 }
 
@@ -542,8 +542,8 @@ void HeaderList::loadGroups(Db* db)
     if ((ret = db->get_DB()->cursor(db->get_DB(), NULL, &dbcp, DB_CURSOR_BULK)) != 0)
     {
         db->err(ret, "DB->cursor");
-        delete [] (char*)(ckey.data);
-        delete [] (char*)(cdata.data);
+        Q_DELETE_ARRAY_NO_LVALUE((char*)(ckey.data));
+        Q_DELETE_ARRAY_NO_LVALUE((char*)(cdata.data));
         return;
     }
 
@@ -599,8 +599,8 @@ void HeaderList::loadGroups(Db* db)
             ret = t_ret;
     }
 
-    delete [] (char*)(ckey.data);
-    delete [] (char*)(cdata.data);
+    Q_DELETE_ARRAY_NO_LVALUE((char*)(ckey.data));
+    Q_DELETE_ARRAY_NO_LVALUE((char*)(cdata.data));
 
     qDebug() << "Loading finished. Seconds: " << start.secsTo(QTime::currentTime());
     quban->statusBar()->showMessage(progMessage + " : 100%", 3000);
@@ -633,7 +633,7 @@ void HeaderList::loadGroups(Db* db)
 
     QApplication::restoreOverrideCursor();
 
-    delete pd;
+    Q_DELETE(pd);
     pd = 0;
 }
 
@@ -650,22 +650,14 @@ void HeaderList::slotCancelCurrentBulkLoad()
 {
     quban->getQMgr()->slotCancelBulkLoad(bulkLoadSeq);
 
-    if (pd)
-    {
-        delete pd;
-        pd = 0;
-    }
+    Q_DELETE(pd);
 }
 
 void HeaderList::bulkLoadFinished(quint64 seq)
 {
 	if (bulkLoadSeq == seq)
 	{
-		if (pd)
-		{
-		 	delete pd;
-		 	pd = 0;
-		}
+        Q_DELETE(pd);
 
 		QString progMessage(tr("Loading %1 ...").arg(ng->getAlias()));
 		quban->statusBar()->showMessage(progMessage + " : 100%", 3000);
@@ -720,11 +712,7 @@ void HeaderList::bulkLoadFailed(quint64 seq)
 {
 	if (bulkLoadSeq == seq)
 	{
-		if (pd)
-		{
-		 	delete pd;
-		 	pd = 0;
-		}
+        Q_DELETE(pd);
 
 		quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Error during bulk load of ") + ng->getAlias());
 	}
@@ -734,11 +722,7 @@ void HeaderList::bulkLoadCancelled(quint64 seq)
 {
     if (bulkLoadSeq == seq)
     {
-        if (pd)
-        {
-            delete pd;
-            pd = 0;
-        }
+        Q_DELETE(pd);
 
         quban->getLogEventList()->logEvent(tr("Bulk load of ") + ng->getAlias() + " cancelled");
     }
@@ -958,7 +942,7 @@ void HeaderList::downloadSelectedHeader(bool first, bool view, QString dir, QMod
         datamem=new uchar[data.get_size()+1000];
         data.set_ulen(data.get_size()+1000);
         data.set_data(datamem);
-        delete [] p;
+        Q_DELETE_ARRAY(p);
         qDebug("Exiting growing array cycle");
         ret=ng->getDb()->get(0,&key, &data, 0);
     }
@@ -994,7 +978,7 @@ void HeaderList::downloadSelectedHeader(bool first, bool view, QString dir, QMod
             qDebug("Error updating record: %d", ret);
 
         data.set_data(datamem);
-        delete [] p;
+        Q_DELETE_ARRAY(p);
     }
     else
         qDebug() << "Error retrieving record: " << ret;
@@ -1149,7 +1133,7 @@ void HeaderList::slotDelSelected()
 				datamem2=new uchar[data2.get_size()+1000];
 				data2.set_ulen(data2.get_size()+1000);
 				data2.set_data(datamem2);
-				delete [] p;
+                Q_DELETE_ARRAY(p);
 				qDebug("Exiting growing array cycle");
 				ret=ng->getDb()->get(0,&key2, &data2, 0);
 			}
@@ -1185,9 +1169,8 @@ void HeaderList::slotDelSelected()
 				pbh=hb->data();
 				memcpy(datamem2, pbh, hb->getRecordSize());
 
-				if (pbh)
-				    delete [] pbh;
-				delete hb;
+                Q_DELETE_ARRAY(pbh);
+                Q_DELETE(hb);
 
 				// key and data sizes are unchanged
 				ret=ng->getDb()->put(0,&key2, &data2, 0);
@@ -1221,7 +1204,7 @@ void HeaderList::slotDelSelected()
 	m_headerList->setUpdatesEnabled(true);
 	QApplication::restoreOverrideCursor();
 
-    delete pd;
+    Q_DELETE(pd);
 
 	emit updateFinished(ng);
 }
@@ -1378,7 +1361,7 @@ void HeaderList::delSelectedSmall()
 				datamem2=new uchar[data2.get_size()+1000];
 				data2.set_ulen(data2.get_size()+1000);
 				data2.set_data(datamem2);
-				delete [] p;
+                Q_DELETE_ARRAY(p);
 				qDebug("Exiting growing array cycle");
 				ret=ng->getDb()->get(0,&key2, &data2, 0);
 			}
@@ -1419,7 +1402,7 @@ void HeaderList::delSelectedSmall()
 
 				serverArticleNos.clear();
 
-				delete hb;
+                Q_DELETE(hb);
 
 				if (keybuilder->append((void*)k, index.length()) == false) // failed to add to buffer
 				{
@@ -1430,17 +1413,17 @@ void HeaderList::delSelectedSmall()
 						ng->getDb()->err(ret, "Db::del");
 						QApplication::restoreOverrideCursor();
 						m_headerList->setUpdatesEnabled(true);
-					    delete pd;
-						delete keybuilder;
+                        Q_DELETE(pd);
+                        Q_DELETE(keybuilder);
                         Q_FREE(keymem);
-						delete[] keymem2;
-						delete[] datamem2;
+                        Q_DELETE_ARRAY(keymem2);
+                        Q_DELETE_ARRAY(datamem2);
 						emit updateFinished(ng);
 						return;
 					}
 
 					//qDebug() << "In loop, db deletion complete";
-					delete keybuilder;
+                    Q_DELETE(keybuilder);
 					memset(&keymem, 0, sizeof(keymem));
 					keybuilder = new DbMultipleDataBuilder(mkey);
 					if (keybuilder->append((void*)k, index.length()) == false) // failed to add single index to buffer
@@ -1487,11 +1470,11 @@ void HeaderList::delSelectedSmall()
 		ng->getDb()->err(ret, "Db::del");
 		QApplication::restoreOverrideCursor();
 		m_headerList->setUpdatesEnabled(true);
-	    delete pd;
-		delete keybuilder;
+        Q_DELETE(pd);
+        Q_DELETE(keybuilder);
         Q_FREE(keymem);
-		delete[] keymem2;
-		delete[] datamem2;
+        Q_DELETE_ARRAY(keymem2);
+        Q_DELETE_ARRAY(datamem2);
 		emit updateFinished(ng);
 		return;
 	}
@@ -1502,10 +1485,10 @@ void HeaderList::delSelectedSmall()
 	if (rowCount)
 	    headerTreeModel->removeRows(delRow, rowCount); // last set encountered
 
-	delete keybuilder;
+    Q_DELETE(keybuilder);
     Q_FREE(keymem);
-	delete[] keymem2;
-	delete[] datamem2;
+    Q_DELETE_ARRAY(keymem2);
+    Q_DELETE_ARRAY(datamem2);
 
 	//m_headerList->setSortingEnabled(true);
 
@@ -1521,7 +1504,7 @@ void HeaderList::delSelectedSmall()
 	m_headerList->setUpdatesEnabled(true);
 	QApplication::restoreOverrideCursor();
 
-    delete pd;
+    Q_DELETE(pd);
 
 	emit updateFinished(ng);
 }
@@ -1596,7 +1579,7 @@ void HeaderList::markSelectedAs( int what)
 				datamem=new uchar[data.get_size()+1000];
 				data.set_ulen(data.get_size()+1000);
 				data.set_data(datamem);
-				delete [] p;
+                Q_DELETE_ARRAY(p);
 				qDebug("Exiting growing array cycle");
 				ret=ng->getDb()->get(0,&key, &data, 0);
 			}
@@ -1632,8 +1615,8 @@ void HeaderList::markSelectedAs( int what)
 					qDebug("Error updating record: %d", ret);
 
 				data.set_data(datamem);
-				delete [] p;
-				delete hb;
+                Q_DELETE_ARRAY(p);
+                Q_DELETE(hb);
 				//Take item out of the list...
                 if ( (what == MultiPartHeader::bh_read) && showOnlyNew )
 					m_headerList->setRowHidden(selectedSubjects.at(i).row(), QModelIndex(), true);
@@ -1757,7 +1740,7 @@ void HeaderList::compoundFilter(FilterComponents &s)
             headerProxy->addFilter(columnNo, s.filterLines.at(i)->filterType);
         }
 
-        delete s.filterLines.at(i);
+        Q_DELETE_NO_LVALUE(s.filterLines.at(i));
         s.filterLines.removeAt(i);
     }
 
@@ -1821,8 +1804,8 @@ void HeaderList::markAllAsRead( Db* db)
 					qDebug("Error updating record: %d", ret);
 
 				data.set_data(datamem);
-				delete [] p;
-				delete hb;
+                Q_DELETE_ARRAY(p);
+                Q_DELETE(hb);
 
 				current=QTime::currentTime();
 				if (previous.secsTo(current) > 1)
@@ -1842,7 +1825,7 @@ void HeaderList::markAllAsRead( Db* db)
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -1872,7 +1855,7 @@ void HeaderList::closeAndNoMark( )
 	QCloseEvent *e = new QCloseEvent();
 	ng->setView(NULL);
 	QTabWidget::closeEvent(e);
-    delete e;
+    Q_DELETE(e);
 }
 
 void HeaderList::closeEvent( QCloseEvent * e )
@@ -2007,7 +1990,7 @@ void HeaderList::markGroupAsRead( )
 				datamem=new uchar[data.get_size()+1000];
 				data.set_ulen(data.get_size()+1000);
 				data.set_data(datamem);
-				delete [] p;
+                Q_DELETE_ARRAY(p);
 				qDebug("Exiting growing array cycle");
 				ret=ng->getDb()->get(0,&key, &data, 0);
 			}
@@ -2036,8 +2019,8 @@ void HeaderList::markGroupAsRead( )
 					qDebug("Error updating record: %d", ret);
 
 				data.set_data(datamem);
-				delete [] p;
-				delete hb;
+                Q_DELETE_ARRAY(p);
+                Q_DELETE(hb);
 			}
 			else
 				qDebug("Error retrieving record: %d", ret);
@@ -2211,7 +2194,7 @@ void HeaderList::confirmSelectedHeader(QModelIndex sourceSubjIndex, QString inde
         datamem=new uchar[data.get_size()+1000];
         data.set_ulen(data.get_size()+1000);
         data.set_data(datamem);
-        delete [] p;
+        Q_DELETE_ARRAY(p);
         qDebug("Exiting growing array cycle");
         ret=ng->getDb()->get(0,&key, &data, 0);
     }
@@ -2244,7 +2227,7 @@ void HeaderList::confirmSelectedHeader(QModelIndex sourceSubjIndex, QString inde
             qDebug("Error updating record: %d", ret);
 
         data.set_data(datamem);
-        delete [] p;
+        Q_DELETE_ARRAY(p);
     }
     else
         qDebug() << "Error retrieving record: " << ret;

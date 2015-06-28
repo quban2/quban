@@ -264,7 +264,7 @@ public:
 	inline quint32 getRepairBlocks() { return pendingHeader->repairBlocks; }
 
 	void setHeader(HeaderBase* _hb);
-    void deleteHeader() {if (pendingHeader->hb) {delete pendingHeader->hb; pendingHeader->hb = 0;}}
+    void deleteHeader() {if (pendingHeader->hb) {Q_DELETE(pendingHeader->hb);}}
 	inline void setHeaderType(char t) { pendingHeader->headerType = t; }
 	inline void setRepairOrder(quint32 _repairOrder) { pendingHeader->repairOrder = _repairOrder; }
 	inline void setRepairBlocks(quint32 _repairBlocks) { pendingHeader->repairBlocks = _repairBlocks; }

@@ -126,7 +126,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	memcpy(temp, i, strSize);
 	temp[strSize] = '\0';
 	downloadGroup->dirPath = temp;
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 	memcpy(&strSize, i, sizeof(uint));
@@ -136,7 +136,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	memcpy(temp, i, strSize);
 	temp[strSize] = '\0';
 	downloadGroup->masterRepairFile = temp;
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 	memcpy(&strSize, i, sizeof(uint));
@@ -146,7 +146,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	memcpy(temp, i, strSize);
 	temp[strSize] = '\0';
 	downloadGroup->masterUnpackFile = temp;
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 	qDebug() << "Restored Group record with master unpack file: " << downloadGroup->masterUnpackFile;
@@ -158,7 +158,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	memcpy(temp, i, strSize);
 	temp[strSize] = '\0';
 	downloadGroup->processLog = temp;
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 	memcpy(&strSize, i, sizeof(uint));
@@ -173,7 +173,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	else
 	    downloadGroup->ng = gList->getNg(QString(temp));
 
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 // Add all of the sub structs
@@ -259,7 +259,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 
 GroupManager::~GroupManager()
 {
-    delete downloadGroup;
+    Q_DELETE(downloadGroup);
 }
 
 bool GroupManager::dbSave()
@@ -430,12 +430,12 @@ bool GroupManager::dbSave()
 
 	if ((db->put(0, &key, &data, 0)) != 0)
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		db->sync(0);
 		return true;
 	}
@@ -538,8 +538,8 @@ PendingHeader::PendingHeader(Db *_db, uchar* dbData) : db(_db)
 PendingHeader::~PendingHeader()
 {
     if (pendingHeader->hb)
-        delete pendingHeader->hb;
-    delete pendingHeader;
+        Q_DELETE(pendingHeader->hb);
+    Q_DELETE(pendingHeader);
 }
 
 bool PendingHeader::operator< (const PendingHeader &other) const
@@ -622,12 +622,12 @@ bool PendingHeader::dbSave()
 
 	if ((db->put(0, &key, &data, 0)) != 0)
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		db->sync(0);
 		return true;
 	}
@@ -692,7 +692,7 @@ AutoFile::AutoFile(Db *_db, uchar* dbData) : db(_db)
 	memcpy(temp, i, strSize);
 	temp[strSize] = '\0';
 	autoFile->fileName = temp;
-	delete[] temp;
+    Q_DELETE_ARRAY(temp);
 	i += strSize;
 
 	qDebug() << "Restored Auto file with name: " << autoFile->fileName;
@@ -700,7 +700,7 @@ AutoFile::AutoFile(Db *_db, uchar* dbData) : db(_db)
 
 AutoFile::~AutoFile()
 {
-    delete autoFile;
+    Q_DELETE(autoFile);
 }
 
 bool AutoFile::dbSave()
@@ -742,12 +742,12 @@ bool AutoFile::dbSave()
 
 	if ((db->put(0, &key, &data, 0)) != 0)
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		db->sync(0);
 		return true;
 	}
@@ -881,7 +881,7 @@ void AutoUnpackThread::run()
 		    {
 				ce = new AutoUnpackEvent(groupManager, (int)AutoUnpackEvent::AU_FILE_OPEN_FAILED);
 				QApplication::postEvent(parent, ce);
-				delete externalProcess;
+                Q_DELETE(externalProcess);
 				return;
 		    }
 
@@ -894,7 +894,7 @@ void AutoUnpackThread::run()
 			    {
 					ce = new AutoUnpackEvent(groupManager, (int)AutoUnpackEvent::AU_FILE_OPEN_FAILED);
 					QApplication::postEvent(parent, ce);
-					delete externalProcess;
+                    Q_DELETE(externalProcess);
 					outFile.close();
 					return;
 			    }
@@ -909,7 +909,7 @@ void AutoUnpackThread::run()
 				    {
 						ce = new AutoUnpackEvent(groupManager, (int)AutoUnpackEvent::AU_FILE_WRITE_FAILED);
 						QApplication::postEvent(parent, ce);
-						delete externalProcess;
+                        Q_DELETE(externalProcess);
 						inFile.close();
 						outFile.close();
 						return;
@@ -922,7 +922,7 @@ void AutoUnpackThread::run()
 			    {
 					ce = new AutoUnpackEvent(groupManager, (int)AutoUnpackEvent::AU_FILE_READ_FAILED);
 					QApplication::postEvent(parent, ce);
-					delete externalProcess;
+                    Q_DELETE(externalProcess);
 					outFile.close();
 					return;
 			    }
@@ -931,7 +931,7 @@ void AutoUnpackThread::run()
 			outFile.close();
 
 			 while (!filesToJoin.isEmpty())
-			     delete filesToJoin.takeFirst();
+                 Q_DELETE_NO_LVALUE(filesToJoin.takeFirst());
     	}
 
     	// Update the group record
@@ -954,20 +954,20 @@ void AutoUnpackThread::run()
 	{
 		ce = new AutoUnpackEvent(groupManager, (int)AutoUnpackEvent::AU_UNKNOWN_OPERATION);
 		QApplication::postEvent(parent, ce);
-		delete externalProcess;
+        Q_DELETE(externalProcess);
 		return;
 	}
 
 	if (retCode)
 	{
-		delete externalProcess;
+        Q_DELETE(externalProcess);
 		externalProcess = 0;
 		return; // event already sent
 	}
 
 	exec();
 
-	delete externalProcess;
+    Q_DELETE(externalProcess);
 	externalProcess = 0;
 }
 

@@ -100,8 +100,8 @@ void BulkHeaderGroup::BulkGroup()
     // 	qDebug("Update done");
 
     running = false;
-    delete [] keymem;
-    delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 }
 
 bool BulkHeaderGroup::BulkHeaderGroupBody()
@@ -126,16 +126,16 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     HeaderBase* hb;
     HeaderGroup* headerGroup = 0;
 
-    DBC *dbcp;
+    DBC *dbcp = 0;
     DBT ckey, cdata;
 
     memset(&ckey, 0, sizeof(ckey));
     memset(&cdata, 0, sizeof(cdata));
 
     size_t retklen, retdlen;
-    void *retkey, *retdata;
+    void *retkey = 0, *retdata = 0;
     int ret, t_ret;
-    void *p;
+    void *p = 0;
 
     quint64 count=0;
 
@@ -151,8 +151,12 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     if ((ret = db->get_DB()->cursor(db->get_DB(), NULL, &dbcp, DB_CURSOR_BULK)) != 0)
     {
         db->err(ret, "DB->cursor");
-        delete [] (char*)(ckey.data);
-        delete [] (char*)(cdata.data);
+        char* ptr = 0;
+
+        ptr = (char*)(ckey.data);
+        Q_DELETE_ARRAY(ptr);
+        ptr = (char*)(cdata.data);
+        Q_DELETE_ARRAY(ptr);
         return false;
     }
 
@@ -166,7 +170,7 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     uchar keymem[KEYMEM_SIZE];
     uchar datamem[DATAMEM_SIZE];
     Dbt key, data;
-    char* p2;
+    char* p2 = 0;
     QByteArray ba;
     const char *k;
 
@@ -330,8 +334,8 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
                     if (ret!=0)
                         qDebug("Error updating record: %d", ret);
 
-                    delete [] p2;
-                    delete headerGroup;
+                    Q_DELETE_ARRAY(p2);
+                    Q_DELETE(headerGroup);
                     numGroups++;
                 }
 
@@ -382,8 +386,10 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
             ret = t_ret;
     }
 
-    delete [] (char*)(ckey.data);
-    delete [] (char*)(cdata.data);
+    char* ptr = ((char*)ckey.data);
+    Q_DELETE_ARRAY(ptr);
+    ptr = ((char*)cdata.data);
+    Q_DELETE_ARRAY(ptr);
 
     qDebug() << "Multi = " << grouped << ", single = " << single;
 
@@ -406,8 +412,7 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
     ng->setTotalGroups(numGroups);
 
-    if (headerGroup)
-        delete headerGroup;
+    Q_DELETE(headerGroup);
 
     return true;
 }

@@ -70,7 +70,7 @@ void HeaderReadNoCompression::startHeaderRead()
                 qDebug() << "Error inserting header!";
                 error = 90; // DbWrite_Err
                 errorString=tr("error inserting header");
-                delete ba;
+                Q_DELETE(ba);
 
                 busyMutex.unlock();
 
@@ -101,7 +101,7 @@ void HeaderReadNoCompression::startHeaderRead()
             qDebug() << "Bad header - maybe an incomplete line?";
         }
 
-        delete ba;
+        Q_DELETE(ba);
     }
 
     cacheFlush(0);

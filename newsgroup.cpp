@@ -105,28 +105,24 @@ int compare_q16(Db *, const Dbt *a, const Dbt *b)
 
 NewsGroup::~NewsGroup()
 {
-    if (listItem)
-        delete listItem;
+    Q_DELETE(listItem);
 
 	if (partsDb)
 	{
 		partsDb->close(0);
-        delete partsDb;
-		partsDb = 0;
+        Q_DELETE(partsDb);
 	}
 
     if (groupingDb)
     {
         groupingDb->close(0);
-        delete groupingDb;
-        groupingDb = 0;
+        Q_DELETE(groupingDb);
     }
 
     if (db)
     {
         db->close(0);
-        delete db;
-        db = 0;
+        Q_DELETE(db);
     }
     // 	qDebug("Database %s closed", (const char *) dbName);
 }
@@ -758,7 +754,7 @@ uchar * NewsGroup::getBinHeader(QString index)
 int NewsGroup::close()
 {
 	int ret = db->close(0);
-	delete db;
+    Q_DELETE(db);
 	return ret;
 
 }

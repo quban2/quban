@@ -392,14 +392,15 @@ void GroupList::slotDeleteSelected( )
 
 				if (selected->parent() == 0)
 				{
-				    delete selected;
+                    Q_DELETE(selected);
 				}
 				else
 				{
 					int newCatCount = selected->parent()->text(2).toInt() - 1;
 					if (newCatCount == 0)
 					{
-					    delete selected->parent();
+                        QTreeWidgetItem* ptr = selected->parent();
+                        Q_DELETE(ptr);
 					}
 					else
 					{
@@ -474,7 +475,7 @@ void GroupList::slotZeroSelected( )
 // 		ng->listItem->setText(Total_Col, QString::number(ng->unreadArticles));
 		slotSaveSettings(ng,  ng->onlyUnread(), ng->onlyComplete());
 // 		saveGroup(ng);
-		delete count;
+        Q_DELETE(count);
 	}
 }
 
@@ -667,7 +668,7 @@ void GroupList::slotUnsubscribe(QString ngName) // called externally, so only kn
 		return;
 
 	NewsGroup *ng=getNg(ngName);
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	for (int i=0; i<this->topLevelItemCount(); ++i)
 	{
@@ -676,7 +677,7 @@ void GroupList::slotUnsubscribe(QString ngName) // called externally, so only kn
 			selected = (NGListViewItem*)this->topLevelItem(i);
 		    if (selected->getNg()->getName() == ngName)
 		    {
-		    	delete selected;
+                Q_DELETE(selected);
 		    	break;
 		    }
 		}
@@ -690,7 +691,8 @@ void GroupList::slotUnsubscribe(QString ngName) // called externally, so only kn
 					int newCatCount = selected->parent()->text(2).toInt() - 1;
 					if (newCatCount == 0)
 					{
-						delete selected->parent();
+                        QTreeWidgetItem* ptr = selected->parent();
+                        Q_DELETE(ptr);
 					}
 					else
 					{
@@ -754,9 +756,9 @@ void GroupList::deleteGroup( NewsGroup *ng )
 	emit unsubscribe(groupName);
 
 	//Delete db file...
-	delete keymem;
-	delete dbFile;
-	delete dbFile2;
+    Q_DELETE(keymem);
+    Q_DELETE(dbFile);
+    Q_DELETE(dbFile2);
 }
 
 void GroupList::slotGroupProperties( )
@@ -912,7 +914,8 @@ void GroupList::slotModifyServerProperties( QStringList entries)
 	{
 		if (ng->getCategory() == "None")
 		{
-			delete ng->listItem;
+            NGListViewItem* ptr = ng->listItem;
+            Q_DELETE(ptr);
 		}
 		else
 		{
@@ -1039,7 +1042,7 @@ void GroupList::slotRemoveCategory( )
 	{
 		//Remove the item
 // 		qDebug("About to remove %s", (const char *) item->text(0));
-		delete item;
+        Q_DELETE(item);
 	}
 	else
 		QMessageBox::warning(this, tr("Error"), tr("Can only remove empty categories!"));
@@ -1113,7 +1116,7 @@ void GroupList::slotCompactDbs( )
 		uint unreadArticles=0;
 		uint totalArticles=0;
 		previous=QTime::currentTime();
-		MultiPartHeader *bh;
+        MultiPartHeader *bh = 0;
 		while (cursor->get(&key, &data, DB_NEXT) != DB_NOTFOUND  )
 		{
 			bh = new MultiPartHeader(key.get_size(), (char*)key.get_data(), (char*)data.get_data());
@@ -1121,7 +1124,7 @@ void GroupList::slotCompactDbs( )
             if (bh->getStatusIgnoreMark() == MultiPartHeader::bh_new)
 				unreadArticles++;
 			totalArticles++;
-			delete bh;
+            Q_DELETE(bh);
 			int transRet = newDb->put(0, &key, &data,0);
 			switch  (transRet) {
 				case DB_RUNRECOVERY:
@@ -1165,10 +1168,10 @@ void GroupList::slotCompactDbs( )
 	    QByteArray ba4 = ng->getName().toLocal8Bit();
 	    const char *c_str4 = ba4.data();
 		tempDb->remove(c_str4,0, 0);
-		delete tempDb;
+        Q_DELETE(tempDb);
 
 		newDb->close(0);
-		delete newDb;
+        Q_DELETE(newDb);
 
 
 		tempDb=new Db(dbenv,0);
@@ -1178,20 +1181,20 @@ void GroupList::slotCompactDbs( )
 	    const char *c_str3 = ba3.data();
 		tempDb->rename(c_str2, 0, c_str3, 0);
 
-		delete tempDb;
+        Q_DELETE(tempDb);
         ng->open();
 
         quban->getLogEventList()->logEvent(tr("Successfully compacted newsgroup ") + ng->getAlias());
 	}
 
-	delete [] keymem;
-	delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 
 	qpd->setValue(100);
 
 	logFile.close();
 
-	delete qpd;
+    Q_DELETE(qpd);
 }
 
 void GroupList::slotSaveSettings( NewsGroup *ng, bool unread, bool complete)

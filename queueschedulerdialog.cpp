@@ -162,14 +162,14 @@ QueueSchedulerDialog::~QueueSchedulerDialog()
 {
 	pbList.clear();
 
-	delete leftArrow;
-	delete leftC;
+    Q_DELETE(leftArrow);
+    Q_DELETE(leftC);
 
-	delete rightArrow;
-	delete rightC;
+    Q_DELETE(rightArrow);
+    Q_DELETE(rightC);
 
 	if (queueSchedule)  // It's a copy ...
-		delete queueSchedule;
+        Q_DELETE(queueSchedule);
 }
 
 void QueueSchedulerDialog::reject()
@@ -282,7 +282,7 @@ void QueueSchedulerDialog::timeSet()
 				model->appendRow( rowData );
 				overviewTable->selectRow(model->rowCount() - 1);
 
-				delete[] modelItem;
+                Q_DELETE_ARRAY(modelItem);
 
 				if (speedSpinBox2->value() > 0)
 					button->setStyleSheet(orangeButton);
@@ -363,7 +363,7 @@ void QueueSchedulerDialog::timeSet()
 					// QItemSelection dummy;
 					// slot_SelectionChanged(dummy, dummy);
 
-				    delete[] modelItem;
+                    Q_DELETE_ARRAY(modelItem);
 
 					for (int i=startIndex; i <=buttonIndex; ++i )
 					{
@@ -386,8 +386,7 @@ void QueueSchedulerDialog::addSchedule()
 
 void QueueSchedulerDialog::addSchedule(QString & newScheduleN)
 {
-	if (queueSchedule)
-		delete queueSchedule;
+    Q_DELETE(queueSchedule);
 
 	queueSchedule = new QueueSchedule(queueScheduler->getDb(), newScheduleN, queueScheduler);
 	queueScheduler->addNewSchedule(*queueSchedule);
@@ -420,8 +419,7 @@ void QueueSchedulerDialog::saveAsSchedule()
 void QueueSchedulerDialog::saveAsSchedule(QString & saveAsSchedule)
 {
 	QueueSchedule* thisSchedule = new QueueSchedule(*queueSchedule);
-	if (queueSchedule)
-		delete queueSchedule;
+    Q_DELETE(queueSchedule);
 
 	queueSchedule = thisSchedule;
 	queueSchedule->setName(saveAsSchedule);
@@ -569,7 +567,7 @@ void QueueSchedulerDialog::buildScreen(QueueSchedule* newSchedule)
 	    }
 	}
 
-	delete[] modelItem;
+    Q_DELETE_ARRAY(modelItem);
 
 	if (row)
 	{
@@ -895,7 +893,7 @@ void QueueSchedulerDialog::ScheduleChanged(const QString &newText)
 			changeDetected = false;
 		}
 
-		delete queueSchedule;
+        Q_DELETE(queueSchedule);
 	}
 
 	QueueSchedule* thisSchedule = queueScheduler->getSchedule(newText);

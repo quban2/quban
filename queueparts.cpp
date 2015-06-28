@@ -266,21 +266,21 @@ Thread::~Thread()
     if (speedTimer)
     {
         speedTimer->stop();
-        delete speedTimer;
+        Q_DELETE(speedTimer);
     }
     if (idleTimer)
     {
         idleTimer->stop();
-        delete idleTimer;
+        Q_DELETE(idleTimer);
     }
     if (retryTimer)
     {
         retryTimer->stop();
-        delete retryTimer;
+        Q_DELETE(retryTimer);
     }
 
-    delete nntpT;
-    delete threadBytes;
+    Q_DELETE(nntpT);
+    Q_DELETE(threadBytes);
 }
 
 void Thread::closeCleanly()
@@ -564,7 +564,7 @@ void QUpdItem::update(int partId, int partial, int total, int)
 QUpdItem::~QUpdItem()
 {
     listItem->setSelected(false);
-    delete listItem;
+    Q_DELETE(listItem);
 }
 
 bool QUpdItem::finished(int partId)
@@ -725,7 +725,7 @@ int QGroupLimitsItem::error(int partId, QString & error)
 QGroupLimitsItem::~QGroupLimitsItem()
 {
     listItem->setSelected(false);
-    delete listItem;
+    Q_DELETE(listItem);
 }
 
 void QGroupLimitsItem::comError(int partId)
@@ -801,7 +801,7 @@ void QListItem::update(int, int, int, int)
 
 QListItem::~QListItem()
 {
-    delete listItem;
+    Q_DELETE(listItem);
 }
 
 QPostItem::QPostItem(QTreeWidget * parent, int id, QString subj, QString rfn,
@@ -1121,10 +1121,10 @@ int QPostItem::error(int partId, QString & error)
 
 QPostItem::~QPostItem()
 {
-    delete listItem;
+    Q_DELETE(listItem);
     if (post)
     {
-        ;//delete post; // Why has this started core dumping ????
+        ;//Q_DELETE(post); // Why has this started core dumping ????
     }
 }
 
@@ -1282,7 +1282,7 @@ int QExtensionsItem::error(int partId, QString & error)
 QExtensionsItem::~QExtensionsItem()
 {
     listItem->setSelected(false);
-    delete listItem;
+    Q_DELETE(listItem);
 }
 
 void QExtensionsItem::comError(int partId)

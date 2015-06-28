@@ -189,8 +189,8 @@ void QNzb::slotGroupFullNzb()
 										else
 											mph->missingParts = mph->missingParts - 1;
 
-										delete [] phead;
-										delete h;
+                                        Q_DELETE_ARRAY(phead);
+                                        Q_DELETE(h);
 									}
 								}
 								segmentsSubNode = segmentsSubNode.nextSibling();

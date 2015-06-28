@@ -241,7 +241,7 @@ void NntpThread::run()
 
             result = getArticle();
             saveFile->close();
-            delete saveFile;
+            Q_DELETE(saveFile);
             saveFile=0;
             break;
 
@@ -635,7 +635,7 @@ bool NntpThread::waitLine( )
                 char * newbuff= new char[bufferSize*2];
                 memcpy(newbuff, buffer, bufferSize);
                 watermark=newbuff+bufferSize;
-                delete [] buffer;
+                Q_DELETE_ARRAY(buffer);
                 buffer = newbuff;
                 bufferSize *= 2;
             }
@@ -738,7 +738,7 @@ bool NntpThread::waitBigLine( )
                 char * newbuff= new char[bigBufferSize*2];
                 memcpy(newbuff, bigBuffer, bigBufferSize);
                 bigWatermark=newbuff+bigBufferSize;
-                delete [] bigBuffer;
+                Q_DELETE_ARRAY(bigBuffer);
                 bigBuffer = newbuff;
                 bigBufferSize *= 2;
             }
@@ -1517,7 +1517,7 @@ bool NntpThread::getXover(QString group)
 
     for (int k=0; k<NUM_HEADER_WORKERS; ++k)
     {
-        delete headerReadWorker[k];
+        Q_DELETE(headerReadWorker[k]);
     }
 
     if (cancel)
@@ -1543,13 +1543,13 @@ bool NntpThread::saveGroup()
     if ((tret = job->gdb->put(NULL, &groupkey, &groupdata, 0)) != 0)
     {
         qDebug() << "Error updating newsgroup: %d" << tret;
-        delete [] tempng;
+        Q_DELETE_ARRAY(tempng);
         return false;
     }
 
     job->gdb->sync(0);
 
-    delete [] tempng;
+    Q_DELETE_ARRAY(tempng);
 
     return true;
 }
@@ -1588,7 +1588,7 @@ bool NntpThread::m_readLine()
             //     		qDebug("Line Buffer overflow");
             // 			qDebug("LineSize: %d", lineSize);
             lineBufSize=lineSize+1000;
-            delete [] line;
+            Q_DELETE_ARRAY(line);
             line=new char[lineBufSize];
             memset(line, 0, sizeof(lineBufSize));
         }
@@ -1851,7 +1851,7 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
         ret=db->put(NULL, &listkey, &listdata, 0);
         if (ret != 0)
             qDebug("Error inserting into groups db: %d", ret);
-        delete p;
+        Q_DELETE_ARRAY(p);
         return ret;
 
     } else if (ret == 0) {
@@ -1870,8 +1870,8 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
         ret=db->put(NULL, &listkey, &listdata, 0);
         if (ret != 0)
             qDebug("Error updating group db: %d", ret);
-        delete [] p;
-        delete g;
+        Q_DELETE_ARRAY(p);
+        Q_DELETE(g);
         return ret;
     }
     else
@@ -1909,7 +1909,7 @@ void NntpThread::freeSocket()
             emit unregisterSocket(kes);
         }
         kes->close();
-        delete kes;
+        Q_DELETE(kes);
         kes = 0;
 
         qDebug() << "Deleted socket";
@@ -2131,19 +2131,15 @@ NntpThread::NntpThread(uint serverId, uint _threadId, uint* cb, bool _isRatePeri
 
 NntpThread::~ NntpThread( )
 {
-    delete [] line;
-    delete [] buffer;
-    if (bigBuffer)
-        delete [] bigBuffer;
+    Q_DELETE_ARRAY(line);
+    Q_DELETE_ARRAY(buffer);
+    Q_DELETE_ARRAY(bigBuffer);
 
-    if (inflatedBuffer)
-        delete [] inflatedBuffer;
+    Q_DELETE_ARRAY(inflatedBuffer);
 
-    if (bufferLine)
-        delete [] bufferLine;
+    Q_DELETE_ARRAY(bufferLine);
 
-    if (saveFile)
-        delete saveFile;
+    Q_DELETE(saveFile);
 
     if (kes)
     {
@@ -2178,7 +2174,7 @@ void NntpThread::closeConnection(bool finally)
         if (kes)
         {
             kes->close();
-            delete kes;
+            Q_DELETE(kes);
             kes = 0;
         }
 
@@ -2256,7 +2252,7 @@ void NntpThread::tResume( )
     if (kes)
     {
         kes->close();
-        delete kes;
+        Q_DELETE(kes);
         kes = 0;
     }
 

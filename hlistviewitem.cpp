@@ -80,8 +80,8 @@ HeaderTreeItem::~HeaderTreeItem()
 	childItems.clear();
 	itemData->clear();
 	iconData->clear();
-	delete itemData;
-    //delete iconData;
+    Q_DELETE(itemData);
+    //Q_DELETE(iconData);
 }
 
 void HeaderTreeItem::appendChild(HeaderTreeItem *item)
@@ -116,8 +116,8 @@ bool HeaderTreeItem::removeChildren(int position, int count)
     if (position < 0 || position + count > childItems.size())
         return false;
 
-    for (int row = 0; row < count; ++row)
-        delete childItems.takeAt(position);
+    qDeleteAll(childItems);
+    childItems.clear();
 
     return true;
 }
@@ -196,7 +196,7 @@ HeaderTreeModel::HeaderTreeModel(Servers *_servers, Db* _db,  Db* _partsDb, Db* 
 
 HeaderTreeModel::~HeaderTreeModel()
 {
-	delete rootItem;
+    Q_DELETE(rootItem);
     qDeleteAll(iconMap);
     fromList.clear();
 }
@@ -251,7 +251,7 @@ quint16 HeaderTreeModel::updateFirstIcon(QVector<QIcon*>** iconData, quint32 new
     if (iconMap.contains(newIconKey))
     {
         *iconData = iconMap.value(newIconKey);
-        delete newIconData;
+        Q_DELETE(newIconData);
         //qDebug() << "Retrieved from List\n";
     }
     else
@@ -561,7 +561,7 @@ void HeaderTreeModel::setupTopLevelItem(HeaderBase* hb)
     // iconKey will now hold a value that maps to this vector of icons
     if (iconMap.contains(iconKey))
     {
-        delete iconData;
+        Q_DELETE(iconData);
         iconData = iconMap.value(iconKey);
         //qDebug() << "Re-using icons !!";
     }
@@ -653,7 +653,7 @@ void HeaderTreeModel::setupTopLevelGroupItem(HeaderGroup* hg)
     // iconKey will now hold a value that maps to this vector of icons
     if (iconMap.contains(iconKey))
     {
-        delete iconData;
+        Q_DELETE(iconData);
         iconData = iconMap.value(iconKey);
         //qDebug() << "Re-using icons !!";
     }
@@ -887,7 +887,7 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
             // iconKey will now hold a value that maps to this vector of icons
             if (iconMap.contains(iconKey))
             {
-                delete iconData;
+                Q_DELETE(iconData);
                 iconData = iconMap.value(iconKey);
                 //qDebug() << "Re-using icons !!";
             }
@@ -896,12 +896,12 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
 
             item->appendChild(new HeaderTreeItem(columnData, iconData, QString::null, hb->getStatusIgnoreMark(), iconKey, 0, HeaderTreeItem::HEADER, item));          
 
-            delete hb;
+            Q_DELETE(hb);
         }
 
         endInsertRows();
 
-        delete hg;
+        Q_DELETE(hg);
     }
 }
 
@@ -1033,7 +1033,7 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
                 // iconKey will now hold a value that maps to this vector of icons
                 if (iconMap.contains(iconKey))
                 {
-                    delete iconData;
+                    Q_DELETE(iconData);
                     iconData = iconMap.value(iconKey);
                     //qDebug() << "Re-using icons !!";
                 }
@@ -1042,7 +1042,7 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
 
                 item->appendChild(new HeaderTreeItem(columnData, iconData, QString::null, mph->getStatusIgnoreMark(), iconKey, 0, HeaderTreeItem::PART, item));
 
-                delete h;
+                Q_DELETE(h);
 
                 ret = cursorp->get(&key, &data, DB_NEXT_DUP);
             }
@@ -1055,7 +1055,7 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
             qDebug() << "Key: " << mph->multiPartKey;
         }
 
-        delete mph;
+        Q_DELETE(mph);
     }
 }
 

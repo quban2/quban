@@ -75,7 +75,7 @@ Db* QubanDbEnv::openDb(const char* dbName, bool create, int* ret)
 		if ((*ret = thisDb->open(NULL, dbName, NULL, DB_BTREE, DB_CREATE | DB_THREAD, 0644)!=0))
 		{
 			quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Error creating ") + dbName + " db! : " + g_dbenv->strerror(*ret));
-			delete thisDb;
+            Q_DELETE(thisDb);
 			thisDb = 0;
 		}
 	}
@@ -84,7 +84,7 @@ Db* QubanDbEnv::openDb(const char* dbName, bool create, int* ret)
 		if ((*ret = thisDb->open(NULL, dbName, NULL, DB_BTREE, DB_THREAD, 0644)!=0))
 		{
 			quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Error opening ") + dbName + " db! : " + g_dbenv->strerror(*ret));
-			delete thisDb;
+            Q_DELETE(thisDb);
 			thisDb = 0;
 		}
 	}
@@ -101,7 +101,7 @@ Db* QubanDbEnv::openDb(const char* dbMasterName, const char* dbName, bool create
 		if ((*ret = thisDb->open(NULL, dbMasterName, dbName, DB_BTREE, DB_CREATE | DB_THREAD, 0644)!=0))
 		{
 			quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Error creating ") + dbName + " db! : " + g_dbenv->strerror(*ret));
-			delete thisDb;
+            Q_DELETE(thisDb);
 			thisDb = 0;
 		}
 	}
@@ -110,7 +110,7 @@ Db* QubanDbEnv::openDb(const char* dbMasterName, const char* dbName, bool create
 		if ((*ret = thisDb->open(NULL, dbMasterName, dbName, DB_BTREE, DB_THREAD, 0644)!=0))
 		{
 			quban->getLogAlertList()->logMessage(LogAlertList::Error, tr("Error opening ") + dbName + " db! : " + g_dbenv->strerror(*ret));
-			delete thisDb;
+            Q_DELETE(thisDb);
 			thisDb = 0;
 		}
 	}
@@ -163,7 +163,7 @@ void QubanDbEnv::createDbs()
 	{
 		saveVersionData(versionDb);
 		versionDb->close(0);
-		delete versionDb;
+        Q_DELETE(versionDb);
 	}
 	else
 	{
@@ -669,13 +669,13 @@ void QubanDbEnv::migrateDbs()
             if (ret != 0)
                 qDebug("Return from cursor put: %s", g_dbenv->strerror(ret));
 
-            delete tempg;
+            Q_DELETE(tempg);
             qDebug("End of cycle");
         }
 
         cursor->close();
         groupDb->close(0);
-        delete groupDb;
+        Q_DELETE(groupDb);
 
         groupDbVersion = GROUPDB_VERSION;
         saveVersionData(versionDb);
@@ -696,6 +696,6 @@ void QubanDbEnv::migrateDbs()
 	saveVersionData(versionDb);
 
 	versionDb->close(0);
-	delete versionDb;
+    Q_DELETE(versionDb);
 }
 

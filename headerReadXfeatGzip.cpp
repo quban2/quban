@@ -80,7 +80,7 @@ void HeaderReadXFeatGzip::startHeaderRead()
                 qDebug() << "Abandoning header download";
                 error=100; // Unzip_Err
                 errorString=tr("failed to inflate zipped data");
-                delete ba;
+                Q_DELETE(ba);
 
                 busyMutex.unlock();
 
@@ -88,7 +88,7 @@ void HeaderReadXFeatGzip::startHeaderRead()
             }
             else
             {
-                delete ba;
+                Q_DELETE(ba);
                 continue;
             }
         }
@@ -112,7 +112,7 @@ void HeaderReadXFeatGzip::startHeaderRead()
                 if (lineSize > lineBufSize)
                 {
                     lineBufSize=lineSize+1000;
-                    delete [] line;
+                    Q_DELETE_ARRAY(line);
                     line=new char[lineBufSize];
                     memset(line, 0, sizeof(lineBufSize));
                 }
@@ -138,7 +138,7 @@ void HeaderReadXFeatGzip::startHeaderRead()
                         qDebug() << "Error inserting header!";
                         error = 90; //DbWrite_Err
                         errorString=tr("error inserting header");
-                        delete ba;
+                        Q_DELETE(ba);
                         busyMutex.unlock();
 
                         return;
@@ -176,7 +176,7 @@ void HeaderReadXFeatGzip::startHeaderRead()
 
         } while (lineSize > 0);
 
-        delete ba;
+        Q_DELETE(ba);
     }
 
     cacheFlush(0);

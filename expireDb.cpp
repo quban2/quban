@@ -101,8 +101,8 @@ void ExpireDb::expireList()
 
 	running = false;
 
-	delete [] keymem;
-	delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 }
 
 bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
@@ -183,7 +183,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 	quint16 hostId;
 
 	bool updateRequired = false;
-	char *p;
+    char *p = 0;
 
 	if (m_cancel)
 	{
@@ -198,7 +198,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 	HeaderBase* hb = 0;
 	MultiPartHeader *mph = 0;
 	SinglePartHeader *sph = 0;
-	char* dataBlock;
+    char* dataBlock = 0;
 	QMap<quint16, quint64> serverLowest; // server, part
 
 	int i =0;
@@ -346,7 +346,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 						if ((retCode = cursorp->put(&key, &data, DB_CURRENT)) != 0)
 						{
 							qDebug() << "Failed to modify db record. Return code = " << retCode;
-							delete [] p;
+                            Q_DELETE_ARRAY(p);
 							cursorp->close();
 							emit updateJob(JobList::Expire, JobList::Finished_Fail, jId);
 							return false;
@@ -354,7 +354,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 
 						data.set_ulen(bufSize);
 						data.set_data(datamem);
-						delete [] p;
+                        Q_DELETE_ARRAY(p);
 
 						serverLowest = hb->getServerLowest();
 						for (lit=serverLowest.begin(); lit!=serverLowest.end(); ++lit)
@@ -397,7 +397,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 				}
 			}
 
-			delete hb;
+            Q_DELETE(hb);
 
 			if (commitPoint > 1000)
 			{
@@ -415,7 +415,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 			data.set_ulen(data.get_size()+1000);
 			bufSize = data.get_size()+1000;
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 

@@ -135,12 +135,12 @@ bool Header::dbSave()
 
 	if ((db->put(0, &key, &data, 0)) != 0)
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		return false;
 	}
 	else
 	{
-		delete[] p;
+        Q_DELETE_ARRAY(p);
 		db->sync(0);
 		return true;
 	}

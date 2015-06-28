@@ -174,20 +174,20 @@ QMgr::~QMgr()
 		{
 			tit.value()->kill();
 			// MD TODO tit.value()->closeCleanly();
-			delete tit.value();
+            Q_DELETE(tit.value());
 		}
 		qit.value().clear();
 	}
 	threads.clear();
 
 	autoFileDb->close(0);
-	delete autoFileDb;
+    Q_DELETE(autoFileDb);
 
 	pendDb->close(0);
-	delete pendDb;
+    Q_DELETE(pendDb);
 
 	unpackDb->close(0);
-	delete unpackDb;
+    Q_DELETE(unpackDb);
 
 	if (expireDb)
 	{
@@ -198,7 +198,7 @@ QMgr::~QMgr()
 			emit quitExpireDb();
 			expireDbThread.wait(1000); // give the thread one second
 		}
-		delete expireDb;
+        Q_DELETE(expireDb);
 	}
 
 	if (bulkDelete)
@@ -210,7 +210,7 @@ QMgr::~QMgr()
 			emit quitBulkDelete();
 			bulkDeleteThread.wait(1000); // give the thread one second
 		}
-		delete bulkDelete;
+        Q_DELETE(bulkDelete);
 	}
 
 	if (bulkLoad)
@@ -222,7 +222,7 @@ QMgr::~QMgr()
 			emit quitBulkLoad();
 			bulkLoadThread.wait(1000); // give the thread one second
 		}
-		delete bulkLoad;
+        Q_DELETE(bulkLoad);
 	}
 
     if (bulkGroup)
@@ -234,10 +234,10 @@ QMgr::~QMgr()
             emit quitBulkGroup();
             bulkGroupThread.wait(1000); // give the thread one second
         }
-        delete bulkGroup;
+        Q_DELETE(bulkGroup);
     }
 
-	delete rateController;
+    Q_DELETE(rateController);
 
 	if (saveQThread.isRunning())
 	{
@@ -245,13 +245,13 @@ QMgr::~QMgr()
 		emit quitSaveQ();
 		saveQThread.wait(2000); // give the thread two seconds
 	}
-	delete saveQItems;
+    Q_DELETE(saveQItems);
 
 	qDb->close(0);
-	delete qDb;
+    Q_DELETE(qDb);
 
-    delete qnzb;
-	delete nzbGroup;
+    Q_DELETE(qnzb);
+    Q_DELETE(nzbGroup);
 
 	if (decodeManagerThread.isRunning())
 	{
@@ -259,7 +259,7 @@ QMgr::~QMgr()
 		emit quitDecode();
 		decodeManagerThread.wait(2000); // give the thread two seconds
 	}
-	delete decodeManager;
+    Q_DELETE(decodeManager);
 
 	// free any group containers
 	qDeleteAll(autoFiles);
@@ -496,7 +496,7 @@ void QMgr::startBulkGrouping(NewsGroup* _ng)
 
 quint64 QMgr::startBulkDelete(NewsGroup* _ng, HeaderList* headerList, QList<QString>* mphList, QList<QString>* sphList)
 {
-	// All bulk delete requests go through here ..
+    // All bulk delete requests go through here ..
 
 	bulkSeq++;
 
@@ -2974,7 +2974,7 @@ void QMgr::slotDeleteThread(int serverId)
 			//can safely delete the thread...
 			deleted = it.key();
 
-			delete (it.value()); //delete thread
+            Q_DELETE((it.value())); //delete thread
 			threads[serverId].erase(it);
 
 			//Now move other threads...
@@ -3370,7 +3370,7 @@ void QMgr::checkQueue()
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -3401,7 +3401,7 @@ void QMgr::checkQueue()
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -3427,7 +3427,7 @@ void QMgr::checkQueue()
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -3480,8 +3480,8 @@ void QMgr::checkQueue()
 
 						cancelGroupItems();
 
-						delete [] keymem;
-						delete [] datamem;
+                        Q_DELETE_ARRAY(keymem);
+                        Q_DELETE_ARRAY(datamem);
 
 						return;
 						break;
@@ -3513,7 +3513,7 @@ void QMgr::checkQueue()
 			datamem=new uchar[data.get_size()+1000];
 			data.set_ulen(data.get_size()+1000);
 			data.set_data(datamem);
-			delete [] p;
+            Q_DELETE_ARRAY(p);
 		}
 	}
 
@@ -3525,8 +3525,8 @@ void QMgr::checkQueue()
 	}
 	cursor->close();
 
-	delete [] keymem;
-	delete [] datamem;
+    Q_DELETE_ARRAY(keymem);
+    Q_DELETE_ARRAY(datamem);
 
 	if (go == false) // nothing to load
 	{
@@ -3604,7 +3604,7 @@ void QMgr::checkQueue()
 			}
 
 			// 		qDebug() << "Reloading id: " << it.key() << " subj: " << bh->getSubj();
-            delete [] p2;
+            Q_DELETE_ARRAY(p2);
 			if (it.value()->group == "nzb")
 			{
 				createPostItemFromQ(it.key(), it.value(), hb, nzbGroup);
@@ -4671,7 +4671,7 @@ void QMgr::removeAutoGroup(GroupManager* thisGroup)
 		pendingHeaders.remove(thisGroup->getGroupId(), (*it));
 		(*it)->dbDelete();
         (*it)->deleteHeader();
-		delete (*it);
+        Q_DELETE((*it));
 	}
 
 	// Finally get rid of the group
@@ -4725,7 +4725,7 @@ void QMgr::removeAutoGroupFiles(GroupManager* thisGroup, bool keepGroupRecord)
 				(*it)->dbDelete();
 			}
 
-			delete (*it);
+            Q_DELETE((*it));
 		}
 	}
 }

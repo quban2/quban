@@ -71,11 +71,11 @@ ServersList::~ServersList()
 {
     qDebug() << "In ServersList::~ServersList";
 
-    delete activeIcon;
-    delete activePausedIcon;
-    delete passiveIcon;
-    delete passivePausedIcon;
-    delete dormantIcon;
+    Q_DELETE(activeIcon);
+    Q_DELETE(activePausedIcon);
+    Q_DELETE(passiveIcon);
+    Q_DELETE(passivePausedIcon);
+    Q_DELETE(dormantIcon);
 
     QMapIterator<int, ThreadView> i(serverThreads);
     while (i.hasNext())
@@ -90,15 +90,14 @@ ServersList::~ServersList()
             if (j.value())
             {
                 if (j.value()->item)
-                    delete j.value()->item;
+                    Q_DELETE(j.value()->item);
 
-                delete j.value();
+                Q_DELETE_NO_LVALUE(j.value());
             }
         }
     }
 
-    if (serverSpeedTimer)
-        delete serverSpeedTimer;
+    Q_DELETE(serverSpeedTimer);
 
     serverThreads.clear();
 }
@@ -353,7 +352,7 @@ void ServersList::m_addServer( NntpHost *nh )
  	parent->setIcon(0, *icon);
  	this->addTopLevelItem(parent);
 
- 	delete icon;
+    Q_DELETE(icon);
 
     nh->setDb(serverDb);
 
@@ -453,7 +452,7 @@ void ServersList::m_saveServer(NntpHost* nh)
 	data.set_data(datamem);
 	char *p=nh->saveHost();
 	memcpy(datamem, p, nh->getSize());
-    delete [] p;
+    Q_DELETE_ARRAY(p);
 
 	qDebug() << "Saving flags of " << nh->getServerFlags() << " for " << nh->getName();
 
@@ -516,7 +515,7 @@ void ServersList::slotDeleteServer()
 
 		//4)
 		qDebug("phase 4");
-		delete selected;
+        Q_DELETE(selected);
 	}
 }
 
@@ -562,7 +561,7 @@ void ServersList::slotDeleteDeletedServer(quint16 serverId)
 	//Delete the server from the
 	// - servers' list, container and db.
 
-	delete (*servers)[serverId];
+    Q_DELETE((*servers)[serverId]);
 	servers->remove(serverId);
 	Dbt key;
 	memset(&key, 0, sizeof(key));
@@ -840,7 +839,7 @@ void ServersList::slotModifyServer(NntpHost * nh)
     quban->getLogEventList()->logEvent(tr("Successfully updated server ") + nh->getName());
 
     nh->setServerLimitEnabled(false); // to prevent save by destructor ...
-	delete nh;
+    Q_DELETE(nh);
 }
 
 void ServersList::slotDisableServer()
@@ -954,8 +953,8 @@ void ServersList::slotThreadDeleted( int serverId , int threadId)
     {
 		(*servers)[serverId]->setWorkingThreads((*servers)[serverId]->getWorkingThreads() - 1);
 	}
-	delete serverThreads[serverId][threadId]->item;
-	delete serverThreads[serverId][threadId];
+    Q_DELETE(serverThreads[serverId][threadId]->item);
+    Q_DELETE(serverThreads[serverId][threadId]);
 	serverThreads[serverId].remove(threadId);
 
 	//Now reorder the queue...not anymore

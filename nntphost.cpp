@@ -141,7 +141,7 @@ void NntpHost::loadHost( char *p)
         QByteArray ba(i, certSize);
         QSslCertificate* cert = new QSslCertificate(ba);
         sslCertificate = *cert;
-        delete cert;
+        Q_DELETE(cert);
     }
 
 	workingThreads=0;

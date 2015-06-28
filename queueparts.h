@@ -336,7 +336,7 @@ public:
 	virtual void comError(int partId);
 
 	PartNumMap& getServerArticleNos() { return serverArticleNos; }
-	void deletePost() { delete post; }
+    void deletePost() { Q_DELETE(post); }
 	bool over() { return overwriteExisting; }
 	bool dFailed() { return deleteFailed; }
 	void setTotalLines(uint tl) { totalPostLines = tl; }

@@ -53,7 +53,7 @@ void LogAlertList::logMessage(int type, QString description)
     alert->setText(1, description);
     alertTreeWidget->insertTopLevelItem(0, alert);
 
- 	delete icon;
+    Q_DELETE(icon);
 
     alertTreeWidget->resizeColumnToContents(0);
     alertTreeWidget->setColumnWidth(0, alertTreeWidget->columnWidth(0) + 6);

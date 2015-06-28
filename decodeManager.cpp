@@ -332,8 +332,7 @@ bool DecodeManager::decode(QPostItem *postItem)
 		}
 	}
 
-	if (decoder)
-		delete decoder;
+    Q_DELETE(decoder);
 
 	if (diskError)
 		return false;

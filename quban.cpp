@@ -94,33 +94,30 @@ Quban::~Quban()
 	if (agroupDb)
 	{
 		agroupDb->close(0);
-		delete agroupDb;
+        Q_DELETE(agroupDb);
 	}
 
 	qDeleteAll(sWidgets);
 	sWidgets.clear();
 
-	if (qTWidget)
-	    delete qTWidget;
+    Q_DELETE(qTWidget);
 
-	if (rateControlInfo)
-		delete rateControlInfo;
+    Q_DELETE(rateControlInfo);
 
-	if (qMgr)
-	    delete qMgr;
+    Q_DELETE(qMgr);
 
 	if (servers)
 	{
 		qDeleteAll(*servers);
 		servers->clear();
 
-		delete servers;
+        Q_DELETE(servers);
 	}
 
 	if (groupDb)
 	{
 		groupDb->close(0);
-		delete groupDb;
+        Q_DELETE(groupDb);
 	}
 
 	if (serversList)
@@ -129,7 +126,7 @@ Quban::~Quban()
 		if (serverDb)
 		{
 			serverDb->close(0);
-			delete serverDb;
+            Q_DELETE(serverDb);
 		}
 	}
 
@@ -151,45 +148,42 @@ Quban::~Quban()
 				HeaderList* view = (HeaderList *)tabWidget_2->widget(mainTabIndex);
 				view->prepareToClose(false);
 				tabWidget_2->removeTab(mainTabIndex);
-				delete view;
+                Q_DELETE(view);
 			}
 			else
 			{
 				FileViewer* view = (FileViewer *)tabWidget_2->widget(mainTabIndex);
 				tabWidget_2->removeTab(mainTabIndex);
-				delete view;
+                Q_DELETE(view);
 			}
 		}
 	}
 
 	if (completeIcon)
 	{
-		delete completeIcon;
-		delete incompleteIcon;
-		delete articleNewIcon;
-		delete articleReadIcon;
-		delete articleunreadIcon;
-		delete binaryIcon;
-		delete tickIcon;
-		delete crossIcon;
+        Q_DELETE(completeIcon);
+        Q_DELETE(incompleteIcon);
+        Q_DELETE(articleNewIcon);
+        Q_DELETE(articleReadIcon);
+        Q_DELETE(articleunreadIcon);
+        Q_DELETE(binaryIcon);
+        Q_DELETE(tickIcon);
+        Q_DELETE(crossIcon);
 	}
 
-	if (aGroups)
-	    delete aGroups;
+    Q_DELETE(aGroups);
 
 	if (schedDb)
 	{
 		schedDb->close(0);
-		delete schedDb;
+        Q_DELETE(schedDb);
 	}
 
-	if (queueScheduler)
-	    delete queueScheduler;
+    Q_DELETE(queueScheduler);
 
-    if (qubanDbEnv)
-        delete qubanDbEnv;
+    Q_DELETE(qubanDbEnv);
 
-	delete settings;
+    Q_DELETE(settings);
 }
 
 void Quban::startup()
@@ -1086,7 +1080,7 @@ void Quban::slotUnsubscribe(QString groupName)
 		{
 			HeaderList* view = (HeaderList *)tabWidget_2->widget(i);
 			tabWidget_2->removeTab(i);
-			delete view;
+            Q_DELETE(view);
 		}
 		else
 		{
@@ -1152,7 +1146,7 @@ void Quban::slotCloseHead()
 	if (view->prepareToClose(true) == true)
 	{
 		tabWidget_2->removeTab(mainTabIndex);
-		delete view;
+        Q_DELETE(view);
 
         tabWidget_2->setCurrentIndex(0);
 
@@ -1173,7 +1167,7 @@ void Quban::slotCloseHeadAndMark()
 
 	view->closeAndMark();
 	tabWidget_2->removeTab(mainTabIndex);
-	delete view;
+    Q_DELETE(view);
 
     tabWidget_2->setCurrentIndex(0);
 
@@ -1193,7 +1187,7 @@ void Quban::slotCloseHeadAndNoMark()
 
 	view->closeAndNoMark();
 	tabWidget_2->removeTab(mainTabIndex);
-	delete view;
+    Q_DELETE(view);
 
     tabWidget_2->setCurrentIndex(0);
 
@@ -1220,7 +1214,7 @@ void Quban::slotCloseView()
     	view->deleteFile();
 
 	tabWidget_2->removeTab(mainTabIndex);
-	delete view;
+    Q_DELETE(view);
 }
 
 void Quban::closeAndDelete()
@@ -1228,14 +1222,14 @@ void Quban::closeAndDelete()
 	FileViewer* view = (FileViewer *)tabWidget_2->widget(mainTabIndex);
 	view->deleteFile();
 	tabWidget_2->removeTab(mainTabIndex);
-	delete view;
+    Q_DELETE(view);
 }
 
 void Quban::closeNoDelete()
 {
 	FileViewer* view = (FileViewer *)tabWidget_2->widget(mainTabIndex);
 	tabWidget_2->removeTab(mainTabIndex);
-	delete view;
+    Q_DELETE(view);
 }
 
 void Quban::slotCloseAvail()
@@ -1245,7 +1239,7 @@ void Quban::slotCloseAvail()
 	tabWidget_2->removeTab(mainTabIndex);
 	actionSubscribe_to_newsgroup->setEnabled(false);
     tabWidget_2->setCurrentIndex(0);
-    delete aGroupsView;
+    Q_DELETE(aGroupsView);
     aGroupsView = 0;
 //	aGroups->setVisible(false);
 }
@@ -1395,13 +1389,13 @@ void Quban::closeCurrentTab()
 	    HeaderList* view = (HeaderList *)tabWidget_2->widget(activeIndex);
 	    tabWidget_2->removeTab(activeIndex);
 	    view->closeAndNoMark();
-	    delete view;
+        Q_DELETE(view);
 
         tabWidget_2->setCurrentIndex(0);
 	}
     else if ( tabWidget_2->tabText(activeIndex) == tr("Available Newsgroups"))
     {
-        delete aGroupsView;
+        Q_DELETE(aGroupsView);
         aGroupsView = 0;
         tabWidget_2->setCurrentIndex(0);
         tabWidget_2->removeTab(activeIndex);
@@ -1485,7 +1479,7 @@ void Quban::slotServTypeChanged(int significantChange, int serverId, int newServ
 		qDebug() << "Dormant";
 		statusBar()->removeWidget(sWidgets[serverId]);
 		sWidgets.remove(serverId);
-		delete sWidgets[serverId];
+        Q_DELETE(sWidgets[serverId]);
 	}
     else if (significantChange)
 	{
@@ -1513,7 +1507,7 @@ void Quban::slotDeleteServerMessage()
 void Quban::slotDeleteServerWidget(quint16 serverId)
 {
 	statusBar()->removeWidget(sWidgets[serverId]);
-	delete sWidgets[serverId];
+    Q_DELETE(sWidgets[serverId]);
 	sWidgets.remove(serverId);
 	statusBar()->clearMessage();
 }
@@ -1598,7 +1592,7 @@ void Quban::slotRateSpeedChanged(qint64 newSpeed)
 	if (rateControlInfo)
 	{
 		statusBar()->removeWidget(rateControlInfo);
-		delete rateControlInfo;
+        Q_DELETE(rateControlInfo);
 		rateControlInfo = 0;
 	}
 
@@ -1736,12 +1730,12 @@ QStatusServerWidget::QStatusServerWidget( QString serverName, int serverType, bo
 
 QStatusServerWidget::~QStatusServerWidget()
 {
-    delete activeIcon;
-    delete activePausedIcon;
-    delete passiveIcon;
-    delete passivePausedIcon;
-    delete dormantIcon;
-    delete poorlyIcon;
+    Q_DELETE(activeIcon);
+    Q_DELETE(activePausedIcon);
+    Q_DELETE(passiveIcon);
+    Q_DELETE(passivePausedIcon);
+    Q_DELETE(dormantIcon);
+    Q_DELETE(poorlyIcon);
 }
 
 void QStatusServerWidget::updateIcon(int serverType, bool paused)
@@ -1806,7 +1800,7 @@ QToolbarWidget::QToolbarWidget( QWidget * parent ) :
 
 QToolbarWidget::~QToolbarWidget()
 {
-	delete tIcon;
+    Q_DELETE(tIcon);
 }
 
 void QToolbarWidget::slotQueueInfo( unsigned long long  count, unsigned long long size )
@@ -1855,5 +1849,5 @@ void QRateControlWidget::update(qint64 _speed)
 
 QRateControlWidget::~QRateControlWidget()
 {
-	delete speedicon;
+    Q_DELETE(speedicon);
 }

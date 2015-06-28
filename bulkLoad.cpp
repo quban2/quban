@@ -99,8 +99,8 @@ void BulkLoad::bulkLoad()
 
 	running = false;
 
-	delete [] (char*)dataBuffer;
-	delete [] (char*)keyBuffer;
+    Q_DELETE_ARRAY(dataBuffer);
+    Q_DELETE_ARRAY(keyBuffer);
 }
 
 bool BulkLoad::bulkLoadBody()

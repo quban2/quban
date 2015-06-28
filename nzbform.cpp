@@ -124,7 +124,7 @@ void NzbForm::reject()
 		while (item)
 		{
 			NzbHeader *nh = (*headerList)[item->text(0).toInt() - 1];
-			delete nh;
+            Q_DELETE(nh);
 			item = (QTreeWidgetItem*) artList->itemBelow(item);
 		}
 	}
@@ -181,7 +181,7 @@ void NzbForm::accept()
 				if (keepOpen == false)
 				{
 					nh= (*headerList)[item->text(0).toInt() - 1];
-					delete nh;
+                    Q_DELETE(nh);
 				}
 			}
 			if (first)

@@ -349,7 +349,7 @@ bool HeaderReadWorker::cacheFlush(uint size)
             }
         }
 
-        delete h;
+        Q_DELETE(h);
     }
 
     // Multiple threads are still controlled by mutex at this point
@@ -407,9 +407,13 @@ bool HeaderReadWorker::cacheFlush(uint size)
         void *ptr = data.get_data();
         Q_FREE(ptr);
         if (hb->getHeaderType() == 'm')
-            delete mph;
+        {
+            Q_DELETE(mph);
+        }
         else
-            delete sph;
+        {
+            Q_DELETE(sph);
+        }
         ++it;
     }
 
