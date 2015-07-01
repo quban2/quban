@@ -801,6 +801,40 @@ void HeaderList::slotListParts()
 #endif
 }
 
+HeaderGroup* HeaderList::getGroup(QString& articleIndex)
+{
+    HeaderGroup *hg = 0;
+
+    int ret;
+    Dbt groupkey;
+    Dbt groupdata;
+    memset(&groupkey, 0, sizeof(groupkey));
+    memset(&groupdata, 0, sizeof(groupdata));
+    groupdata.set_flags(DB_DBT_MALLOC);
+
+    QByteArray ba = articleIndex.toLocal8Bit();
+    const char *k= ba.constData();
+    groupkey.set_data((void*)k);
+    groupkey.set_size(articleIndex.length());
+
+    Db* groupsDb = ng->getGroupingDb();
+    ret=groupsDb->get(NULL, &groupkey, &groupdata, 0);
+    if (ret != 0) //key not found
+    {
+        qDebug() << "Failed to find group with key " << articleIndex;
+    }
+    else
+    {
+        qDebug() << "Found group with key " << articleIndex;
+
+        hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
+        void* ptr = groupdata.get_data();
+        Q_FREE(ptr);
+    }
+
+    return hg;
+}
+
 void HeaderList::slotDownloadSelected(bool first, bool view, QString dir)
 {
     if (quban->getMainTab()->currentWidget() != this)
@@ -852,33 +886,11 @@ void HeaderList::slotDownloadSelected(bool first, bool view, QString dir)
         }
         else if (headerTreeModel->getItem(sourceSubjIndex)->getType() == HeaderTreeItem::HEADER_GROUP)
         {
-            int ret;
             QString articleIndex = sourceSubjIndex.data().toString() % "\n" % sourceFromIndex.data().toString();
 
-            Dbt groupkey;
-            Dbt groupdata;
-            memset(&groupkey, 0, sizeof(groupkey));
-            memset(&groupdata, 0, sizeof(groupdata));
-            groupdata.set_flags(DB_DBT_MALLOC);
-
-            QByteArray ba = articleIndex.toLocal8Bit();
-            const char *k= ba.constData();
-            groupkey.set_data((void*)k);
-            groupkey.set_size(articleIndex.length());
-
-            Db* groupsDb = ng->getGroupingDb();
-            ret=groupsDb->get(NULL, &groupkey, &groupdata, 0);
-            if (ret != 0) //key not found
-            {
-                qDebug() << "Failed to find group with key " << articleIndex;
+            HeaderGroup *hg = getGroup(articleIndex);
+            if (!hg)
                 return;
-            }
-
-            qDebug() << "Found group with key " << articleIndex;
-
-            HeaderGroup *hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
-            void* ptr = groupdata.get_data();
-            Q_FREE(ptr);
 
             hbKeys = hg->getSphKeys();
 
@@ -1020,7 +1032,6 @@ void HeaderList::slotDelSelected()
 	if (quban->getMainTab()->currentWidget() != this)
 		return;
 
-	QMap<int, int> rowsToDelete; // row num, array index
     QList<QModelIndex> selectedSubjects = m_headerList->selectionModel()->selectedRows(CommonDefs::Subj_Col);
     QList<QModelIndex> selectedFroms    = m_headerList->selectionModel()->selectedRows(CommonDefs::From_Col);
     QModelIndex sourceSubjIndex;
@@ -1037,15 +1048,7 @@ void HeaderList::slotDelSelected()
 
 	ng->articlesNeedDeleting(true);
 
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
-
 	QString index;
-	int ret;
-
-    QByteArray ba;
-	const char *k;
 
 	//m_headerList->setSortingEnabled(false);
 
@@ -1086,7 +1089,7 @@ void HeaderList::slotDelSelected()
     QString msgId;
     int i;
     bool multiPart = false;
-    char* pbh;
+    QList<QString>hbKeys;
 
     for (i=0; i<selectedSubjects.size(); ++i)
     {
@@ -1097,7 +1100,7 @@ void HeaderList::slotDelSelected()
 		sourceSubjIndex = headerProxy->mapToSource(selectedSubjects.at(i));
 		sourceFromIndex = headerProxy->mapToSource(selectedFroms.at(i));
 
-		if (headerTreeModel->parent(sourceSubjIndex) == QModelIndex()) // top level
+        if (headerTreeModel->getItem(sourceSubjIndex)->getType() == HeaderTreeItem::HEADER)
 		{
 			msgId = headerTreeModel->getItem(sourceSubjIndex)->getMsgId();
 
@@ -1114,77 +1117,42 @@ void HeaderList::slotDelSelected()
 				multiPart = false;
 			}
 
-		    ba = index.toLocal8Bit();
-			k= ba.data();
-
-			memcpy(keymem2, k, index.length());
-			key2.set_size(index.length());
-
-			ret=ng->getDb()->get(NULL, &key2, &data2, 0);
-
-			//qDebug() << "Get record returned " << ret << " for index " << index;
-
-			if (ret == DB_BUFFER_SMALL)
-			{
-				//Grow key and repeat the query
-				qDebug("Insufficient memory");
-				qDebug("Size is: %d", data2.get_size());
-				uchar *p=datamem2;
-				datamem2=new uchar[data2.get_size()+1000];
-				data2.set_ulen(data2.get_size()+1000);
-				data2.set_data(datamem2);
-                Q_DELETE_ARRAY(p);
-				qDebug("Exiting growing array cycle");
-				ret=ng->getDb()->get(0,&key2, &data2, 0);
-			}
-
-			//qDebug() << "Get record (check 2) returned " << ret << " for index " << index;
-
-			if (ret==0)
-			{
-				if (multiPart)
-				{
-					mph = new MultiPartHeader(index.length(), (char*)k, (char*)datamem2);
-				    hb = (HeaderBase*)mph;
-				}
-				else
-				{
-					sph = new SinglePartHeader(index.length(), (char*)k, (char*)datamem2);
-					hb = (HeaderBase*)sph;
-				}
-
-				ng->decTotal();
-                if (headerTreeModel->getItem(sourceSubjIndex)->getStatus() == HeaderBase::bh_new)
-					ng->decUnread();
-
-                hb->setStatus(hb->getStatus() | HeaderBase::MarkedForDeletion);
-                headerTreeModel->getItem(sourceSubjIndex)->setStatus(HeaderBase::MarkedForDeletion, headerTreeModel);
-
-				if (data2.get_size() != hb->getRecordSize()) // This should always be true ...
-				{
-					qDebug() << "Mismatch in article deletion ... Read size = " << data2.get_size() << ", but write size = " << hb->getRecordSize();
-					continue;
-				}
-
-				pbh=hb->data();
-				memcpy(datamem2, pbh, hb->getRecordSize());
-
-                Q_DELETE_ARRAY(pbh);
-                Q_DELETE(hb);
-
-				// key and data sizes are unchanged
-				ret=ng->getDb()->put(0,&key2, &data2, 0);
-				if(ret != 0)
-					qDebug() << "Error marking header for deletion: " << g_dbenv->strerror(ret);
-
-			}
-
-			if ((++numDeleted) % 50 == 0)
-			{
-				pd->setValue(numDeleted);
-				QCoreApplication::processEvents();
-			}
+            markForDeletion(index, multiPart, keymem2, datamem2, key2, data2, sourceSubjIndex);
 		}
+        else if (headerTreeModel->getItem(sourceSubjIndex)->getType() == HeaderTreeItem::HEADER_GROUP)
+        {
+            index = sourceSubjIndex.data().toString() % "\n" % sourceFromIndex.data().toString();
+
+            HeaderGroup *hg = getGroup(index);
+            if (!hg)
+                return;
+
+            hbKeys = hg->getSphKeys();
+
+            for (int h=0; h<hbKeys.count(); ++h)
+            {
+                qDebug() << "Found sph with key " << hbKeys.at(h);
+
+                QString thisIndex = hbKeys.at(h);
+                markForDeletion(thisIndex, false, keymem2, datamem2, key2, data2, sourceSubjIndex);
+            }
+
+            hbKeys = hg->getMphKeys();
+
+            for (int h=0; h<hbKeys.count(); ++h)
+            {
+                qDebug() << "Found mph with key " << hbKeys.at(h);
+
+                QString thisIndex = hbKeys.at(h);
+                markForDeletion(thisIndex, true, keymem2, datamem2, key2, data2, sourceSubjIndex);
+            }
+        }
+
+        if ((++numDeleted) % 50 == 0)
+        {
+            pd->setValue(numDeleted);
+            QCoreApplication::processEvents();
+        }
 
 		if (deleteCancelled)
 			break;
@@ -1209,6 +1177,82 @@ void HeaderList::slotDelSelected()
 	emit updateFinished(ng);
 }
 
+void HeaderList::markForDeletion(QString& index, bool multiPart, uchar* keymem2, uchar* datamem2, Dbt& key2,
+                                 Dbt& data2, QModelIndex& sourceSubjIndex)
+{
+    int ret = 0;
+    QByteArray ba;
+    const char* k = 0;
+    MultiPartHeader* mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
+    char* pbh = 0;
+
+    ba = index.toLocal8Bit();
+    k= ba.data();
+
+    memcpy(keymem2, k, index.length());
+    key2.set_size(index.length());
+
+    ret=ng->getDb()->get(NULL, &key2, &data2, 0);
+
+    //qDebug() << "Get record returned " << ret << " for index " << index;
+
+    if (ret == DB_BUFFER_SMALL)
+    {
+        //Grow key and repeat the query
+        qDebug("Insufficient memory");
+        qDebug("Size is: %d", data2.get_size());
+        uchar *p=datamem2;
+        datamem2=new uchar[data2.get_size()+1000];
+        data2.set_ulen(data2.get_size()+1000);
+        data2.set_data(datamem2);
+        Q_DELETE_ARRAY(p);
+        qDebug("Exiting growing array cycle");
+        ret=ng->getDb()->get(0,&key2, &data2, 0);
+    }
+
+    //qDebug() << "Get record (check 2) returned " << ret << " for index " << index;
+
+    if (ret==0)
+    {
+        if (multiPart)
+        {
+            mph = new MultiPartHeader(index.length(), (char*)k, (char*)datamem2);
+            hb = (HeaderBase*)mph;
+        }
+        else
+        {
+            sph = new SinglePartHeader(index.length(), (char*)k, (char*)datamem2);
+            hb = (HeaderBase*)sph;
+        }
+
+        ng->decTotal();
+        if (headerTreeModel->getItem(sourceSubjIndex)->getStatus() == HeaderBase::bh_new)
+            ng->decUnread();
+
+        hb->setStatus(hb->getStatus() | HeaderBase::MarkedForDeletion);
+        headerTreeModel->getItem(sourceSubjIndex)->setStatus(HeaderBase::MarkedForDeletion, headerTreeModel);
+
+        if (data2.get_size() != hb->getRecordSize()) // This should always be true ...
+        {
+            qDebug() << "Mismatch in article deletion ... Read size = " << data2.get_size() << ", but write size = " << hb->getRecordSize();
+            return;
+        }
+
+        pbh=hb->data();
+        memcpy(datamem2, pbh, hb->getRecordSize());
+
+        Q_DELETE_ARRAY(pbh);
+        Q_DELETE(hb);
+
+        // key and data sizes are unchanged
+        ret=ng->getDb()->put(0,&key2, &data2, 0);
+        if(ret != 0)
+            qDebug() << "Error marking header for deletion: " << g_dbenv->strerror(ret);
+    }
+}
+
 void HeaderList::delSelectedSmall()
 {
 	if (quban->getMainTab()->currentWidget() != this)
@@ -1220,19 +1264,15 @@ void HeaderList::delSelectedSmall()
     QModelIndex sourceSubjIndex;
     QModelIndex sourceFromIndex;
 
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
-
 	int thisRow = 0,
 	    delRow = 0,
 		rowCount = 0;
 
+    bool multiPart = false;
+    QList<QString>hbKeys;
+
 	QString index;
 	int ret;
-
-    QByteArray ba;
-	const char *k;
 
 	//m_headerList->setSortingEnabled(false);
 
@@ -1299,17 +1339,6 @@ void HeaderList::delSelectedSmall()
 
     QString msgId;
     int i;
-    bool multiPart = false;
-    quint16 serverId;
-
-	//typedef QMap<quint16,quint64> ServerNumMap;     // Holds server number, article num
-	//typedef QMap<quint16, ServerNumMap> PartNumMap; //Hold <part number 1, 2 etc, <serverid, articlenum>>
-	PartNumMap serverArticleNos;
-	QMap<quint16, quint64> partSize;
-	QMap<quint16, QString> partMsgId;
-
-	ServerNumMap::Iterator servit;
-	PartNumMap::iterator pnmit;
 
     QMapIterator<int, int> it(rowsToDelete); // row num, array index
     it.toBack(); // We need to delete from the back and they could be sorted by sender etc, so in a random order
@@ -1325,9 +1354,10 @@ void HeaderList::delSelectedSmall()
 		sourceSubjIndex = headerProxy->mapToSource(selectedSubjects.at(i));
 		sourceFromIndex = headerProxy->mapToSource(selectedFroms.at(i));
 
-		if (headerTreeModel->parent(sourceSubjIndex) == QModelIndex()) // top level
+        if (headerTreeModel->getItem(sourceSubjIndex)->getType() == HeaderTreeItem::HEADER)
+        // if (headerTreeModel->parent(sourceSubjIndex) == QModelIndex()) // top level
 		{
-			msgId = headerTreeModel->getItem(sourceSubjIndex)->getMsgId();
+			msgId = headerTreeModel->getItem(sourceSubjIndex)->getMsgId();     
 
 			if (msgId.isNull()) // it's a multi part header
 			{
@@ -1342,121 +1372,55 @@ void HeaderList::delSelectedSmall()
 				multiPart = false;
 			}
 
-		    ba = index.toLocal8Bit();
-			k= ba.data();
+            deleteHeader(index, multiPart, true, keymem2, datamem2, key2, data2, sourceSubjIndex,
+                         keybuilder, mkey, thisRow, delRow, rowCount);
 
-			memcpy(keymem2, k, index.length());
-			key2.set_size(index.length());
+            if ((++numDeleted) % 50 == 0)
+            {
+                pd->setValue(numDeleted);
+                QCoreApplication::processEvents();
+            }
+        }
+        else if (headerTreeModel->getItem(sourceSubjIndex)->getType() == HeaderTreeItem::HEADER_GROUP)
+        {
+            index = sourceSubjIndex.data().toString() % "\n" % sourceFromIndex.data().toString();
 
-			ret=ng->getDb()->get(NULL, &key2, &data2, 0);
+            HeaderGroup *hg = getGroup(index);
+            if (!hg)
+                return;
 
-			//qDebug() << "Get record returned " << ret << " for index " << index;
+            hbKeys = hg->getSphKeys();
 
-			if (ret == DB_BUFFER_SMALL)
-			{
-				//Grow key and repeat the query
-				qDebug("Insufficient memory");
-				qDebug("Size is: %d", data2.get_size());
-				uchar *p=datamem2;
-				datamem2=new uchar[data2.get_size()+1000];
-				data2.set_ulen(data2.get_size()+1000);
-				data2.set_data(datamem2);
-                Q_DELETE_ARRAY(p);
-				qDebug("Exiting growing array cycle");
-				ret=ng->getDb()->get(0,&key2, &data2, 0);
-			}
+            for (int h=0; h<hbKeys.count(); ++h)
+            {
+                qDebug() << "Found sph with key " << hbKeys.at(h);
 
-			//qDebug() << "Get record (check 2) returned " << ret << " for index " << index;
+                QString thisIndex = hbKeys.at(h);
+                deleteHeader(thisIndex, false, false, keymem2, datamem2, key2, data2, sourceSubjIndex,
+                             keybuilder, mkey, thisRow, delRow, rowCount);
+            }
 
-			if (ret==0)
-			{
-				if (multiPart)
-				{
-					mph = new MultiPartHeader(index.length(), (char*)k, (char*)datamem2);
-				    hb = (HeaderBase*)mph;
-					hb->getAllArticleNums(ng->getPartsDb(), &serverArticleNos, &partSize, &partMsgId);
-					//qDebug() << "Deleting parts for " << mph->getSubj();
-				    mph->deleteAllParts(ng->getPartsDb());
-				}
-				else
-				{
-					sph = new SinglePartHeader(index.length(), (char*)k, (char*)datamem2);
-					hb = (HeaderBase*)sph;
-					hb->getAllArticleNums(ng->getPartsDb(), &serverArticleNos, &partSize, &partMsgId);
-				}
+            hbKeys = hg->getMphKeys();
 
-				// Don't need these two ...
-				partSize.clear();
-				partMsgId.clear();
+            for (int h=0; h<hbKeys.count(); ++h)
+            {
+                qDebug() << "Found mph with key " << hbKeys.at(h);
 
-				// walk through the parts ...
-				for (pnmit = serverArticleNos.begin(); pnmit != serverArticleNos.end(); ++pnmit)
-				{
-					for (servit = pnmit.value().begin(); servit != pnmit.value().end(); ++servit)
-					{
-						serverId = servit.key();
-						ng->reduceParts(serverId, 1);
-						//qDebug() << "Reducing parts for server " << serverId << " by 1";
-					}
-				}
+                QString thisIndex = hbKeys.at(h);
+                deleteHeader(thisIndex, true, false, keymem2, datamem2, key2, data2, sourceSubjIndex,
+                             keybuilder, mkey, thisRow, delRow, rowCount);
+            }
 
-				serverArticleNos.clear();
+            thisRow = it.key();
+            rowCount = 1;
+            headerTreeModel->removeRows(thisRow, rowCount);
+            rowCount = 0;
 
-                Q_DELETE(hb);
-
-				if (keybuilder->append((void*)k, index.length()) == false) // failed to add to buffer
-				{
-					qDebug() << "In loop, about to delete from db";
-
-					if ((ret=ng->getDb()->del(NULL, &mkey, DB_MULTIPLE)) != 0)
-					{
-						ng->getDb()->err(ret, "Db::del");
-						QApplication::restoreOverrideCursor();
-						m_headerList->setUpdatesEnabled(true);
-                        Q_DELETE(pd);
-                        Q_DELETE(keybuilder);
-                        Q_FREE(keymem);
-                        Q_DELETE_ARRAY(keymem2);
-                        Q_DELETE_ARRAY(datamem2);
-						emit updateFinished(ng);
-						return;
-					}
-
-					//qDebug() << "In loop, db deletion complete";
-                    Q_DELETE(keybuilder);
-					memset(&keymem, 0, sizeof(keymem));
-					keybuilder = new DbMultipleDataBuilder(mkey);
-					if (keybuilder->append((void*)k, index.length()) == false) // failed to add single index to buffer
-					{
-						qDebug() << "ERROR: the following header key is too long for the buffer: " << index;
-					}
-				}
-
-				ng->decTotal();
-                if (headerTreeModel->getItem(sourceSubjIndex)->getStatus() == MultiPartHeader::bh_new)
-					ng->decUnread();
-
-				if (thisRow == delRow - 1) // consecutive rows
-				{
-					++rowCount;
-				}
-				else
-				{
-					if (rowCount)
-					{
-						//qDebug() << "In loop: About to delete " << rowCount << " rows starting at " << delRow;
-					    headerTreeModel->removeRows(delRow, rowCount);
-					}
-					rowCount = 1;
-				}
-				delRow = thisRow;
-			}
-
-			if ((++numDeleted) % 50 == 0)
-			{
-				pd->setValue(numDeleted);
-				QCoreApplication::processEvents();
-			}
+            if ((++numDeleted) % 50 == 0)
+            {
+                pd->setValue(numDeleted);
+                QCoreApplication::processEvents();
+            }
 		}
 
 		if (deleteCancelled)
@@ -1507,6 +1471,143 @@ void HeaderList::delSelectedSmall()
     Q_DELETE(pd);
 
 	emit updateFinished(ng);
+}
+
+void HeaderList::deleteHeader(QString& index, bool multiPart, bool deleteFromTree, uchar* keymem2, uchar* datamem2, Dbt& key2,
+                              Dbt& data2, QModelIndex& sourceSubjIndex, DbMultipleDataBuilder* keybuilder, Dbt& mkey, int& thisRow,
+                              int& 	delRow, int& rowCount)
+{
+    int ret = 0;
+    QByteArray ba;
+    const char* k = 0;
+
+    MultiPartHeader* mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
+
+    quint16 serverId;
+
+    //typedef QMap<quint16,quint64> ServerNumMap;     // Holds server number, article num
+    //typedef QMap<quint16, ServerNumMap> PartNumMap; //Hold <part number 1, 2 etc, <serverid, articlenum>>
+    PartNumMap serverArticleNos;
+    QMap<quint16, quint64> partSize;
+    QMap<quint16, QString> partMsgId;
+
+    ServerNumMap::Iterator servit;
+    PartNumMap::iterator pnmit;
+
+    ba = index.toLocal8Bit();
+    k= ba.data();
+
+    memcpy(keymem2, k, index.length());
+    key2.set_size(index.length());
+
+    ret=ng->getDb()->get(NULL, &key2, &data2, 0);
+
+    //qDebug() << "Get record returned " << ret << " for index " << index;
+
+    if (ret == DB_BUFFER_SMALL)
+    {
+        //Grow key and repeat the query
+        qDebug("Insufficient memory");
+        qDebug("Size is: %d", data2.get_size());
+        uchar *p=datamem2;
+        datamem2=new uchar[data2.get_size()+1000];
+        data2.set_ulen(data2.get_size()+1000);
+        data2.set_data(datamem2);
+        Q_DELETE_ARRAY(p);
+        qDebug("Exiting growing array cycle");
+        ret=ng->getDb()->get(0,&key2, &data2, 0);
+    }
+
+    //qDebug() << "Get record (check 2) returned " << ret << " for index " << index;
+
+    if (ret==0)
+    {
+        if (multiPart)
+        {
+            mph = new MultiPartHeader(index.length(), (char*)k, (char*)datamem2);
+            hb = (HeaderBase*)mph;
+            hb->getAllArticleNums(ng->getPartsDb(), &serverArticleNos, &partSize, &partMsgId);
+            //qDebug() << "Deleting parts for " << mph->getSubj();
+            mph->deleteAllParts(ng->getPartsDb());
+        }
+        else
+        {
+            sph = new SinglePartHeader(index.length(), (char*)k, (char*)datamem2);
+            hb = (HeaderBase*)sph;
+            hb->getAllArticleNums(ng->getPartsDb(), &serverArticleNos, &partSize, &partMsgId);
+        }
+
+        // Don't need these two ...
+        partSize.clear();
+        partMsgId.clear();
+
+        // walk through the parts ...
+        for (pnmit = serverArticleNos.begin(); pnmit != serverArticleNos.end(); ++pnmit)
+        {
+            for (servit = pnmit.value().begin(); servit != pnmit.value().end(); ++servit)
+            {
+                serverId = servit.key();
+                ng->reduceParts(serverId, 1);
+                //qDebug() << "Reducing parts for server " << serverId << " by 1";
+            }
+        }
+
+        serverArticleNos.clear();
+
+        Q_DELETE(hb);
+
+        if (keybuilder->append((void*)k, index.length()) == false) // failed to add to buffer
+        {
+            qDebug() << "In loop, about to delete from db";
+
+            if ((ret=ng->getDb()->del(NULL, &mkey, DB_MULTIPLE)) != 0)
+            {
+                ng->getDb()->err(ret, "Db::del");
+                QApplication::restoreOverrideCursor();
+                m_headerList->setUpdatesEnabled(true);
+                Q_DELETE(pd);
+                Q_DELETE(keybuilder);
+                Q_FREE(keymem);
+                Q_DELETE_ARRAY(keymem2);
+                Q_DELETE_ARRAY(datamem2);
+                emit updateFinished(ng);
+                return;
+            }
+
+            //qDebug() << "In loop, db deletion complete";
+            Q_DELETE(keybuilder);
+            memset(&keymem, 0, sizeof(keymem));
+            keybuilder = new DbMultipleDataBuilder(mkey);
+            if (keybuilder->append((void*)k, index.length()) == false) // failed to add single index to buffer
+            {
+                qDebug() << "ERROR: the following header key is too long for the buffer: " << index;
+            }
+        }
+
+        ng->decTotal();
+        if (headerTreeModel->getItem(sourceSubjIndex)->getStatus() == MultiPartHeader::bh_new)
+            ng->decUnread();
+
+        if (deleteFromTree)
+        {
+            if (thisRow == delRow - 1) // consecutive rows
+            {
+                ++rowCount;
+            }
+            else
+            {
+                if (rowCount)
+                {
+                    //qDebug() << "In loop: About to delete " << rowCount << " rows starting at " << delRow;
+                    headerTreeModel->removeRows(delRow, rowCount);
+                }
+                rowCount = 1;
+            }
+            delRow = thisRow;
+        }
+    }
 }
 
 void HeaderList::cancelDelete()

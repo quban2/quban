@@ -76,8 +76,6 @@ class HeaderList: public QTabWidget
 
 private:
 
-	//char headerIndex[MPH_MAX_STRING_SIZE + 1];
-
 	// Auto unpack data
 	quint32             headerGroupId;
 
@@ -99,6 +97,13 @@ private:
 
     void downloadSelectedHeader(bool first, bool view, QString dir, QModelIndex sourceSubjIndex, QString index, bool multiPartHeader);
     void confirmSelectedHeader(QModelIndex sourceSubjIndex, QString index, bool multiPartHeader, UnpackConfirmation *unpackConfirmation);
+    HeaderGroup* getGroup(QString& articleIndex);
+
+    void markForDeletion(QString& index, bool multiPart, uchar* keymem2, uchar* datamem2, Dbt& key2,
+                         Dbt& data2, QModelIndex& sourceSubjIndex);
+    void deleteHeader(QString& index, bool multiPart, bool deleteFromTree, uchar* keymem2, uchar* datamem2, Dbt& key2,
+                      Dbt& data2, QModelIndex& sourceSubjIndex, DbMultipleDataBuilder* keybuilder, Dbt& mkey, int& thisRow,
+                      int& 	delRow, int& rowCount);
 
 public:
 	HeaderList(NewsGroup *_ng, Servers *_servers, QString caption, QWidget* parent=0);

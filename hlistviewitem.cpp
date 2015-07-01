@@ -76,7 +76,6 @@ HeaderTreeItem::HeaderTreeItem(QVector<QVariant>* data, QVector<QIcon*>* icons, 
 
 HeaderTreeItem::~HeaderTreeItem()
 {
-	qDeleteAll(childItems);
 	childItems.clear();
 	itemData->clear();
 	iconData->clear();
@@ -116,8 +115,16 @@ bool HeaderTreeItem::removeChildren(int position, int count)
     if (position < 0 || position + count > childItems.size())
         return false;
 
-    qDeleteAll(childItems);
-    childItems.clear();
+    if (position == 0 && count >= (childItems.size() - 1)) // full delete
+    {
+        qDeleteAll(childItems);
+        childItems.clear();
+    }
+    else
+    {
+        for (int row = 0; row < count; ++row)
+            delete childItems.takeAt(position);
+    }
 
     return true;
 }

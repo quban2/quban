@@ -1,6 +1,6 @@
 Installation instructions for Quban - a Qt usenet binary news grabber 
 
-Version 0.7.1.1 - 21st May 2015
+Version 0.7.2 - 3rd July 2015
 
 Dependencies:
  - Qt 4.6 or greater (libqt4-devel, qt4-devel, etc)
@@ -15,10 +15,10 @@ Dependencies:
 - You can grab the source from sourceforge (go to
 http://quban.sourceforge.net/). It compiles as follows:
 
-  cp Quban_0.7.1.1.tar.gz <your chosen installation dir>
+  cp Quban_0.7.2.tar.gz <your chosen installation dir>
   cd <your chosen installation dir>
-  tar zxvf Quban_0.7.1.1.tar.gz
-  cd Quban_0.7.1.1  
+  tar zxvf Quban_0.7.2.tar.gz
+  cd Quban_0.7.2  
   qmake -recursive CONFIG+=release Quban.pro
   make
 
