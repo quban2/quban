@@ -20,8 +20,6 @@
 
 #include "nntpthreadsocket.h"
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netdb.h>
 #include <errno.h>
 #include <QSslConfiguration>
 #include <QSslCipher>
@@ -150,7 +148,7 @@ void NntpThread::run()
 
     while (true)
     {
-        // 		qDebug("qID: %d, tID: %d", qId, threadId);
+        //qDebug("qID: %d, tID: %d", qId, threadId);
 
         if (pause)
         {
@@ -322,7 +320,7 @@ void NntpThread::run()
                         {
                             job->tries--;
                             qDebug() << "NntpThread::run(): retry: "
-                                     <<	job->tries;
+                                     <<    job->tries;
                             job->status=Job::Queued_Job;
                             emit Err(job, No_Err);
 
@@ -395,25 +393,25 @@ Job *NntpThread::findFreeJob()
 {
     QList<int>::iterator it;
     QMap<int, Part*>::iterator pit;
-    QItem *item;
-    Job *j;
+    QItem *item = 0;
+    Job *j = 0;
     //For every item...
     queueLock->lock();
 
     for (it = threadQueue->begin(); it != threadQueue->end(); ++it)
     {
         //for every part of the item...
-        // 		qDebug("Thread %d: trying item %d", threadId, *it);
+        //         qDebug("Thread %d: trying item %d", threadId, *it);
         item=(*queue)[*it];
-        // 		qDebug("item's part count: %d", item->parts.count());
+        //         qDebug("item's part count: %d", item->parts.count());
         for (pit = item->parts.begin(); pit != item->parts.end(); ++pit)
         {
             //check every job of the item...
-            // 			qDebug("Trying part %d of item %d", pit.key(), *it);
+            //             qDebug("Trying part %d of item %d", pit.key(), *it);
             j=pit.value()->job;
             if ( (j->status==Job::Queued_Job) && (j->qId == qId) )
             {
-                // 					qDebug("Job: %d", j->id);
+                //                     qDebug("Job: %d", j->id);
                 j->status=Job::Processing_Job;
                 j->threadId=threadId;
                 queueLock->unlock();
@@ -423,13 +421,13 @@ Job *NntpThread::findFreeJob()
     }
 
     queueLock->unlock();
-    // 	qDebug("thread %d: job not found", threadId);
+    //     qDebug("thread %d: job not found", threadId);
     return 0;
 }
 
 bool NntpThread::addJob()
 {
-    // 	qDebug("Entering NntpThread::addJob()");
+    //     qDebug("Entering NntpThread::addJob()");
 
     if (nHost == 0)
     {
@@ -438,16 +436,16 @@ bool NntpThread::addJob()
     }
 
     timeout=nHost->getTimeout();
-    // 	retries=nHost->tries;
+    //     retries=nHost->tries;
 
     switch (job->jobType)
     {
     case Job::GetPost:
         db=job->ng->getDb();
 
-        // 		qDebug("NntpThread::addJob(): adding GetPost job");
+        //         qDebug("NntpThread::addJob(): adding GetPost job");
         //         *status=NntpThread::NewJob;
-        // 		qDebug("Savefile: %s", (const char *) job->fName);
+        //         qDebug("Savefile: %s", (const char *) job->fName);
         saveFile=new QFile(job->fName);
 
         if (!saveFile->open(QIODevice::WriteOnly|QIODevice::Truncate))
@@ -460,7 +458,7 @@ bool NntpThread::addJob()
         //         newsGroup=job->ng->ngName;
         artNum=job->artNum;
         lines=0;
-        // 		articles=0;
+        //         articles=0;
         articles=job->artSize;
 
         return true;
@@ -632,7 +630,7 @@ bool NntpThread::waitLine( )
             if (bufferSize - (watermark-buffer) == 0)
             {
                 qDebug("Warning: Buffer is full. Expanding to %d bytes", bufferSize*2);
-                char * newbuff= new char[bufferSize*2];
+                char* newbuff= new char[bufferSize*2];
                 memcpy(newbuff, buffer, bufferSize);
                 watermark=newbuff+bufferSize;
                 Q_DELETE_ARRAY(buffer);
@@ -681,7 +679,7 @@ bool NntpThread::waitLine( )
                 kes->incrementBytesRead(bytes);
                 kes->unlockMutex();
                 //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
-                //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
+                //        qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
                 msleep(sleepDuration);
             }
 
@@ -735,7 +733,7 @@ bool NntpThread::waitBigLine( )
             if (bigBufferSize - (bigWatermark-bigBuffer) == 0)
             {
                 qDebug("Warning: Buffer is full. Expanding to %d bytes", bigBufferSize*2);
-                char * newbuff= new char[bigBufferSize*2];
+                char* newbuff= new char[bigBufferSize*2];
                 memcpy(newbuff, bigBuffer, bigBufferSize);
                 bigWatermark=newbuff+bigBufferSize;
                 Q_DELETE_ARRAY(bigBuffer);
@@ -780,7 +778,7 @@ bool NntpThread::waitBigLine( )
                 kes->incrementBytesRead(bytes);
                 kes->unlockMutex();
                 //qDebug() << QTime::currentTime () << " socket: " << threadId << " has sleep of " << sleepDuration << " msecs and speed of " <<
-                //		qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
+                //        qMin<qint64>((qint64)(bufferSize-(watermark-buffer)), maxBytes); // << ", read buffer size " << kes->readBufferSize();
                 msleep(sleepDuration);
             }
 
@@ -908,14 +906,14 @@ bool NntpThread::m_connect( )
         return false;
     }
 
-    // 		qDebug("Connected, going on");
+    //  qDebug("Connected, going on");
 
-    if (!waitLine()) {
-        // 			qDebug("Error connecting!!");
-
+    if (!waitLine())
+    {
+    //  qDebug("Error connecting!!");
         return false;
     }
-    // 		qDebug("Line found");
+    //         qDebug("Line found");
     m_readLine();
     QString s = line;
     //        qDebug() << "Got this line: " << s;
@@ -935,14 +933,14 @@ bool NntpThread::m_connect( )
         return true;
     }
     cmd="authinfo user " + nHost->getUserName() + "\r\n";
-    // 		qDebug("Sending user");
+    //         qDebug("Sending user");
     if (!m_sendCmd(cmd, NntpThread::user )) {
         qDebug("Bad response to the \"user\" cmd");
         reset();
         return false;
     }
     cmd="authinfo pass " + nHost->getPass() + "\r\n";
-    // 	   qDebug("Sending password");
+    //        qDebug("Sending password");
     if (!(m_sendCmd(cmd, NntpThread::pass ))) {
         qDebug("Authentication failed");
         qDebug("Error is: %d", error);
@@ -954,7 +952,7 @@ bool NntpThread::m_connect( )
     }
 
     isLoggedIn=true;
-    // 	   qDebug("Logged in");
+    //        qDebug("Logged in");
 
     return true;
 }
@@ -1297,7 +1295,7 @@ bool NntpThread::getXover(QString group)
         bool badCRC=false;
 
         unsigned char ch;
-        const char *ascii_rep;
+        const char* ascii_rep = 0;
 
         qDebug() << hostId << ": It's time for header compression";
         for (int i=0; (i*COMPRESSED_HEADER_THRESHOLD) < (int)articles; ++i)
@@ -1456,7 +1454,7 @@ bool NntpThread::getXover(QString group)
             {
                 if (lineBA->at(0) == '.')
                 {
-                    // 				qDebug("End found");
+                    //                 qDebug("End found");
                     endReached = true;
                     break;
                 }
@@ -1531,12 +1529,12 @@ bool NntpThread::saveGroup()
     int tret;
     Dbt groupkey, groupdata;
 
-    char *tempng = job->ng->data(); // MD TODO this allocates space each time called !!!
+    char* tempng = job->ng->data(); // MD TODO this allocates space each time called !!!
     groupdata.set_data(tempng);
     groupdata.set_size(job->ng->getRecordSize());
 
     QByteArray ba = job->ng->ngName.toLocal8Bit();
-    const char *tempkey = ba.data();
+    const char* tempkey = ba.data();
     groupkey.set_data((void*) tempkey);
     groupkey.set_size(job->ng->ngName.length());
 
@@ -1585,8 +1583,8 @@ bool NntpThread::m_readLine()
 
         if (lineSize > lineBufSize)
         {
-            //     		qDebug("Line Buffer overflow");
-            // 			qDebug("LineSize: %d", lineSize);
+            //             qDebug("Line Buffer overflow");
+            //             qDebug("LineSize: %d", lineSize);
             lineBufSize=lineSize+1000;
             Q_DELETE_ARRAY(line);
             line=new char[lineBufSize];
@@ -1727,15 +1725,15 @@ bool NntpThread::getArticle()
             //*curbytes+=strlen(line);
             // kes->bytesRead += strlen(line);
             rlines+=strlen(line);  // it's really bytes not lines!!
-            //			qDebug() << "rlines = " << rlines << ", increased by strlen(line)";
+            //            qDebug() << "rlines = " << rlines << ", increased by strlen(line)";
             currentTime=QTime::currentTime();
         }
 
-        // 		if ((articles != 0) && (prevTime.secsTo(currentTime) > 1)) {
+        //         if ((articles != 0) && (prevTime.secsTo(currentTime) > 1)) {
         if ( prevTime.secsTo(currentTime) > 1)
         {
             partialLines=rlines-partialLines;
-            //			qDebug() << "Sending rlines " << rlines << ", articles " << articles;
+            //            qDebug() << "Sending rlines " << rlines << ", articles " << articles;
             emit SigUpdatePost(job, rlines, articles, partialLines, qId);
             prevTime=QTime::currentTime();
             partialLines=rlines;
@@ -1818,17 +1816,17 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
     articles = fields[1].toInt() - fields[2].toInt() + 1;
     if (articles < 0)
         articles = 0;
-    // 	qDebug() <<"Articles: " << articles;
-    // 	QString desc=fields[1];
+    //     qDebug() <<"Articles: " << articles;
+    //     QString desc=fields[1];
     QByteArray ba = ngName.toLocal8Bit();
     const char *i = ba.data();
     listkey.set_data((void*)i);
     listkey.set_size(ngName.length());
-    // 	qDebug() << "Articles on " << ngName << ": " << articles;
+    //     qDebug() << "Articles on " << ngName << ": " << articles;
 
-    // 	memcpy(keymem, i, ngName.length());
+    //     memcpy(keymem, i, ngName.length());
 
-    // 	key->set_size(ngName.length());
+    //     key->set_size(ngName.length());
     ret=db->get(NULL, &listkey, &listdata, 0);
     if (ret == ENOMEM)
         qDebug("Memory error?? WTF??");
@@ -1836,14 +1834,14 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
 
         //Not found, create new group and insert into db
         AvailableGroup *g=new AvailableGroup(ngName, hostId, articles);
-        // 		g->setArticles(hostId, articles);
+        //         g->setArticles(hostId, articles);
         //save into db...
         char *p=g->data();
 
         //key is already built, build data
-        // 		memcpy(datamem, p, g->size());
-        // 		data->set_size(g->size());
-        // 		delete[] p;
+        // memcpy(datamem, p, g->size());
+        // data->set_size(g->size());
+        // delete[] p;
 
         listdata.set_data(p);
         listdata.set_size(g->size());
@@ -1854,7 +1852,9 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
         Q_DELETE_ARRAY(p);
         return ret;
 
-    } else if (ret == 0) {
+    } 
+    else if (ret == 0) 
+    {
         //found, update and resave
         AvailableGroup *g = new AvailableGroup((char*)listdata.get_data());
         void* ptr = listdata.get_data();
@@ -1862,8 +1862,8 @@ int NntpThread::dbGroupPut( Db * db, const char *line, int hostId )
         g->addHost(hostId);
         g->setArticles(hostId, articles);
         char *p=g->data();
-        // 		memcpy(datamem, p, g->size());
-        // 		data->set_size(g->size());
+        // memcpy(datamem, p, g->size());
+        // data->set_size(g->size());
         listdata.set_data(p);
         listdata.set_size(g->size());
 
