@@ -129,7 +129,7 @@ public:
     int getDownloadingServersCount() { return downloadingServers.count(); }
 
     enum { IGNORE_UNSEQUENCED_ARTICLES = 1, NAME_DB_AS_ALIAS = 2, RENAME_DB_AT_STARTUP = 4,  DB_CURRENTLY_NAMED_AS_ALIAS = 8, ARTICLES_NEED_DELETING = 16,
-           HEADERS_GROUPED = 32, HEADERS_NEEDS_GROUPING = 64, NO_REGEX_ON_GROUPS = 128 };
+           HEADERS_GROUPED = 32, HEADERS_NEEDS_GROUPING = 64, NO_REGEX_ON_GROUPS = 128, ADVANCED_GROUPING = 256 };
 
 	void ignoreUnsequencedArticles(bool b) { (b == true) ? newsGroupFlags |= IGNORE_UNSEQUENCED_ARTICLES : newsGroupFlags &= ~IGNORE_UNSEQUENCED_ARTICLES; }
 	void nameDbAsAlias(bool b) { (b == true) ? newsGroupFlags |= NAME_DB_AS_ALIAS : newsGroupFlags &= ~NAME_DB_AS_ALIAS; }
@@ -139,6 +139,7 @@ public:
     void setHeadersGrouped(bool b) { (b == true) ? newsGroupFlags |= HEADERS_GROUPED : newsGroupFlags &= ~HEADERS_GROUPED; }
     void setHeadersNeedGrouping(bool b) { (b == true) ? newsGroupFlags |= HEADERS_NEEDS_GROUPING : newsGroupFlags &= ~HEADERS_NEEDS_GROUPING; }
     void setNoRegexGrouping(bool b) { (b == true) ? newsGroupFlags |= NO_REGEX_ON_GROUPS : newsGroupFlags &= ~NO_REGEX_ON_GROUPS; }
+    void setAdvancedGrouping(bool b) { (b == true) ? newsGroupFlags |= ADVANCED_GROUPING : newsGroupFlags &= ~ADVANCED_GROUPING; }
 
 	bool areUnsequencedArticlesIgnored() { return newsGroupFlags & IGNORE_UNSEQUENCED_ARTICLES; }
 	bool shouldDbBeNamedAsAlias() { return newsGroupFlags & NAME_DB_AS_ALIAS; }
@@ -148,6 +149,7 @@ public:
     bool areHeadersGrouped() { return newsGroupFlags & HEADERS_GROUPED; }
     bool doHeadersNeedGrouping() { return newsGroupFlags & HEADERS_NEEDS_GROUPING; }
     bool isThereNoRegexOnGrouping() { return newsGroupFlags & NO_REGEX_ON_GROUPS; }
+    bool isThereAdvancedGrouping() { return newsGroupFlags & ADVANCED_GROUPING; }
 
 	NewsGroup(DbEnv *_dbEnv, QString _ngName, QString _saveDir, QString _alias, QString _useAlias); // Opens? yes!
     NewsGroup(DbEnv *, char *, uint version=GROUPDB_VERSION); //un-marshal and open

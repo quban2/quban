@@ -29,6 +29,7 @@ typedef struct
 {
     qint16  maxMatchDistance;
     bool    dontUseREs;
+    bool    advancedGrouping;
     QString RE1;
     quint8  indexRE1;
     QString RE2;

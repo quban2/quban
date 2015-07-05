@@ -21,6 +21,7 @@
 #include <QtDebug>
 #include <QMessageBox>
 #include <QDateTime>
+#include <QStringBuilder>
 #include "MultiPartHeader.h"
 #include "appConfig.h"
 #include "JobList.h"
@@ -123,8 +124,15 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
     MultiPartHeader mph;
     SinglePartHeader sph;
-    HeaderBase* hb;
+    HeaderBase* hb = 0;
     HeaderGroup* headerGroup = 0;
+    HeaderGroup* advancedHeaderGroup = 0;
+
+    // typedef QMap<QString, QString> HeaderGroupIndexes; // subj, headerGroup index
+    // typedef QMap<QString, HeaderGroup*> HeaderGroups; //  headerGroup index, headerGroup *
+
+    HeaderGroupIndexes headerGroupIndexes;
+    HeaderGroups       headerGroups;
 
     DBC *dbcp = 0;
     DBT ckey, cdata;
@@ -208,6 +216,8 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     qint16 stringDiff = -1;
 
     bool prevGroup = false;
+    bool advancedPlacement = false;
+    bool skipAdvanced = false;
 
     noRegexpGrouping = ng->isThereNoRegexOnGrouping();
 
@@ -224,6 +234,9 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
     ng->getGroupingDb()->truncate(0, &delCount, 0);
     qDebug() << "Deleted " << delCount << " records from group db";
+
+    QMapIterator<QString, QString> it(headerGroupIndexes);
+    QString advancedIndex;
 
     for (;;)
     {
@@ -320,6 +333,60 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
             if (newGroup)
             {
+                if (ng->isThereAdvancedGrouping())
+                {
+                    it.toFront();
+
+                    // decide if we can match to a previous group
+                    while (it.hasNext())
+                    {
+                        it.next();
+                        if ((stringDiff = levenshteinDistance(it.key(), subj)) <= ng->getMatchDistance()) // match ...
+                        {
+                            // The index for this group is in it.value()
+                            // See if we have the HeaderGroup in our cache headerGroups)
+
+                            if (headerGroups.contains(it.value()))
+                            {
+                                advancedHeaderGroup = headerGroups.value(it.value());
+                            }
+                            else // not in cache
+                            {
+                                advancedIndex = it.value();
+                                advancedHeaderGroup = getGroup(ng, advancedIndex);
+                                if (advancedHeaderGroup)
+                                {
+                                    headerGroups.insert(advancedIndex, advancedHeaderGroup);
+                                }
+                                else // db read failed ..
+                                {
+                                    skipAdvanced = true;
+                                }
+                            }
+
+                            if (skipAdvanced == false)
+                            {
+                                if (mphFound)
+                                    advancedHeaderGroup->addMphKey(recKey);
+                                else
+                                    advancedHeaderGroup->addSphKey(recKey);
+
+                                advancedPlacement = true;
+                                subj = prevSubj; // ignore this header as it's been placed out of sequence
+                                from = prevFrom;
+                                newGroup = false; // as we managed to relocate to an existing group
+
+                                break; // stop looking at previous groups
+                            }
+                            else
+                                skipAdvanced = false;
+                        }
+                    }
+                }
+            }
+
+            if (newGroup)
+            {
                 if (prevGroup) // save before moving on
                 {
                     ba = storeIndex.toLocal8Bit();
@@ -334,6 +401,9 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
                     if (ret!=0)
                         qDebug("Error updating record: %d", ret);
 
+                    if (ng->isThereAdvancedGrouping())
+                        headerGroupIndexes.insert(storeIndex.section('\n', 0, 0), storeIndex);
+
                     Q_DELETE_ARRAY(p2);
                     Q_DELETE(headerGroup);
                     numGroups++;
@@ -341,7 +411,7 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
 
                 prevGroup = true;
 
-                storeIndex = subj + "\n" + from;
+                storeIndex = subj % "\n" % from;
 
                 headerGroup = new HeaderGroup();
 
@@ -352,10 +422,16 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
                 headerGroup->setNextDistance(stringDiff);
             }
 
-            if (mphFound)
-                headerGroup->addMphKey(recKey);
+            // if we've found somewhere else to place this header then don't add again
+            if (!advancedPlacement)
+            {
+                if (mphFound)
+                    headerGroup->addMphKey(recKey);
+                else
+                    headerGroup->addSphKey(recKey);
+            }
             else
-                headerGroup->addSphKey(recKey);
+                advancedPlacement = false;
 
             if (count % 250 == 0)
             {
@@ -390,6 +466,11 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     Q_DELETE_ARRAY(ptr);
     ptr = ((char*)cdata.data);
     Q_DELETE_ARRAY(ptr);
+    if (headerGroups.count())
+    {
+        qDeleteAll(headerGroups);
+        headerGroups.clear();
+    }
 
     qDebug() << "Multi = " << grouped << ", single = " << single;
 
@@ -415,6 +496,40 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     Q_DELETE(headerGroup);
 
     return true;
+}
+
+HeaderGroup* BulkHeaderGroup::getGroup(NewsGroup* ng, QString& articleIndex)
+{
+    HeaderGroup *hg = 0;
+
+    int ret;
+    Dbt groupkey;
+    Dbt groupdata;
+    memset(&groupkey, 0, sizeof(groupkey));
+    memset(&groupdata, 0, sizeof(groupdata));
+    groupdata.set_flags(DB_DBT_MALLOC);
+
+    QByteArray ba = articleIndex.toLocal8Bit();
+    const char *k= ba.constData();
+    groupkey.set_data((void*)k);
+    groupkey.set_size(articleIndex.length());
+
+    Db* groupsDb = ng->getGroupingDb();
+    ret=groupsDb->get(NULL, &groupkey, &groupdata, 0);
+    if (ret != 0) //key not found
+    {
+        qDebug() << "Failed to find group with key " << articleIndex;
+    }
+    else
+    {
+        qDebug() << "Found group with key " << articleIndex;
+
+        hg=new HeaderGroup(articleIndex.length(), (char*)k, (char*)groupdata.get_data());
+        void* ptr = groupdata.get_data();
+        Q_FREE(ptr);
+    }
+
+    return hg;
 }
 
 void BulkHeaderGroup::cancel(quint64 seq)

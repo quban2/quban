@@ -253,6 +253,7 @@ void NewsGroupDialog::accept( )
         entries.append(QString::number(headerGroupingWidget->maxDistanceSpinBox->value()));
         entries.append(headerGroupingWidget->noRegexCheckBox->isChecked() ? "Y" : "N");
         entries.append(groupingUpdated ? "Y" : "N");
+        entries.append(headerGroupingWidget->advanceGroupingCheckBox->isChecked() ? "Y" : "N");
 
         if (creating == false)
             emit updateGroup(entries);
@@ -342,7 +343,8 @@ void NewsGroupDialog::slotTestGrouping()
     HeaderGroupingSettings settings;
 
     settings.maxMatchDistance = headerGroupingWidget->maxDistanceSpinBox->value();
-    settings.dontUseREs = headerGroupingWidget->noRegexCheckBox->isChecked();
+    settings.dontUseREs = headerGroupingWidget->noRegexCheckBox->isChecked();    
+    settings.advancedGrouping = headerGroupingWidget->advanceGroupingCheckBox->isChecked();
     settings.RE1 = headerGroupingWidget->groupRE1_Value->text();
     settings.indexRE1 = headerGroupingWidget->groupRE1_Combo->currentIndex();
     settings.RE2 = headerGroupingWidget->groupRE2_Value->text();
@@ -361,6 +363,7 @@ void NewsGroupDialog::amendGrouping(HeaderGroupingSettings& settings)
 {
     headerGroupingWidget->maxDistanceSpinBox->setValue(settings.maxMatchDistance);
     headerGroupingWidget->noRegexCheckBox->setChecked(settings.dontUseREs);
+    headerGroupingWidget->advanceGroupingCheckBox->setChecked(settings.advancedGrouping);
     headerGroupingWidget->groupRE1_Value->setText(settings.RE1);
     headerGroupingWidget->groupRE1_Combo->setCurrentIndex(settings.indexRE1);
     headerGroupingWidget->groupRE2_Value->setText(settings.RE2);

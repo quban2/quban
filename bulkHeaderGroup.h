@@ -21,10 +21,15 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 #include <QObject>
+#include <QString>
+#include <QMap>
 #include "common.h"
 #include "newsgroup.h"
 #include <QLinkedList>
 #include <QMultiHash>
+
+typedef QMap<QString, QString> HeaderGroupIndexes; // subj, headerGroup index
+typedef QMap<QString, HeaderGroup*> HeaderGroups; //  headerGroup index, headerGroup *
 
 typedef struct
 {
@@ -45,6 +50,7 @@ private:
     void BulkGroup();
     bool BulkHeaderGroupBody();
     qint16 levenshteinDistance(const QString& a_compare1, const QString& a_compare2);
+    HeaderGroup* getGroup(NewsGroup* ng, QString& articleIndex);
 
     bool running;
 

@@ -69,6 +69,7 @@ void HeaderGroupTestDialog::getSettings()
 {
     currentSettings.maxMatchDistance = headerGroupingWidget->maxDistanceSpinBox->value();
     currentSettings.dontUseREs = headerGroupingWidget->noRegexCheckBox->isChecked();
+    currentSettings.advancedGrouping = headerGroupingWidget->advanceGroupingCheckBox->isChecked();
     currentSettings.RE1 = headerGroupingWidget->groupRE1_Value->text();
     currentSettings.indexRE1 = headerGroupingWidget->groupRE1_Combo->currentIndex();
     currentSettings.RE2 = headerGroupingWidget->groupRE2_Value->text();
@@ -81,6 +82,7 @@ void HeaderGroupTestDialog::setSettings()
 {
     headerGroupingWidget->maxDistanceSpinBox->setValue(currentSettings.maxMatchDistance);
     headerGroupingWidget->noRegexCheckBox->setChecked(currentSettings.dontUseREs);
+    headerGroupingWidget->advanceGroupingCheckBox->setChecked(currentSettings.advancedGrouping);
     headerGroupingWidget->groupRE1_Value->setText(currentSettings.RE1);
     headerGroupingWidget->groupRE1_Combo->setCurrentIndex(currentSettings.indexRE1);
     headerGroupingWidget->groupRE2_Value->setText(currentSettings.RE2);

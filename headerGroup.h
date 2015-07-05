@@ -69,7 +69,7 @@ private:
     quint16 status;
     qint16 nextDistance;
 
-    QString match; // these two are built from the key
+    QString match; // .. subj. These two are built from the key
     QString from;
     
 signals:

@@ -18,8 +18,6 @@
     along with Quban.  If not, see <http://www.gnu.org/licenses/>.
  ***************************************************************************/
 
-#include "nntpthreadsocket.h"
-#include <sys/types.h>
 #include <errno.h>
 #include <QSslConfiguration>
 #include <QSslCipher>
@@ -32,14 +30,11 @@
 #include "headerReadNoCompression.h"
 #include "headerReadXfeatGzip.h"
 #include "headerReadXzVer.h"
-
-#include <stdio.h>
-#include <string.h>
+#include "nntpthreadsocket.h"
 
 extern crc32_t crc_table[];
 
 #define COMPRESSED_HEADER_THRESHOLD 18000
-
 
 void NntpThread::run()
 {

@@ -855,6 +855,7 @@ void GroupList::slotNewGroup( QStringList entries, AvailableGroup *g )
     tempNg->setMatchDistance(entries[15].toInt());
 
     tempNg->setNoRegexGrouping(entries[16] == "Y" ? true : false);
+    tempNg->setAdvancedGrouping(entries[18] == "Y" ? true : false);
 
 	groups.insert(tempNg->getName(), tempNg);
 	Servers::iterator it;
@@ -966,6 +967,7 @@ void GroupList::slotModifyServerProperties( QStringList entries)
 
     ng->setNoRegexGrouping(entries[16] == "Y" ? true : false);
     groupingUpdated = entries[17] == "Y" ? true : false;
+    ng->setAdvancedGrouping(entries[18] == "Y" ? true : false);
 
 	saveGroup(ng);
 	ng->listItem->setText(0, ng->getAlias());

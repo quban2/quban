@@ -97,7 +97,6 @@ private:
 
     void downloadSelectedHeader(bool first, bool view, QString dir, QModelIndex sourceSubjIndex, QString index, bool multiPartHeader);
     void confirmSelectedHeader(QModelIndex sourceSubjIndex, QString index, bool multiPartHeader, UnpackConfirmation *unpackConfirmation);
-    HeaderGroup* getGroup(QString& articleIndex);
 
     void markForDeletion(QString& index, bool multiPart, uchar* keymem2, uchar* datamem2, Dbt& key2,
                          Dbt& data2, QModelIndex& sourceSubjIndex);
@@ -117,6 +116,7 @@ public:
 	QTreeView *getTree() { return m_headerList;}
 	QMenu* getMenu() {return contextMenu;}
     HeaderListWidget* getHeaderListWidget() { return headerListWidget; }
+    HeaderGroup* getGroup(QString& articleIndex);
 
 	virtual void closeEvent(QCloseEvent *e);
 
