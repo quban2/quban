@@ -29,7 +29,13 @@
 
 extern Quban* quban;
 
+#define DB_API_CHANGE_VERSION 0 + (6*100) + (1*10000) + (12*1000000) // 12.1.6.0
+
+#if DB_VERSION_MINOR + (DB_VERSION_MAJOR*100) + (DB_VERSION_RELEASE*10000) + (DB_VERSION_FAMILY*1000000) >= DB_API_CHANGE_VERSION
+int compare_q16(Db *, const Dbt *, const Dbt *, size_t *);
+#else
 int compare_q16(Db *, const Dbt *, const Dbt *);
+#endif
 
 NewsGroup::NewsGroup(DbEnv * _dbEnv, QString _ngName, QString _saveDir, QString _alias, QString _useAlias)
 {
@@ -89,7 +95,11 @@ NewsGroup::NewsGroup(DbEnv * _dbEnv, QString _ngName, QString _saveDir, QString 
 
 }
 
+#if DB_VERSION_MINOR + (DB_VERSION_MAJOR*100) + (DB_VERSION_RELEASE*10000) + (DB_VERSION_FAMILY*1000000) >= DB_API_CHANGE_VERSION
+int compare_q16(Db *, const Dbt *a, const Dbt *b, size_t *)
+#else
 int compare_q16(Db *, const Dbt *a, const Dbt *b)
+#endif
 {
 	quint16 ai,
             bi;
