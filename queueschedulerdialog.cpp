@@ -86,7 +86,7 @@ QueueSchedulerDialog::QueueSchedulerDialog(QueueScheduler* _queueScheduler, QWid
 			  sun10 << sun11 << sun12 << sun13 << sun14 << sun15 << sun16 << sun17 << sun18 << sun19 <<
 			  sun20 << sun21 << sun22 << sun23;
 
-	QPushButton* pb;
+    QPushButton* pb = 0;
 	for (int i = 0; i < pbList.size(); ++i)
 	{
 		pb = pbList.at(i);
@@ -480,7 +480,7 @@ void QueueSchedulerDialog::clearScreen()
 
 void QueueSchedulerDialog::buildScreen(QueueSchedule* newSchedule)
 {
-	QPushButton* pb;
+    QPushButton* pb = 0;
 
 	QString boxTitle = tr("Periods for ") + newSchedule->getName();
 	groupBox->setTitle(boxTitle);
@@ -500,7 +500,7 @@ void QueueSchedulerDialog::buildScreen(QueueSchedule* newSchedule)
 		disabledRadioButton->setChecked(true);
 	}
 
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 	QStandardItem** modelItem = new QStandardItem*[queuePeriods->count() * NUM_SUMMARY_COLS];
 
 	QMapIterator<quint32, QueueScheduleElement*> it(*(newSchedule->getElements()));
@@ -671,7 +671,7 @@ void QueueSchedulerDialog::modifyCurrentPeriod()
 
 	int buttonIndexStart = element->getStartSecs() / 60 / 60;
 	int buttonIndexEnd   = element->getEndSecs() / 60 / 60;
-	QPushButton* pb;
+    QPushButton* pb = 0;
 
 	for (int j=buttonIndexStart; j<=buttonIndexEnd; ++j)
 	{
@@ -711,7 +711,7 @@ void QueueSchedulerDialog::modifyCurrentPeriod()
 
 quint32 QueueSchedulerDialog::setStartTime(quint32 startTime, QueueScheduleElement* thisElement)
 {
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 	QMapIterator<quint32, QueueScheduleElement*> it(*(queueSchedule->getElements()));
 
 	quint32 hours;
@@ -746,7 +746,7 @@ quint32 QueueSchedulerDialog::setStartTime(quint32 startTime, QueueScheduleEleme
 quint32 QueueSchedulerDialog::setEndTime(quint32 endTime, QueueScheduleElement* thisElement)
 {
 	// Do backwards
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 
 	quint32 hours;
 	quint32 periodStartSecs;
@@ -784,7 +784,7 @@ quint32 QueueSchedulerDialog::setEndTime(quint32 endTime, QueueScheduleElement* 
 
 bool QueueSchedulerDialog::isPeriodInvalid(quint32 startTime, quint32 endTime, QueueScheduleElement* thisElement)
 {
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 	QMapIterator<quint32, QueueScheduleElement*> it(*(queueSchedule->getElements()));
 
 	while (it.hasNext())
@@ -829,7 +829,7 @@ void QueueSchedulerDialog::deleteCurrentPeriod()
 
 	int buttonIndexStart = element->getStartSecs() / 60 / 60;
 	int buttonIndexEnd   = element->getEndSecs() / 60 / 60;
-	QPushButton* pb;
+    QPushButton* pb = 0;
 
 	for (int j=buttonIndexStart; j<=buttonIndexEnd; ++j)
 	{

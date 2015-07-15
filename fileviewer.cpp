@@ -33,7 +33,6 @@ FileViewer::FileViewer(QString& fileName, QWidget *parent) : QTabWidget(parent)
 {
 	bool imageFound = false;
 
-    // qDebug() << "Request to view file : " << fileName;
     fullFileName = fileName;
 
     // try and load as an image first

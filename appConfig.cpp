@@ -129,7 +129,7 @@ void Configuration::read( )
 
 	if (numRepairers > 0)
 	{
-		t_ExternalApp* repairExternalApp;
+        t_ExternalApp* repairExternalApp = 0;
 
 		for (int i=0; i<numRepairers; i++)
 		{
@@ -154,7 +154,7 @@ void Configuration::read( )
 
 	if (numUnpackers > 0)
 	{
-		t_ExternalApp* unpackExternalApp;
+        t_ExternalApp* unpackExternalApp = 0;
 
 		for (int i=0; i<numUnpackers; i++)
 		{

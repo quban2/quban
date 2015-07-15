@@ -371,7 +371,7 @@ bool HeaderReadWorker::cacheFlush(uint size)
     QHash<QString, HeaderBase*>::iterator it = cache.begin();
 
     QByteArray ba;
-    const char *cIndexCharArr;
+    const char *cIndexCharArr = 0;
 
     while (it != cache.end())
     {

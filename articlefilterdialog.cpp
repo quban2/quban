@@ -199,7 +199,7 @@ void ArticleFilterDialog::commonCheckBox(bool checked)
 
 void ArticleFilterDialog::filter()
 {
-    FilterLine* filterLine;
+    FilterLine* filterLine = 0;
 
     if (AndComboBox->currentIndex() == 0)
         filterComponents.andComponents = true;

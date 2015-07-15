@@ -45,7 +45,7 @@ void QNzb::slotGroupFullNzb()
 	memset(&data, 0, sizeof(data));
 
 	QByteArray ba;
-	const char *c_str;
+    const char *c_str = 0;
 	QString sindex;
 
 	QString nzbFilename =
@@ -97,8 +97,8 @@ void QNzb::slotGroupFullNzb()
 	QDomNode n = docElem.firstChild();
 	int ret;
 	quint64 mps;
-	Header* h;
-	char *phead;
+    Header* h = 0;
+    char *phead = 0;
 	Dbt pkey;
 	Dbt pdata;
 
@@ -272,7 +272,7 @@ void QNzb::OpenNzbFile(QString nzbFilename)
 	QDomElement docElem = doc.documentElement();
 	QDomNode n = docElem.firstChild();
 	quint64 mps;
-	Header* h;
+    Header* h = 0;
 
     QString groupName;
     QString category;

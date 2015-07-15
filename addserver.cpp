@@ -50,7 +50,7 @@ AddServer::AddServer( NntpHost *host, QWidget * parent, Qt::WindowFlags fl ) : Q
 	vLayout->addWidget(addServerWidget);
 	addServerWidget->groupBox->setEnabled(true);
 
-	IdListWidgetItem* item;
+    IdListWidgetItem* item = 0;
 
 	quint64 serverFlags = host->getServerFlags();
     for (quint64 i=NntpHost::xzver; i<=NntpHost::xfeatgzip; i *= 2)

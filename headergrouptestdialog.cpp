@@ -106,12 +106,12 @@ void HeaderGroupTestDialog::buildTrees()
     data.set_ulen(DATAMEM_SIZE);
     data.set_data(datamem);
 
-    Dbc *cursor;
+    Dbc *cursor = 0;
     ng->getDb()->cursor(0, &cursor, 0);
 
     int i=0;
 
-    char *splitpoint, *keyData, *dataData;
+    char *splitpoint = 0, *keyData = 0, *dataData = 0;
     quint32 keySize;
 
     QString articleName,

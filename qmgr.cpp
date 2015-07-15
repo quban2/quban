@@ -308,8 +308,8 @@ void QMgr::slotUpdateServerExtensions(quint16 serverId)
     queue.insert(nextItemId, new QExtensionsItem(nh->getName(), queueList, nextItemId));
 
 	//create the part; create the job; add part/jobs to item...
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 
 	queueView.append(nextItemId);
 	queueCount++;
@@ -376,8 +376,8 @@ void QMgr::slotAddListItem(quint16 serverId, AvailableGroups* ag)
 	nextItemId++;
 	QMutexLocker locker(&queueLock);
     queue.insert(nextItemId, new QListItem(nh->getName(), queueList, nextItemId));
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 
 	queueView.append(nextItemId);
 	queueCount++;
@@ -598,8 +598,8 @@ void QMgr::slotAddUpdItem(NewsGroup* ng, uint from, uint to)
 
 void QMgr::slotAddUpdItem(quint16 hostId, NewsGroup* ng, quint64 from, quint64 to)
 {
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 
     NntpHost* nh = servers->value(hostId);
 
@@ -684,8 +684,8 @@ void QMgr::slotGetGroupLimits(NewsGroup * _ng)
 	queue.insert(nextItemId, new QGroupLimitsItem(queueList, nextItemId, _ng));
 
 	//create the part; create the job; add part/jobs to item...
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 
 	queueView.append(nextItemId);
 	queueCount++;
@@ -758,8 +758,8 @@ void QMgr::slotGetGroupLimits(NewsGroup * _ng, quint16 hostId, NntpHost *nh)
 	queue.insert(nextItemId, new QGroupLimitsItem(queueList, nextItemId, _ng));
 
 	//create the part; create the job; add part/jobs to item...
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 
 	queueView.append(nextItemId);
 	queueCount++;
@@ -840,8 +840,8 @@ void QMgr::slotAddPostItem(HeaderBase * hb, NewsGroup *ng, bool first, bool view
 
 	QSaveItem *qsi = new QSaveItem;
 
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 	int serverId = 0;
     QString tempDir = config->tmpDir + '/';
 
@@ -1143,8 +1143,8 @@ Job* QMgr::findNextJob(int qId)
 {
 	QList<int>::iterator it;
 	QMap<int, Part*>::iterator pit;
-	QItem *item;
-	Job *j;
+    QItem *item = 0;
+    Job *j = 0;
 	//For every item...
 	for (it = queueItems[qId].begin(); it != queueItems[qId].end(); ++it)
 	{
@@ -1836,8 +1836,8 @@ void QMgr::Failed(Job* job, int err)
 
 void QMgr::customEvent(QEvent * e)
 {
-	AutoUnpackEvent* aue;
-	AutoUnpackThread* unpackThread;
+    AutoUnpackEvent* aue = 0;
+    AutoUnpackThread* unpackThread = 0;
 	QString message;
 	QString area;
 
@@ -2062,7 +2062,7 @@ void QMgr::slotCancelSelected()
             continue;
 		QMap<int, Part*>::iterator pit;
 		NewsGroup *ng = 0;
-		Part *part;
+        Part *part = 0;
 		if (item->type == Job::GetPost && item->processing)
 		{
 			//Item is in the decoding queue...
@@ -2200,7 +2200,7 @@ void QMgr::decodeFinished(QPostItem *item, bool ok, QString fileName, QString er
 	// 	it=queueView.find(item->qItemId);
 	queueView.removeAll(item->qItemId);
 
-	QTreeWidgetItem *temp, *child, *after = 0;
+    QTreeWidgetItem *temp = 0, *child = 0, *after = 0;
 	if (item->failedParts == 0 && ok)
 	{
 		temp = new QTreeWidgetItem(doneList);
@@ -2472,7 +2472,7 @@ void QMgr::moveItem(QItem *item)
 void QMgr::requeue(Job * j)
 {
 	// 	qDebug("Requeueing!");
-	QPostItem* item;
+    QPostItem* item = 0;
 	bool found = false;
 
 	//Delete the job from the server queue
@@ -2664,7 +2664,7 @@ void QMgr::moveCanceledItem(QItem *item, QMutexLocker* locker)
 	}
 	queueCount--;
 
-	QTreeWidgetItem *temp, *child, *after = 0;
+    QTreeWidgetItem *temp = 0, *child = 0, *after = 0;
 	temp = new QTreeWidgetItem(failedList);
 	temp->setText(0, QString::number(item->qItemId));
 	temp->setText(1, item->listItem->text(1));
@@ -2789,7 +2789,7 @@ void QMgr::slotMoveSelectedToBottom()
 {
 	QList<QTreeWidgetItem*> selection = queueList->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	QTreeWidgetItem* nextItem;
+    QTreeWidgetItem* nextItem = 0;
 
 	while (it.hasNext())
 	{
@@ -2860,7 +2860,7 @@ void QMgr::slotMoveSelectedToTop()
 {
 	QList<QTreeWidgetItem*> selection = queueList->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	QTreeWidgetItem* nextItem;
+    QTreeWidgetItem* nextItem = 0;
 
 	it.toBack();
 
@@ -3277,7 +3277,7 @@ void QMgr::checkServers()
 
 void QMgr::checkQueue()
 {
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	Dbt key, data;
 
 	// Make sure that the status is known for all servers
@@ -3322,17 +3322,17 @@ void QMgr::checkQueue()
 	int ret = 0;
 
 	uint id;
-	QSaveItem *qsi;
-	GroupManager* groupManager;
-	PendingHeader* pendingHeader;
-	AutoFile* autoFile;
+    QSaveItem *qsi = 0;
+    GroupManager* groupManager = 0;
+    PendingHeader* pendingHeader = 0;
+    AutoFile* autoFile = 0;
 	HeaderBase* hb = 0;
 	SinglePartHeader* sph = 0;
 	MultiPartHeader* mph = 0;
 	QMap<uint, QSaveItem*> queueMap;
 	bool groupDataHeld = false;
 
-	qDebug() << "Getting groups details";
+    //qDebug() << "Getting groups details";
 	unpackDb->cursor(0, &cursor, DB_WRITECURSOR);
 
 	while (ret == 0)
@@ -3341,7 +3341,7 @@ void QMgr::checkQueue()
 		{
 			groupManager = new GroupManager(unpackDb, gList, (uchar*)data.get_data(), this);
 			groupedDownloads.insert(groupManager->getGroupId(), groupManager);
-			qDebug() << "Just got group: " << groupManager->getGroupId() << ", master unpack: " << groupManager->getMasterUnpack();
+            //qDebug() << "Just got group: " << groupManager->getGroupId() << ", master unpack: " << groupManager->getMasterUnpack();
 			groupDataHeld = true;
 
 			if (groupManager->getGroupId() > maxGroupId)
@@ -3376,7 +3376,7 @@ void QMgr::checkQueue()
 
 	cursor->close();
 
-	qDebug() << "Getting pending files details";
+    // qDebug() << "Getting pending files details";
 
 	pendDb->cursor(0, &cursor, DB_WRITECURSOR);
 
@@ -3631,7 +3631,7 @@ void QMgr::checkQueue()
     QDateTime now = QDateTime::currentDateTime();
     QDateTime qdt;
     quint32 serverExtensionsUpdate;
-    NntpHost *nh;
+    NntpHost *nh = 0;
 
     for (sit = servers->begin(); sit != servers->end(); ++sit)
     {
@@ -3702,8 +3702,8 @@ void QMgr::delNzbItem(QString index)
 
 void QMgr::createPostItemFromQ(int id, QSaveItem * qsi, HeaderBase* hb, NewsGroup *ng)
 {
-	Part *tPart;
-	Job *tJob;
+    Part *tPart = 0;
+    Job *tJob = 0;
 	int serverId = 0;
 	QString rootFName, tempDir;
 
@@ -3746,10 +3746,10 @@ void QMgr::createPostItemFromQ(int id, QSaveItem * qsi, HeaderBase* hb, NewsGrou
 	{
 		mph = (MultiPartHeader*)hb;
 		quint64 multiPartKey = mph->getMultiPartKey();
-		Header* h;
+        Header* h = 0;
 
 		// Walk the headers to get the PartNumMap
-		Dbc *cursorp;
+        Dbc *cursorp = 0;
 
 		// Get a cursor
 		ng->getPartsDb()->cursor(NULL, &cursorp, 0);
@@ -4386,7 +4386,7 @@ void QMgr::slotUnpackConfirmed(QString fullNzbFilename)
 
 	 thisGroup->setNewsgroup(unpackConfirmation->ng);
 
-	 PendingHeader* pendingHeader;
+     PendingHeader* pendingHeader = 0;
 	 quint16 fileType;
 	 quint32 repairBlocks;
 

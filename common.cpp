@@ -31,14 +31,11 @@ bool mkDeepDir( QString dirName )
 
 	QString newDir = dirName.mid(0, dirName.lastIndexOf('/'));
 
-// 	qDebug("Dir: %s", newDir.latin1());
-
 	if (d.exists(newDir))
 		return true;
 
 	if (mkDeepDir(newDir))
 	{
-// 		qDebug("create dir: %s", (const char *) newDir);
 		if (d.mkdir(newDir))
 			return true;
 		else

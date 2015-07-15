@@ -103,7 +103,7 @@ void GroupList::loadGroups(Servers *_servers, DbEnv* dbe)
 	data.set_data(datamem);
 // 	groups.clear();
 
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	groupDb->cursor(0, &cursor, 0);
 
     while((cursor->get(&key, &data, DB_NEXT))==0)
@@ -115,7 +115,7 @@ void GroupList::loadGroups(Servers *_servers, DbEnv* dbe)
 		groups.insert(tempg->getName(), tempg);
 // 		tempg->setListItem(new KListViewItem(this, tempg->getName(), QString::number(tempg->getTotal())));
 		//Create the category list...
-		Category *cat;
+        Category *cat = 0;
 		if ( tempg->getCategory() != "None" ) {
 			if ((cat = categories.value(tempg->getCategory() )) != 0) {
 				//Category exist, add the item as a child of the folder...
@@ -310,7 +310,7 @@ void GroupList::slotUpdateSelected( )
 {
 	QList<QTreeWidgetItem*> selection=this->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	while (it.hasNext()) {
 
@@ -368,7 +368,7 @@ void GroupList::slotDeleteSelected( )
 {
 	QList<QTreeWidgetItem*> selection=this->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	while (it.hasNext())
 	{
@@ -443,7 +443,7 @@ void GroupList::slotZeroSelected( )
 		return;
 	QList<QTreeWidgetItem*> selection=this->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	while (it.hasNext())
 	{
@@ -608,7 +608,7 @@ void GroupList::updateGroups(AvailableGroups* aGroups) // this is called followi
 {
 	QHashIterator<QString, NewsGroup*> it(groups);
     QHash<QString, AvailableGroup*> aGroupsUpdate;
-	NewsGroup* ng;
+    NewsGroup* ng = 0;
 
 	while(it.hasNext())
 	{
@@ -1075,12 +1075,12 @@ void GroupList::slotCompactDbs( )
 	data.set_data(datamem);
 
 	//For every newsgroup....
-	NewsGroup *ng; //Current newsgroup
+    NewsGroup *ng = 0; //Current newsgroup
 	QString tempName; //Name for temp newsgroup
-	Db* newDb; //Handle for the new Db.
-	Db* oldDb; //Copy of the "old" Db handle
+    Db* newDb = 0; //Handle for the new Db.
+    Db* oldDb = 0; //Copy of the "old" Db handle
 
-	Dbc *cursor; //To scan the "old" newsgroup
+    Dbc *cursor = 0; //To scan the "old" newsgroup
 	QTime current, previous;
 
 	QHashIterator<QString, NewsGroup*> it(groups);
@@ -1165,8 +1165,7 @@ void GroupList::slotCompactDbs( )
 		newDb->sync(0);
 		ng->close();
 
-		Db *tempDb;
-		tempDb=new Db(dbenv,0);
+        Db *tempDb = new Db(dbenv,0);
 	    QByteArray ba4 = ng->getName().toLocal8Bit();
 	    const char *c_str4 = ba4.data();
 		tempDb->remove(c_str4,0, 0);
@@ -1224,7 +1223,7 @@ void GroupList::slotUpdateWOptions(NewsGroup *ng, uint from, uint to)
 	// The caller should have set the newsgroup to updating before entering here
 	qDebug() << "Update with options " << ng->name() << ", " << from << ", " << to;
 
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	for (int i=0; i<this->topLevelItemCount(); ++i)
 	{
@@ -1264,7 +1263,7 @@ void GroupList::slotUpdateByRange(quint16 hostId, NewsGroup * ng, quint64 from, 
 	// The caller should have set the newsgroup to updating before entering here
 	qDebug() << "Update with options " << ng->name() << ", " << from << ", " << to;
 
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	for (int i=0; i<this->topLevelItemCount(); ++i)
 	{
@@ -1305,7 +1304,7 @@ void GroupList::slotExpireNewsgroup(NewsGroup *ng, uint exptype, uint expvalue)
 	// The caller should have set the newsgroup to updating before entering here
 	qDebug() << "Expire " << ng->name() << ", " << exptype << ", " << expvalue;
 
-	NGListViewItem *selected;
+    NGListViewItem *selected = 0;
 
 	for (int i=0; i<this->topLevelItemCount(); ++i)
 	{

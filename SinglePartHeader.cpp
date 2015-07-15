@@ -163,7 +163,7 @@ bool SinglePartHeader::getSinglePartHeader(unsigned int keySize, char *k, char *
     sph->setHeaderType(*i);
     i++;
 
-    char *splitpoint;
+    char *splitpoint = 0;
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {

@@ -93,7 +93,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
 	downloadGroup->numBlocksNeeded = 0;
 
 	uint strSize = 0;
-	char *temp;
+    char *temp = 0;
 	int szQuint16 = sizeof(quint16);
 	int szQuint32 = sizeof(quint32);
 	uchar *i = dbData;
@@ -149,7 +149,7 @@ GroupManager::GroupManager(Db *_db, GroupList *gList, uchar* dbData, QMgr* qmgr)
     Q_DELETE_ARRAY(temp);
 	i += strSize;
 
-	qDebug() << "Restored Group record with master unpack file: " << downloadGroup->masterUnpackFile;
+    // qDebug() << "Restored Group record with master unpack file: " << downloadGroup->masterUnpackFile;
 
 	memcpy(&strSize, i, sizeof(uint));
 	i += sizeof(uint);
@@ -268,7 +268,7 @@ bool GroupManager::dbSave()
 
 	uint strSize;
 	QByteArray ba;
-	const char *c_str;
+    const char *c_str = 0;
 
 	char *p = new char[saveItemSize()];
 	char *i = p;
@@ -674,7 +674,7 @@ AutoFile::AutoFile(Db *_db, uchar* dbData) : db(_db)
 	autoFile = new t_AutoFile;
 
 	uint strSize = 0;
-	char *temp;
+    char *temp = 0;
 
 	int szQuint16 = sizeof(quint16);
 	uchar *i = dbData;
@@ -695,7 +695,7 @@ AutoFile::AutoFile(Db *_db, uchar* dbData) : db(_db)
     Q_DELETE_ARRAY(temp);
 	i += strSize;
 
-	qDebug() << "Restored Auto file with name: " << autoFile->fileName;
+    //qDebug() << "Restored Auto file with name: " << autoFile->fileName;
 }
 
 AutoFile::~AutoFile()
@@ -709,7 +709,7 @@ bool AutoFile::dbSave()
 
 	uint strSize;
 	QByteArray ba;
-	const char *c_str;
+    const char *c_str = 0;
 
 	char *p = new char[saveItemSize()];
 	char *i = p;
@@ -840,7 +840,7 @@ void AutoUnpackThread::run()
     	QString fileToMerge,
     	        strippedFile1,
     	        strippedFile2;
-    	QString* fileToJoin;
+        QString* fileToJoin = 0;
 
     	for (it = autoFileList.begin(); it != autoFileList.end(); ++it)
     	{

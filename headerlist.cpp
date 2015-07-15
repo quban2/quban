@@ -299,20 +299,20 @@ void HeaderList::loadHeaders(Db* db)
 
  	connect(pd, SIGNAL(canceled()), this, SLOT(cancelLoad()));
 
-	DBC *dbcp;
+    DBC *dbcp = 0;
 	DBT ckey, cdata;
 
 	MultiPartHeader mph;
 	SinglePartHeader sph;
-	HeaderBase* hb;
+    HeaderBase* hb = 0;
 
 	memset(&ckey, 0, sizeof(ckey));
 	memset(&cdata, 0, sizeof(cdata));
 
     size_t retklen, retdlen;
-    void *retkey, *retdata;
+    void *retkey = 0, *retdata = 0;
     int ret, t_ret;
-    void *p;
+    void *p = 0;
 
     quint64 count=0;
 
@@ -509,7 +509,7 @@ void HeaderList::loadGroups(Db* db)
 
     connect(pd, SIGNAL(canceled()), this, SLOT(cancelLoad()));
 
-    DBC *dbcp;
+    DBC *dbcp = 0;
     DBT ckey, cdata;
 
     HeaderGroup headerGroup;
@@ -518,9 +518,9 @@ void HeaderList::loadGroups(Db* db)
     memset(&cdata, 0, sizeof(cdata));
 
     size_t retklen, retdlen;
-    void *retkey, *retdata;
+    void *retkey = 0, *retdata = 0;
     int ret, t_ret;
-    void *p;
+    void *p = 0;
 
     quint64 count=0;
 
@@ -927,12 +927,12 @@ void HeaderList::slotDownloadSelected(bool first, bool view, QString dir)
 
 void HeaderList::downloadSelectedHeader(bool first, bool view, QString dir, QModelIndex sourceSubjIndex, QString index, bool multiPartHeader)
 {
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
     uint count=0;
-    char *p;
+    char *p = 0;
     QByteArray ba;
 
     int ret;
@@ -1634,9 +1634,9 @@ void HeaderList::markSelectedAs( int what)
 
 	QByteArray ba;
 
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
 	QString index;
     QString msgId;
@@ -1857,15 +1857,15 @@ void HeaderList::markAllAsRead( Db* db)
 	key.set_data(keymem);
 	data.set_data(datamem);
 
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	db->cursor(NULL, &cursor, DB_WRITECURSOR);
 
 	int ret= 0;
 	QTime current, previous;
 	previous=QTime::currentTime();
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
 	while (ret == 0)
 	{
@@ -2047,9 +2047,9 @@ void HeaderList::markGroupAsRead( )
 	QModelIndex subjItem;
 	QModelIndex fromItem;
 
-	MultiPartHeader *mph;
-	SinglePartHeader* sph;
-	HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
     QString msgId;
     bool multiPartHeader = false;
@@ -2268,12 +2268,12 @@ void HeaderList::slotGroupAndDownload()
 
 void HeaderList::confirmSelectedHeader(QModelIndex sourceSubjIndex, QString index, bool multiPartHeader, UnpackConfirmation* unpackConfirmation)
 {
-    MultiPartHeader *mph;
-    SinglePartHeader* sph;
-    HeaderBase* hb;
+    MultiPartHeader *mph = 0;
+    SinglePartHeader* sph = 0;
+    HeaderBase* hb = 0;
 
     uint count=0;
-    char *p;
+    char *p = 0;
     QByteArray ba;
 
     int ret;

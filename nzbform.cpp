@@ -62,8 +62,8 @@ NzbForm::NzbForm(QList<NzbHeader*> *hList, QString dDir, QString groupName, QStr
     artList->setContentsMargins(3,3,3,3);
 
 	QList<NzbHeader*>::iterator it;
-    QTreeWidgetItem* item;
-    NzbHeader* nh;
+    QTreeWidgetItem* item = 0;
+    NzbHeader* nh = 0;
 
 	int i=1;
 
@@ -118,7 +118,7 @@ void NzbForm::reject()
 	else
 	{
 		// delete the remaining items by their numbers (as in normal accept)
-		QTreeWidgetItem *item;
+        QTreeWidgetItem *item = 0;
     	item = (QTreeWidgetItem *) artList->topLevelItem(0);
 
 		while (item)
@@ -157,7 +157,7 @@ void NzbForm::accept()
 	else
 	{
 		bool first = firstCheck->isChecked();
-		QTreeWidgetItem *item;
+        QTreeWidgetItem *item = 0;
 		if (first)
 			item=(QTreeWidgetItem*) artList->topLevelItem(artList->topLevelItemCount() - 1);
 		else
@@ -249,7 +249,7 @@ void NzbForm::slotMarkSelected()
 	QList<QTreeWidgetItem*> selection = artList->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
 
-	QTreeWidgetItem* selected;
+    QTreeWidgetItem* selected = 0;
 	while ( it.hasNext())
 	{
 		selected = (QTreeWidgetItem*) it.next();
@@ -261,7 +261,7 @@ void NzbForm::slotUnmarkSelected()
 {
 	QList<QTreeWidgetItem*> selection = artList->selectedItems();
 	QListIterator<QTreeWidgetItem*> it(selection);
-	QTreeWidgetItem* selected;
+    QTreeWidgetItem* selected = 0;
 	while ( it.hasNext())
 	{
 		selected = (QTreeWidgetItem*) it.next();
@@ -280,7 +280,7 @@ void NzbForm::slotMarkRelated()
 
     slotUnmarkAll();
 
-    QTreeWidgetItem* selected;
+    QTreeWidgetItem* selected = 0;
     QString subject;
     QString matched;
     QRegExp match;

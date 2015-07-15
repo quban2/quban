@@ -119,7 +119,7 @@ bool BulkLoad::bulkLoadBody()
 	mphDeletionsList = 0;
 	sphDeletionsList = 0;
 
-	DBC *dbcp;
+    DBC *dbcp = 0;
 
     MultiPartHeader mph;
     SinglePartHeader sph;
@@ -137,9 +137,9 @@ bool BulkLoad::bulkLoadBody()
     ckey.flags = DB_DBT_USERMEM;
 
     size_t retklen, retdlen;
-    void *retkey, *retdata;
+    void *retkey = 0, *retdata = 0;
     int ret, t_ret;
-    void *p;
+    void *p = 0;
 
     quint64 count=0;
 

@@ -47,8 +47,8 @@ public:
 
 	inline void removeServerPartNum(quint16 id) { serverNumMap.remove(id); }
 
-	bool dbSave();
-	bool dbDelete();
+    //bool dbSave();
+    //bool dbDelete();
 
 	quint32 getRecordSize();
 	char *data();

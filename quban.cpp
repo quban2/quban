@@ -1412,7 +1412,7 @@ void Quban::slotGroupSelection( bool b )
 
 void Quban::slotUpdateNewsGroup( NewsGroup * ng)
 {
-	HeaderList *view;
+    HeaderList *view = 0;
 	Q_ASSERT(ng);
 
 	if ((view=ng->getView()))

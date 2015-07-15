@@ -235,8 +235,8 @@ bool DecodeManager::decode(QPostItem *postItem)
             QString tempFile;
             QString destFile1;
             QByteArray ba;
-            char *c_str;
-            char *c_str2;
+            char *c_str = 0;
+            char *c_str2 = 0;
 
             asciiFile = true;
 

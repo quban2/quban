@@ -233,7 +233,7 @@ void QubanWizard::slotOkClicked()
 		{
 			if (config->numRepairers > config->repairAppsList.count()) // need to add to list
 			{
-				t_ExternalApp* repairExternalApp;
+                t_ExternalApp* repairExternalApp = 0;
 
 				for (int i=config->repairAppsList.count(); i<config->numRepairers; i++)
 				{
@@ -250,7 +250,7 @@ void QubanWizard::slotOkClicked()
 			}
 		}
 
-		PrefUnpackExternal* repairWidget;
+        PrefUnpackExternal* repairWidget = 0;
 
 		for (int i=0; i<config->numRepairers; i++)
 		{
@@ -269,7 +269,7 @@ void QubanWizard::slotOkClicked()
 		{
 			if (config->numUnpackers > config->unpackAppsList.count()) // need to add to list
 			{
-				t_ExternalApp* unpackExternalApp;
+                t_ExternalApp* unpackExternalApp = 0;
 
 				for (int i=config->unpackAppsList.count(); i<config->numUnpackers; i++)
 				{
@@ -286,7 +286,7 @@ void QubanWizard::slotOkClicked()
 			}
 		}
 
-		PrefUnpackExternal* unpackWidget;
+        PrefUnpackExternal* unpackWidget = 0;
 
 		for (int i=0; i<config->numUnpackers; i++)
 		{

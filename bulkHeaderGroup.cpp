@@ -180,7 +180,7 @@ bool BulkHeaderGroup::BulkHeaderGroupBody()
     Dbt key, data;
     char* p2 = 0;
     QByteArray ba;
-    const char *k;
+    const char *k = 0;
 
     key.set_flags(DB_DBT_USERMEM);
     key.set_data(&keymem);

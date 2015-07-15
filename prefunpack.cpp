@@ -55,7 +55,7 @@ PrefUnpack::PrefUnpack(QWidget *parent)
 
 	if (config->numRepairers)
 	{
-		PrefUnpackExternal* repairWidget;
+        PrefUnpackExternal* repairWidget = 0;
 
 		for (int i=0; i<config->numRepairers; i++)
 		{
@@ -113,7 +113,7 @@ PrefUnpack::PrefUnpack(QWidget *parent)
 
 	if (config->numUnpackers)
 	{
-		PrefUnpackExternal* unpackWidget;
+        PrefUnpackExternal* unpackWidget = 0;
 
 		for (int i=0; i<config->numUnpackers; i++)
 		{
@@ -248,7 +248,7 @@ void PrefUnpack::numRepairersChanged(int newVal)
 	}
 	else if (numRepairers < newVal) // addition
 	{
-		PrefUnpackExternal* repairWidget;
+        PrefUnpackExternal* repairWidget = 0;
 
 		for (int i=(numRepairers-1); i<(newVal-1); i++)
 		{
@@ -290,7 +290,7 @@ void PrefUnpack::numUnpackersChanged(int newVal)
 	}
 	else if (numUnpackers < newVal) // addition
 	{
-		PrefUnpackExternal* unpackWidget;
+        PrefUnpackExternal* unpackWidget = 0;
 
 		for (int i=(numUnpackers-1); i<(newVal-1); i++)
 		{

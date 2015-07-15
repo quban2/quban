@@ -29,9 +29,9 @@
 #include "quban.h"
 
 // need to make this global to make sure that we can delete it
-DbEnv *g_dbenv;
+DbEnv *g_dbenv = 0;
 
-Quban* quban;
+Quban* quban = 0;
 
 int main(int argc, char *argv[])
 {

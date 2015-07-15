@@ -304,7 +304,7 @@ void ServersList::slotNewServer()
 
 void ServersList::slotAddServer( NntpHost *nh )
 {
-	NntpHost *eh;
+    NntpHost *eh = 0;
 	Servers::iterator it;
 
 	for (it =servers->begin(); it != servers->end(); ++it)
@@ -406,7 +406,7 @@ void ServersList::m_loadServers()
 	data.set_data(datamem);
 // 	groups.clear();
 
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	serverDb->cursor(0, &cursor, 0);
 
 	while((cursor->get(&key, &data, DB_NEXT))==0)
@@ -711,7 +711,7 @@ void ServersList::slotValidServer(quint16 id)
 
 void ServersList::slotInvalidServer(quint16 id)
 {
-	NntpHost * nh;
+    NntpHost * nh = 0;
 	QIcon*icon = new QIcon(QString::fromUtf8(":/quban/images/ginux/Poorly_Network-16.png"));
 
 	QTreeWidgetItem *serverItem = 0;
@@ -754,7 +754,7 @@ void ServersList::slotModifyServer(NntpHost * nh)
 	{
         emit sigServerTypeChanged(significantChange, oh->getId(), nh->getServerType(), nh->isPaused(), nh->getName());
 
-		QIcon* icon;
+        QIcon* icon = 0;
 
         if (nh->getServerType() == NntpHost::activeServer)
         {

@@ -49,7 +49,7 @@ GroupProgress::~GroupProgress()
 
 void GroupProgress::populateAll()
 {
-	QTreeWidgetItem* item;
+    QTreeWidgetItem* item = 0;
 
 	groupList->clear();
 

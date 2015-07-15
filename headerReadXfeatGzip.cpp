@@ -47,7 +47,7 @@ HeaderReadXFeatGzip::~HeaderReadXFeatGzip()
 
 void HeaderReadXFeatGzip::startHeaderRead()
 {
-    RawHeader* h;
+    RawHeader* h = 0;
     QString headerLine;
     QByteArray* ba = 0;
     int ret = 0;

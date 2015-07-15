@@ -363,7 +363,7 @@ void AddServerWidget::accept()
 
         host->setEnabled(true);
 
-		IdListWidgetItem* item;
+        IdListWidgetItem* item = 0;
 		quint64 extensions = 0,
 				enabledExtensions = 0;
 
@@ -522,7 +522,7 @@ void AddServerWidget::slotUpdateServer()
         host->setLimitUnits(limitsUnitsComboBox->currentIndex());
         host->setFrequency(limitsFreqComboBox->currentIndex());
 
-		IdListWidgetItem* item;
+        IdListWidgetItem* item = 0;
 		quint64 extensions = 0,
 				enabledExtensions = 0;
 

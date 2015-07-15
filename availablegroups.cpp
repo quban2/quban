@@ -189,11 +189,11 @@ AvailGroupModel* AvailableGroups::loadData()
 	{
 	    model = new AvailGroupModel(servers, groupDb,this);
 
-		Dbt *key, *data;
+        Dbt *key = 0, *data = 0;
 		key=new Dbt;
 		data=new Dbt;
-		Dbc *cursor;
-        AvailableGroup *g;
+        Dbc *cursor = 0;
+        AvailableGroup *g = 0;
 		if (groupDb->cursor(NULL, &cursor, 0))
 			qDebug() << "Error opening cursor";
 		int ret;
@@ -246,7 +246,7 @@ void AvailableGroups::slotUnsubscribe(QString name) // this is called from subsc
 	    	g->setSubscribed(false);
 
 	    	AvailGroupItem* rootItem = model->getRootItem();
-	    	AvailGroupItem *child;
+            AvailGroupItem *child = 0;
 
 	    	for (int i=0; i<rootItem->childCount(); ++i)
 	    	{
@@ -271,7 +271,7 @@ void AvailableGroups::slotDeleteServer(quint16 serverId)
 	Dbt key, data;
 	memset(&key, 0, sizeof(key));
 	memset(&data, 0, sizeof(data));
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	int ret;
 	groupDb->cursor(0, &cursor, DB_WRITECURSOR);
 
@@ -426,7 +426,7 @@ AvailGroupModel::AvailGroupModel(Servers *_servers, Db* _db, QObject *parent)
     rootData << tr(cPatterns[ag_AvailableGroup_Col]);
 
     QByteArray ba;
-    const char *c_str;
+    const char *c_str = 0;
 	Servers::iterator it;
 	for (it=servers->begin(); it != servers->end(); ++it)
 	{
@@ -558,7 +558,7 @@ QModelIndex AvailGroupModel::index(int row, int column, const QModelIndex &paren
 	if (!hasIndex(row, column, parent))
 		return QModelIndex();
 
-	AvailGroupItem *parentItem;
+    AvailGroupItem *parentItem = 0;
 
 	parentItem = rootItem;
 

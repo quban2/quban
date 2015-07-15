@@ -37,8 +37,8 @@ AutoUnpackConfirmation::AutoUnpackConfirmation(UnpackConfirmation* _unpackConfir
 
     qMgr = (QMgr*)parent;
 
-    QTreeWidgetItem* item;
-    QComboBox* cb;
+    QTreeWidgetItem* item = 0;
+    QComboBox* cb = 0;
 	QString    fileName;
 
 	QList<ConfirmationHeader*>::iterator it;
@@ -97,8 +97,8 @@ AutoUnpackConfirmation::~AutoUnpackConfirmation()
 
 void AutoUnpackConfirmation::slotOkClicked()
 {
-	QTreeWidgetItem* item;
-	QComboBox* cb;
+    QTreeWidgetItem* item = 0;
+    QComboBox* cb = 0;
 	int numRepair = 0,
 		numMasterRepair = 0,
 		numUnpack = 0,
@@ -162,9 +162,9 @@ void AutoUnpackConfirmation::slotCancelClicked()
 
 void AutoUnpackConfirmation::slotToggleClicked()
 {
-	QTreeWidgetItem* item;
+    QTreeWidgetItem* item = 0;
 	QString    fileName;
-	HeaderBase* hb;
+    HeaderBase* hb = 0;
 	int i=0;
 	QList<ConfirmationHeader*>::iterator it;
 
@@ -189,9 +189,9 @@ void AutoUnpackConfirmation::slotToggleClicked()
 
 void AutoUnpackConfirmation::slotSetNameClicked()
 {
-	QTreeWidgetItem* item;
+    QTreeWidgetItem* item = 0;
 	QString    fileName;
-	HeaderBase* hb;
+    HeaderBase* hb = 0;
 	int i=0;
 	QList<ConfirmationHeader*>::iterator it;
 

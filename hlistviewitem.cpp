@@ -30,7 +30,7 @@
 
 static const char *cPatterns[] = {"Subject", "Parts", "KBytes", "From", "Posting Date", "Download Date"};
 
-Configuration* g_config;
+Configuration* g_config = 0;
 
 QIcon* completeIcon = 0;
 QIcon* incompleteIcon = 0;
@@ -186,7 +186,7 @@ HeaderTreeModel::HeaderTreeModel(Servers *_servers, Db* _db,  Db* _partsDb, Db* 
          << tr(cPatterns[CommonDefs::From_Col]) << tr(cPatterns[CommonDefs::Date_Col]) << tr(cPatterns[CommonDefs::Download_Col]);
 
     QByteArray ba;
-    const char *c_str;
+    const char *c_str = 0;
 	Servers::iterator it;
 	for (it=servers->begin(); it != servers->end(); ++it)
 	{
@@ -368,7 +368,7 @@ QModelIndex HeaderTreeModel::index(int row, int column, const QModelIndex &paren
 	if (!hasIndex(row, column, parent))
 		return QModelIndex();
 
-	HeaderTreeItem *parentItem;
+    HeaderTreeItem *parentItem = 0;
 
 	if (!parent.isValid())
 		parentItem = rootItem;
@@ -398,7 +398,7 @@ QModelIndex HeaderTreeModel::parent(const QModelIndex &index) const
 
 quint32 HeaderTreeModel::fullRowCount(const QModelIndex &parent) const
 {
-	HeaderTreeItem *parentItem;
+    HeaderTreeItem *parentItem = 0;
 	if (parent.column() > 0)
 		return 0;
 
@@ -412,7 +412,7 @@ quint32 HeaderTreeModel::fullRowCount(const QModelIndex &parent) const
 
 int HeaderTreeModel::rowCount(const QModelIndex &parent) const
 {
-	HeaderTreeItem *parentItem;
+    HeaderTreeItem *parentItem = 0;
 	if (parent.column() > 0)
 		return 0;
 
@@ -687,8 +687,8 @@ void HeaderTreeModel::setupChildHeaders(HeaderTreeItem * item)
         int ret;
         QString articleIndex = item->data(CommonDefs::Subj_Col).toString() % '\n' % item->data(CommonDefs::From_Col).toString();
 
-        QVector<QVariant>* columnData;
-        QVector<QIcon*>* iconData;
+        QVector<QVariant>* columnData = 0;
+        QVector<QIcon*>* iconData = 0;
         QColor lineColor; // THIS needs fixing!!!
         quint16 missingParts = 0;
         quint16 totalParts = 0;
@@ -949,7 +949,7 @@ void HeaderTreeModel::setupChildParts(HeaderTreeItem * item)
 
         Dbt key;
         Dbt data;
-        Dbc *cursorp;
+        Dbc *cursorp = 0;
         db_recno_t count;
 
         memset(&key, 0, sizeof(key));

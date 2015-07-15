@@ -35,7 +35,7 @@ SslErrorChecker::SslErrorChecker(QString hostName, quint64 oldFlags, quint64 new
     this->setWindowTitle(this->windowTitle() + tr(" for server: ") + hostName);
 
 	QTextCursor tmpCursor;
-//	IdListWidgetItem* item;
+//	IdListWidgetItem* item = 0;
     bool oldCertShown = false;
 
 	if (oldFlags)

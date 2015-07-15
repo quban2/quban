@@ -139,7 +139,7 @@ NewsGroup::~NewsGroup()
 
 char* NewsGroup::data(char *buffer)
 {
-    char *p;
+    char *p = 0;
 
     if (!buffer)
         p = new char[getRecordSize()];
@@ -447,7 +447,7 @@ NewsGroup::NewsGroup(DbEnv *_dbEnv, char *data, uint version)
     memcpy(&totalArticles, p, sz64);
     p += sz64;
 
-    qDebug() << "Group: " << ngName << ", total articles: " << totalArticles;
+    // qDebug() << "Group: " << ngName << ", total articles: " << totalArticles;
 
     memcpy(&unreadArticles, p, sz64);
     p += sz64;
@@ -496,7 +496,7 @@ NewsGroup::NewsGroup(DbEnv *_dbEnv, char *data, uint version)
 
     memcpy(&count, p, sz16);
     p += sz16;
-    qDebug() << "Read " << count << " col orders";
+
     for (quint16 i = 0; i < count; i++)
     {
         memcpy(&id, p, sz16);
@@ -508,7 +508,7 @@ NewsGroup::NewsGroup(DbEnv *_dbEnv, char *data, uint version)
 
     memcpy(&count, p, sz16);
     p += sz16;
-    qDebug() << "Read " << count << " col sizes";
+
     for (qint16 i = 0; i < count; i++)
     {
         memcpy(&id, p, sz16);

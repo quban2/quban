@@ -57,7 +57,7 @@ QueueSchedule::QueueSchedule(Db* _schedDb, uchar* dbData, QueueScheduler* _queue
     int sz16 = sizeof(qint16);
     int sz32 = sizeof(qint32);
     int sz64 = sizeof(qint64);
-    char *temp;
+    char *temp = 0;
     uchar *i = dbData;
 
     memcpy(&strSize, i, sz32);
@@ -81,7 +81,7 @@ QueueSchedule::QueueSchedule(Db* _schedDb, uchar* dbData, QueueScheduler* _queue
     i += sz32;
 
     // qDebug() << "Loading schedule " << scheduleName << ", with num elements = " << elementsSize;
-    QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
     quint8  element8;
     quint16 element16;
     quint32 elementInt;
@@ -133,7 +133,7 @@ QueueSchedule::QueueSchedule(QueueSchedule& orig) // Only used in the dialog
 	queueScheduler = orig.queueScheduler;
 	schedDb        = orig.schedDb;
 
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 	QMapIterator<quint32, QueueScheduleElement*> it(*(orig.getElements()));
 
 	while (it.hasNext())
@@ -287,7 +287,7 @@ char* QueueSchedule::data()
 	memcpy(i, &elements, sz32);
 	i += sz32;
 
-	QueueScheduleElement* element;
+    QueueScheduleElement* element = 0;
 	quint8  element8;
 	quint16 element16;
 	quint32 elementInt;
@@ -458,7 +458,7 @@ void QueueScheduler::removeCurrentSchedule()
 
 void QueueScheduler::loadData(Db* _schedDb, bool createStartup)
 {
-	Dbc *cursor;
+    Dbc *cursor = 0;
 	Dbt key, data;
 	uchar *keymem=new uchar[KEYMEM_SIZE];
 	uchar *datamem=new uchar[DATAMEM_SIZE];
@@ -479,7 +479,7 @@ void QueueScheduler::loadData(Db* _schedDb, bool createStartup)
 
 	schedDb->cursor(0, &cursor, DB_WRITECURSOR);
 
-	QueueSchedule* queueSchedule;
+    QueueSchedule* queueSchedule = 0;
 
 	while (ret == 0)
 	{
@@ -548,7 +548,7 @@ void QueueScheduler::managePeriods()
 		QMap<quint32, QueueScheduleElement*>* elements =  activeSchedule->getElements();
 		if (elements->count())
 		{
-			QueueScheduleElement* element;
+            QueueScheduleElement* element = 0;
 
 			currentState = WAITING_FOR_START;
 			while (currentMonday.secsTo(currentTime) > (7*24*60*60)) // in case we've moved to a later Monday ...
@@ -625,7 +625,7 @@ bool QueueScheduler::dbDelete(QString _scheduleName)
 	Dbt key;
 
 	QByteArray ba;
-	const char *c_str;
+    const char *c_str = 0;
 
 	ba = _scheduleName.toLocal8Bit();
 	c_str = ba.data();

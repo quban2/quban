@@ -157,7 +157,7 @@ void QubanDbEnv::createDbs()
 	schedulerDbVersion = SCHEDULERDB_VERSION;
 	versionDbVersion = VERSIONDB_VERSION;
 
-	Db *versionDb;
+    Db *versionDb = 0;
 
 	if ((versionDb = openDb(VERSIONDB_NAME, true, &ret)))
 	{
@@ -338,7 +338,7 @@ void QubanDbEnv::migrateDbs()
 	versionDbVersion = config->versionDbVersion;
 
 	//First, open the version db...
-    Db *versionDb;
+    Db *versionDb = 0;
 
 	if (!(versionDb = openDb(VERSIONDB_NAME, false, &ret))) // Try and open without creating first
 	{
@@ -605,7 +605,7 @@ void QubanDbEnv::migrateDbs()
         //Migrate the db!
 
         qDebug() << "Need group db migration from " << groupDbVersion << " to " << GROUPDB_VERSION;
-        Db* groupDb;
+        Db* groupDb = 0;
 
         if (!(groupDb = openDb(SUBSGROUPSDB_NAME, false, &ret)))
         {
@@ -616,7 +616,7 @@ void QubanDbEnv::migrateDbs()
 
         //Now, for all the groups...
 
-        Dbc *cursor;
+        Dbc *cursor = 0;
 
         char datamem[DATAMEM_SIZE];
         char keymem[KEYMEM_SIZE];

@@ -164,7 +164,7 @@ bool ExpireDb::expire(NewsGroup* ng, uint expType, uint expValue)
 
 	QDateTime hDate;
 	QDateTime cDate = QDateTime::currentDateTime();
-	Dbc *cursorp;
+    Dbc *cursorp = 0;
 
 	low.clear();
 	high.clear();

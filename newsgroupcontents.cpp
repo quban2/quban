@@ -79,7 +79,7 @@ void NewsGroupContents::buildDetails()
 	maxLocalParts = 0;
 
 	QMap<quint16, NntpHost*>::iterator it;
-	QTreeWidgetItem *serverItem;
+    QTreeWidgetItem *serverItem = 0;
 
 	if (servers->count() < 2)
 	{

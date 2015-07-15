@@ -37,7 +37,7 @@ int NzbHeader::saveNzbParts()
     char *phead = 0;
 	Dbt pkey;
 	Dbt pdata;
-	Header* h;
+    Header* h = 0;
 
 	pkey.set_data(&multiPartKey);
 	pkey.set_size(sizeof(quint64));
@@ -186,7 +186,7 @@ MultiPartHeader::MultiPartHeader(quint32 keySize, char* k, char *p)
         serverLowest.insert(serverId, part);
     }
 
-    char *splitpoint;
+    char *splitpoint = 0;
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
@@ -280,7 +280,7 @@ bool MultiPartHeader::getMultiPartHeader(unsigned int keySize, char *k, char *p,
     //Skip serverLowest
     i+=(count*(sz16+sz64)+sz16);
 
-    char *splitpoint;
+    char *splitpoint = 0;
 
     if ((splitpoint = (char *)memchr(k, '\n', keySize)))
     {
@@ -383,7 +383,7 @@ Header* MultiPartHeader::partDbFind(Db* pdb, quint16 partNo)
 {
 	int ret = 0;
 	Header* h = 0;
-	Dbc *cursorp;
+    Dbc *cursorp = 0;
 
 	Dbt key;
 	Dbt data;
@@ -538,7 +538,7 @@ void MultiPartHeader::getAllArticleNums(Db* pDB, PartNumMap* serverArticleNos, Q
     Header* h = 0;
 
 	// Walk the headers to get the PartNumMap
-	Dbc *cursorp;
+    Dbc *cursorp = 0;
 
 	// Get a cursor
 	pDB->cursor(NULL, &cursorp, 0);
@@ -567,7 +567,7 @@ void MultiPartHeader::getAllArticleNums(Db* pDB, PartNumMap* serverArticleNos, Q
 void MultiPartHeader::deleteAllParts(Db* pDB)
 {
 	int ret = 0;
-	Dbc *cursorp;
+    Dbc *cursorp = 0;
 
 	Dbt key;
 	Dbt data;
@@ -598,7 +598,7 @@ void MultiPartHeader::removeServer(Db* pDB, quint16 serverId)
     Header* h = 0;
 
 	// Walk the headers to get the PartNumMap
-	Dbc *cursorp;
+    Dbc *cursorp = 0;
 
 	// Get a cursor
 	pDB->cursor(NULL, &cursorp, DB_WRITECURSOR);
