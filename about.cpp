@@ -19,6 +19,7 @@
  ***************************************************************************/
 
 #include <QString>
+#include <QSysInfo>
 #include "zlib.h"
 #include "about.h"
 
@@ -31,7 +32,11 @@ About::About(DbEnv* dbenv, QWidget *parent)
 			QString(dbenv->version((int*)0, (int*)0, (int*)0)) +
 			"\nQt compile version = " + QT_VERSION_STR +
 			"\nQt runtime version = " + qVersion() +
-			"\nzlib version = " + ZLIB_VERSION;
+            "\nzlib version = " + ZLIB_VERSION
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 4, 0))
+            "\nOperating System = " + QSysInfo::prettyProductName()
+#endif
+            ;
 	this->detailText->append(libVers);
 }
 
