@@ -321,7 +321,7 @@ private:
 
 class AutoUnpackEvent: public QEvent
 {
-	friend class QMgr;
+    friend class QMgr;
 private:
 	GroupManager* groupManager;
 	int err;

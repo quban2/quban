@@ -1084,7 +1084,6 @@ bool NntpThread::getXover(QString group)
     quint64 maxHeaderNum;
 
     quint64 targetHWM  = 0;
-    bool endReached = false;
 
     qint16 hostId = nHost->getId();
     Db* db = job->ng->getDb();
@@ -1450,7 +1449,6 @@ bool NntpThread::getXover(QString group)
                 if (lineBA->at(0) == '.')
                 {
                     //                 qDebug("End found");
-                    endReached = true;
                     break;
                 }
                 else
@@ -1491,16 +1489,15 @@ bool NntpThread::getXover(QString group)
 
             emit logMessage(LogAlertList::Error, tr("Server ") + nHost->getName() + " : " + errorString);
         }
+        else
+            maxHeaderNum = targetHWM;
 
-        maxHeaderNum = headerReadWorker[k]->maxHeaderNum;
+        maxHeaderNum = qMax(headerReadWorker[k]->maxHeaderNum, maxHeaderNum);
     }
 
     emit quitHeaderRead();
 
-    if (endReached == true)
-        job->ng->servLocalHigh[hostId] = targetHWM;
-    else
-        job->ng->servLocalHigh[hostId] = qMax(job->ng->servLocalHigh[hostId], maxHeaderNum);
+    job->ng->servLocalHigh[hostId] = qMax(job->ng->servLocalHigh[hostId], maxHeaderNum);
 
     saveGroup();
     db->sync(0);
